@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
+import Products from "@/pages/Products.vue";
 
 const menuOpen = ref(false);
 
@@ -33,6 +34,7 @@ onUnmounted(() => {
             <!-- Навигация на десктопе -->
             <nav class="menu">
                 <a href="#" class="menu-link">Главная</a>
+                <router-link :to="{name: 'Products'}" class="menu-link">Каталог</router-link>
                 <a href="#" class="menu-link">Категории</a>
                 <a href="#" class="menu-link">Новинки</a>
                 <a href="#" class="menu-link">Скидки</a>

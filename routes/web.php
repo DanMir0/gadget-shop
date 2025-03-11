@@ -10,6 +10,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::get('/products', [ProductController::class, 'index']);
+Route::get('/api/products', [ProductController::class, 'getProducts']);
+Route::get('/api/categories', [\App\Http\Controllers\CategorieController::class, 'getCategories']);
 
 Route::get('{any}', function () {
     return view('welcome');
