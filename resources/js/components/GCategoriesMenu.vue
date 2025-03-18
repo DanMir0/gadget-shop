@@ -1,18 +1,13 @@
 <script setup>
 import {onMounted, ref} from "vue";
 
-const emit = defineEmits(['categorySelected'])
 const categories = ref([]);
 
-function selectCategory(category) {
-    emit('categorySelected', category)
-}
 
 async function fetchCategories() {
     try {
         const response = await axios.get(`/api/categories`);
         categories.value = response.data;
-        console.log(categories.value)
     } catch (error) {
         console.log(error)
     }
@@ -24,8 +19,14 @@ onMounted(fetchCategories)
 <template>
 <div>
     <nav class="categories">
-        <g-button @click="selectCategory(0)" class="link">Все</g-button>
-        <g-button v-for="category in categories" :key="category.id" @click="selectCategory(category.id)" class="link">{{ category.name }}</g-button>
+        <router-link to="/products" class="link">Все</router-link>
+        <router-link
+            v-for="category in categories"
+            :key="category.id"
+            :to="`/products/${category.slug}`"
+            class="link">
+            {{ category.name }}
+        </router-link>
     </nav>
 </div>
 </template>
@@ -34,15 +35,20 @@ onMounted(fetchCategories)
 .categories {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     gap: 10px;
 }
 
 .link {
-    color: #000000;
-    border-radius: 0;
+    color: #000;
     font-size: 17px;
     padding: 19px 61px;
-    border: 1px solid;
+    border: 1px solid black;
+    text-decoration: none;
+
+}
+
+.link:hover {
+    background: #f4f4f4;
 }
 </style>

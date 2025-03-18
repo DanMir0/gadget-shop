@@ -40,6 +40,7 @@ const props = defineProps({
     padding: 20px;
     max-width: 350px;
     border-radius: 12px;
+    gap: 10px;
 }
 
 .product-title {
@@ -75,7 +76,6 @@ const props = defineProps({
 
 .product-image {
     width: 100%;
-    max-height: 300px;
     object-fit: cover;
     border-radius: 10px;
 }
@@ -83,9 +83,11 @@ const props = defineProps({
 .product-stock {
     color: #444;
 }
+
 .product-block-stock {
     text-align: center;
 }
+
 button {
     margin-top: 10px;
     background: #E44D26;

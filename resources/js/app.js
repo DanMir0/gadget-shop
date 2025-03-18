@@ -11,10 +11,12 @@ import GCategoriesMenu from "@/components/GCategoriesMenu.vue";
 import GContainer from "@/components/GContainer.vue";
 import GProductsList from "@/components/GProductsList.vue";
 import GProduct from "@/components/GProduct.vue";
+import GBreadcrumb from "@/components/GBreadcrumb.vue";
 
 const app = createApp(App);
 
 app
+    .component('g-breadcrumbs', GBreadcrumb)
     .component('g-product', GProduct)
     .component('g-products-list', GProductsList)
     .component('g-container', GContainer)
