@@ -42,7 +42,7 @@ onMounted(fetchCategories)
     color: #000000;
     border-radius: 0;
     font-size: 17px;
-    padding: 19px 65px;
+    padding: 19px 61px;
     border: 1px solid;
 }
 </style>

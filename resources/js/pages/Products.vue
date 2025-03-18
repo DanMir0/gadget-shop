@@ -35,7 +35,7 @@ onMounted(fetchProducts)
         <g-categories-menu @categorySelected="handlerCategoryChange"></g-categories-menu>
 
         <p v-if="loading">Loading...</p>
-        <g-products-list :products="products"></g-products-list>
+        <g-products-list class="mt-100" :products="products"></g-products-list>
     </g-container>
 
 </template>
@@ -43,5 +43,9 @@ onMounted(fetchProducts)
 <style scoped>
 .mt-50 {
     margin-top: 50px;
+}
+
+.mt-100 {
+    margin-top: 100px;
 }
 </style>
