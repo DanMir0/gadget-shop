@@ -37,15 +37,18 @@ watch(
     () => route.params.category,
     (slug) => {
         if (!slug) {
+            document.title = "Магазин - Все товары";
             selectedCategory.value = 0;
             selectedCategoryName.value = "Все";
         } else {
             const category = categories.value.find(cat => cat.slug === slug);
             if (category) {
+                document.title = `Магазин - ${category.name}`;
                 selectedSlug.value = category.slug;
                 selectedCategory.value = category.id;
                 selectedCategoryName.value = category.name;
             } else {
+                document.title = "Магазин";
                 selectedCategory.value = 0;
                 selectedCategoryName.value = "Все";
             }
