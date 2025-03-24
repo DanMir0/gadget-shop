@@ -2,6 +2,7 @@
 import {onMounted, ref, watch} from "vue";
 import GBreadcrumb from "@/components/GBreadcrumb.vue";
 import {useRoute} from "vue-router";
+import GLoader from "@/components/GLoader.vue";
 
 const route = useRoute();
 const selectedCategory = ref(0);
@@ -73,8 +74,8 @@ onMounted(async () => {
 
         <g-breadcrumb class="mt-50" :selectedSlug="selectedSlug" :selectedCategory="selectedCategoryName"></g-breadcrumb>
 
-        <p v-if="loading">Loading...</p>
-        <g-products-list class="mt-50" :products="products"></g-products-list>
+        <g-loader v-if="loading">Loading...</g-loader>
+        <g-products-list v-else class="mt-50" :products="products"></g-products-list>
     </g-container>
 
 </template>

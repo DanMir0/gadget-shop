@@ -12,10 +12,12 @@ import GContainer from "@/components/GContainer.vue";
 import GProductsList from "@/components/GProductsList.vue";
 import GProduct from "@/components/GProduct.vue";
 import GBreadcrumb from "@/components/GBreadcrumb.vue";
+import GLoader from "@/components/GLoader.vue";
 
 const app = createApp(App);
 
 app
+    .component('g-loader', GLoader)
     .component('g-breadcrumbs', GBreadcrumb)
     .component('g-product', GProduct)
     .component('g-products-list', GProductsList)
