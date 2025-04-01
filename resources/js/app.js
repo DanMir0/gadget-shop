@@ -13,10 +13,12 @@ import GProductsList from "@/components/GProductsList.vue";
 import GProduct from "@/components/GProduct.vue";
 import GBreadcrumb from "@/components/GBreadcrumb.vue";
 import GLoader from "@/components/GLoader.vue";
+import GFooter from "@/components/GFooter.vue";
 
 const app = createApp(App);
 
 app
+    .component('g-footer', GFooter)
     .component('g-loader', GLoader)
     .component('g-breadcrumbs', GBreadcrumb)
     .component('g-product', GProduct)
