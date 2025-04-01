@@ -22,6 +22,11 @@ const routes = [
     },
 ];
 
+// { path: '/:lang/', name: 'Home', component: Home },
+// { path: '/:lang/products', name: 'Products', component: Products },
+// { path: '/:lang/products/:category', name: 'ProductCategory', component: Products },
+// { path: '/', redirect: '/ru/' } // Редирект на русский по умолчанию
+
 const router = createRouter({
     history: createWebHistory(),
     routes,

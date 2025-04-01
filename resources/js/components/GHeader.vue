@@ -27,7 +27,7 @@ onUnmounted(() => {
     <header class="header">
         <div class="container">
             <div class="logo">
-                <img class="logo-img" src="../images/logo2-removebg-preview.png" />
+                <img alt="лого" class="logo-img" src="../images/logo2-removebg-preview.png" />
                 <p class="logo-title">Ninja Devices</p>
             </div>
 
@@ -42,8 +42,8 @@ onUnmounted(() => {
 
             <!-- Кнопки на десктопе -->
             <div class="buttons">
-                <g-button class="btn-green">Войти</g-button>
-                <g-button class="btn-red">Зарегистрироваться</g-button>
+                <g-button class="btn-black">Войти</g-button>
+                <g-button class="btn-outlined">Зарегистрироваться</g-button>
             </div>
 
             <!-- Бургер-кнопка -->
@@ -67,8 +67,8 @@ onUnmounted(() => {
                 <a href="#" class="menu-link">Скидки</a>
             </nav>
             <div class="mobile-buttons">
-                <g-button class="btn-green">Войти</g-button>
-                <g-button class="btn-red">Зарегистрироваться</g-button>
+                <g-button class="btn-black">Войти</g-button>
+                <g-button class="btn-outlined">Зарегистрироваться</g-button>
             </div>
         </div>
     </header>
@@ -76,8 +76,7 @@ onUnmounted(() => {
 
 <style scoped>
 .header {
-    background-color: royalblue;
-    color: white;
+    background-color: #FFFFFF;
     padding: 15px 0;
 }
 
@@ -116,12 +115,13 @@ onUnmounted(() => {
     gap: 15px;
 }
 
-.btn-green {
-    background-color: #35a531;
+.btn-black {
+    background-color: #000000;
+    color: #FFFFFF;
 }
 
-.btn-red {
-    background-color: #d82c2c;
+.btn-outlined {
+    border: 1px solid #000000;
 }
 
 /* Бургер-кнопка */

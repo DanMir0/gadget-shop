@@ -17,7 +17,6 @@ onMounted(fetchCategories)
 </script>
 
 <template>
-<div>
     <nav class="categories">
         <router-link to="/products" class="link">Все</router-link>
         <router-link
@@ -28,7 +27,6 @@ onMounted(fetchCategories)
             {{ category.name }}
         </router-link>
     </nav>
-</div>
 </template>
 
 <style scoped>

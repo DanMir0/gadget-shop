@@ -20,7 +20,6 @@ button {
     transition: background-color 0.3s ease;
     padding: 15px 25px;
     border-radius: 20px;
-    color: #FFFFFF;
 }
 
 /* Стили по умолчанию */
