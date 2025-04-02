@@ -25,7 +25,7 @@ const props = defineProps({
             <div class="product-block-stock">
                 <p class="product-stock">Осталось: <strong>{{ product.stock }}</strong></p>
             </div>
-            <g-button>Купить</g-button>
+            <g-button class="buy-button">Купить</g-button>
         </div>
     </article>
 </template>
@@ -36,11 +36,18 @@ const props = defineProps({
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff; /* Белый фон */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
     padding: 20px;
     max-width: 350px;
     border-radius: 12px;
     gap: 10px;
+    transition: transform 0.2s; /* Плавный эффект при наведении */
+    min-height: 500px;
+}
+
+.product:hover {
+    transform: translateY(-5px); /* Подъем при наведении */
 }
 
 .product-title {
@@ -64,6 +71,9 @@ const props = defineProps({
 
 .product-name {
     max-width: 170px;
+    overflow: hidden; /* Предотвращение переполнения текста */
+    white-space: nowrap; /* Однострочный текст */
+    text-overflow: ellipsis;
 }
 
 .product-price {
@@ -88,10 +98,19 @@ const props = defineProps({
     text-align: center;
 }
 
-button {
+.buy-button {
     margin-top: 10px;
-    background: #E44D26;
-    padding: 10px 15px;
+    background: #E44D26; /* Цвет кнопки */
+    color: #fff; /* Цвет текста на кнопке */
+    border: none; /* Убираем границу */
+    border-radius: 6px; /* Округление углов кнопки */
+    padding: 10px 15px; /* Отступы */
+    cursor: pointer; /* Указатель при наведении */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+}
+
+.buy-button:hover {
+    background-color: #FFA542; /* Цвет кнопки при наведении */
 }
 </style>
 

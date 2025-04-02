@@ -33,7 +33,7 @@ const props = defineProps({selectedCategory: String, selectedSlug: String});
     display: block;
     width: 0;
     height: 1px;
-    background: #4169e1;
+    background: #FFA542;
     transition: .3s;
 }
 
@@ -47,11 +47,11 @@ const props = defineProps({selectedCategory: String, selectedSlug: String});
 }
 
 .breadcrumb-link:hover {
-    color: #4169e1;
+    color: #FFA542;
 }
 
 .active {
-    color: #4169e1;
+    color: #FFA542;
 }
 </style>
 
