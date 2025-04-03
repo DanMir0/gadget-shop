@@ -15,13 +15,17 @@ class ProductController extends Controller
     public function getProducts(Request $request)
     {
         $category = $request->query('category');
+        $perPage = $request->query('per_page', 10);
 
         $productsQuery = Product::query();
+
         if ($category && $category !== '0') {
             $productsQuery->where('category_id', $category);
         }
 
-        $products = $productsQuery->get()->map(function ($product) {
+        $products = $productsQuery->paginate($perPage);
+
+        $products->getCollection()->transform(function ($product) {
             return [
                 'id' => $product->id,
                 'name' => $product->name,
@@ -31,6 +35,17 @@ class ProductController extends Controller
                 'image' => asset('storage/' . $product->image), // ✅ Формируем URL изображения
             ];
         });
+
+//        $products = $productsQuery->get()->map(function ($product) {
+//            return [
+//                'id' => $product->id,
+//                'name' => $product->name,
+//                'description' => $product->description,
+//                'price' => $product->price,
+//                'stock' => $product->stock,
+//                'image' => asset('storage/' . $product->image), // ✅ Формируем URL изображения
+//            ];
+//        });
 
         return response()->json($products);
     }

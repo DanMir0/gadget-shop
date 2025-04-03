@@ -1,8 +1,10 @@
 <script setup>
 import {onMounted, ref, watch} from "vue";
-import GBreadcrumb from "@/components/GBreadcrumb.vue";
-import {useRoute} from "vue-router";
-import GLoader from "@/components/GLoader.vue";
+import {useRoute, useRouter} from "vue-router";
+
+// pagination
+const router = useRouter();
+
 
 const route = useRoute();
 const selectedCategory = ref(0);
@@ -11,6 +13,11 @@ const selectedCategoryName = ref("Все");
 const products = ref([]);
 const loading = ref(false);
 const categories = ref([]);
+
+// pagination
+const currentPage = ref(Number(route.query.page) || 1);
+const lastPage = ref(1);
+const perPage = 5;
 
 async function fetchCategories() {
     try {
@@ -25,14 +32,36 @@ async function fetchProducts() {
     loading.value = true;
     try {
         const response = await axios.get(`/api/products`, {
-            params: {category: selectedCategory.value}
+            params: {
+                // pagination
+                page: currentPage.value,
+                per_page: perPage,
+                category: selectedCategory.value,
+            }
         });
-        products.value = response.data;
+        products.value = response.data.data;
+        lastPage.value = response.data.last_page;
     } catch (error) {
         console.log(error)
     }
     loading.value = false;
 }
+// pagination
+function changePage(page) {
+    if (page >= 1 && page <= lastPage.value) {
+        router.push({
+            query: {
+                page,
+                category: selectedSlug.value || undefined // ✅ Учитываем категорию
+            }
+        });
+    }
+}
+// pagination
+watch(() => route.query.page, (newPage) => {
+    currentPage.value = Number(newPage) || 1;
+    fetchProducts();
+}, {immediate: true});
 
 watch(
     () => route.params.category,
@@ -54,6 +83,12 @@ watch(
                 selectedCategoryName.value = "Все";
             }
         }
+
+        //
+        currentPage.value = 1; // ✅ Сброс страницы при смене категории
+        router.push({ query: { page: 1, category: selectedSlug.value || undefined } }); // ✅ Обновляем URL
+
+
         fetchProducts()
     },
     {immediate: true}
@@ -72,10 +107,26 @@ onMounted(async () => {
         </div>
         <g-categories-menu></g-categories-menu>
 
-        <g-breadcrumb class="mt-50" :selectedSlug="selectedSlug" :selectedCategory="selectedCategoryName"></g-breadcrumb>
+        <g-breadcrumb class="mt-50" :selectedSlug="selectedSlug"
+                      :selectedCategory="selectedCategoryName"></g-breadcrumb>
 
         <g-loader v-if="loading">Loading...</g-loader>
         <g-products-list v-else class="mt-50" :products="products"></g-products-list>
+        <!-- Пагинация -->
+        <div class="pagination">
+            <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1">
+                Назад
+            </button>
+
+            <button v-for="page in lastPage" :key="page" :class="{ active: currentPage === page }"
+                    @click="changePage(page)">
+                {{ page }}
+            </button>
+
+            <button @click="changePage(currentPage + 1)" :disabled="currentPage === lastPage">
+                Вперед
+            </button>
+        </div>
     </g-container>
 
 </template>
