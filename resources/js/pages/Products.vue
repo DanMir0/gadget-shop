@@ -113,17 +113,27 @@ onMounted(async () => {
         <g-loader v-if="loading">Loading...</g-loader>
         <g-products-list v-else class="mt-50" :products="products"></g-products-list>
         <!-- Пагинация -->
-        <div class="pagination">
-            <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1">
+        <div class="pagination" v-if="lastPage > 1">
+            <button
+                @click="changePage(currentPage - 1)"
+                :disabled="currentPage === 1"
+                class="pagination-button">
                 Назад
             </button>
 
-            <button v-for="page in lastPage" :key="page" :class="{ active: currentPage === page }"
-                    @click="changePage(page)">
+            <button
+                v-for="page in lastPage"
+                :key="page"
+                @click="changePage(page)"
+                class="pagination-button"
+                :class="{ active: currentPage === page }">
                 {{ page }}
             </button>
 
-            <button @click="changePage(currentPage + 1)" :disabled="currentPage === lastPage">
+            <button
+                @click="changePage(currentPage + 1)"
+                :disabled="currentPage === lastPage"
+                class="pagination-button">
                 Вперед
             </button>
         </div>
@@ -134,5 +144,41 @@ onMounted(async () => {
 <style scoped>
 .mt-50 {
     margin-top: 50px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.pagination-button {
+    padding: 10px 16px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 2px solid #000;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+    background-color: #000;
+    border-color: #000;
+    color: #fff;
+}
+
+.pagination-button.active {
+    background-color: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+.pagination-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 </style>
