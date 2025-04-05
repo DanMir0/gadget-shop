@@ -142,7 +142,7 @@ onUnmounted(() => {
 .burger-bar {
     width: 35px;
     height: 4px;
-    background-color: white;
+    background-color: black;
     transition: all 0.3s ease;
 }
 
@@ -166,7 +166,7 @@ onUnmounted(() => {
     left: 0;
     width: 100%;
     height: 100vh; /* Можно изменить на 50vh для половины экрана */
-    background: royalblue;
+    background: white;
     display: flex;
     flex-direction: column;
     align-items: center;
