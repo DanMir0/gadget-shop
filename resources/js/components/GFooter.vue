@@ -17,21 +17,29 @@
         <div class="footer-group">
             <nav>
                 <ul class="footer-links">
-                    <li><router-link to="" class="link">Избранное</router-link></li>
-                    <li><router-link to="" class="link">Корзина</router-link></li>
-                    <li><router-link to="" class="link">Контакты</router-link></li>
+                    <li>
+                        <router-link to="" class="link">Избранное</router-link>
+                    </li>
+                    <li>
+                        <router-link to="" class="link">Корзина</router-link>
+                    </li>
+                    <li>
+                        <router-link to="" class="link">Контакты</router-link>
+                    </li>
                 </ul>
             </nav>
         </div>
         <div class="footer-group">
             <nav class="footer-about">
                 <ul>
-                    <li><router-link to="" class="link">Условия сервиса</router-link></li>
+                    <li>
+                        <router-link to="" class="link">Условия сервиса</router-link>
+                    </li>
                 </ul>
             </nav>
             <div class="footer-language">
                 <img alt="Иконка планеты" src="../images/RU.svg">
-<!--                // ru-->
+                <!--                // ru-->
                 <router-link to="#" class="language">Рус</router-link>
                 <!--                // en-->
                 <router-link to="#" class="language">Eng</router-link>
@@ -113,5 +121,51 @@
     display: flex;
     align-items: center;
     gap: 17px;
+}
+
+@media (max-width: 1200px) {
+    .footer {
+        flex-direction: column;
+        gap: 40px;
+        padding: 35px 10px;
+    }
+
+    .footer-group {
+        min-height: 70px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column;
+        gap: 40px;
+        padding: 20px 10px;
+    }
+
+    .footer-title {
+        font-size: 28px;
+    }
+
+    .link {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 500px) {
+    .footer-preview {
+        flex-direction: column;
+    }
+
+    .footer-img {
+        height: 80px;
+    }
+
+    .footer-title {
+        font-size: 24px;
+    }
+
+    .link {
+        font-size: 16px;
+    }
 }
 </style>

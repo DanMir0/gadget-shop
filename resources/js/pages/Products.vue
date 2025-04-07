@@ -17,7 +17,7 @@ const categories = ref([]);
 // pagination
 const currentPage = ref(Number(route.query.page) || 1);
 const lastPage = ref(1);
-const perPage = 5;
+const perPage = 8;
 
 async function fetchCategories() {
     try {

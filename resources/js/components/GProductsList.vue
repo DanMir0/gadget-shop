@@ -21,4 +21,13 @@ const props = defineProps({
     gap: 20px;
     justify-content: center;
 }
+
+@media (max-width: 500px) {
+    .lists {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 0 10px 30px;
+        align-items: center;
+    }
+}
 </style>

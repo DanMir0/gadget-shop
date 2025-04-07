@@ -112,5 +112,13 @@ const props = defineProps({
 .buy-button:hover {
     background-color: #FFA542; /* Цвет кнопки при наведении */
 }
+
+@media (max-width: 768px) {
+    .product {
+        padding: 14px;
+        min-height: auto;
+    }
+
+}
 </style>
 
