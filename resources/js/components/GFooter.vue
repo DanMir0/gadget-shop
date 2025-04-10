@@ -46,10 +46,10 @@
             </div>
         </div>
         <div class="footer-social">
-            <a href="https://vk.com/"><img alt="Вконтакте" src="../images/VK.svg"></a>
-            <a href="https://web.telegram.org/"><img alt="Telegram" src="../images/Telegram.svg"></a>
-            <a href="https://www.whatsapp.com/?lang=ru_RU"><img alt="Whatsapp" src="../images/Whatsapp.svg"></a>
-            <a href="http://instagram.com/"><img alt="Instagram" src="../images/Instagram.svg"></a>
+            <a href="https://vk.com/"><img class="footer-social-img" alt="Вконтакте" src="../images/VK.svg"></a>
+            <a href="https://web.telegram.org/"><img class="footer-social-img" alt="Telegram" src="../images/Telegram.svg"></a>
+            <a href="https://www.whatsapp.com/?lang=ru_RU"><img class="footer-social-img" alt="Whatsapp" src="../images/Whatsapp.svg"></a>
+            <a href="http://instagram.com/"><img class="footer-social-img" alt="Instagram" src="../images/Instagram.svg"></a>
         </div>
 
     </div>
@@ -166,6 +166,10 @@
 
     .link {
         font-size: 16px;
+    }
+
+    .footer-social-img {
+        width: 22px;
     }
 }
 </style>
