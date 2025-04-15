@@ -33,8 +33,8 @@ onUnmounted(() => {
 
             <!-- Навигация на десктопе -->
             <nav class="menu">
-                <a href="#" class="menu-link">Главная</a>
-                <router-link :to="{name: 'Products'}" class="menu-link">Каталог</router-link>
+                <router-link :to="{name: 'Home'}" activeClass="active" class="menu-link">Главная</router-link>
+                <router-link :to="{name: 'Products'}" activeClass="active" class="menu-link">Каталог</router-link>
                 <a href="#" class="menu-link">Категории</a>
                 <a href="#" class="menu-link">Новинки</a>
                 <a href="#" class="menu-link">Скидки</a>
@@ -199,6 +199,15 @@ onUnmounted(() => {
     display: flex;
     flex-direction: column;
     gap: 15px;
+}
+
+.menu-link:hover {
+    color: #a1a399;
+}
+
+.active {
+    color: #a1a399;
+    text-decoration: underline 1px solid #a1a399;
 }
 
 /* Медиа-запросы */
