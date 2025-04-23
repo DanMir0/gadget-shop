@@ -1,6 +1,8 @@
 <script setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 
+const loading = ref(false)
+const products = ref([]);
 const slides = ref([
     {image: "/images/slider/slide3.jpg", title: "Скидка на аксессуары при покупки смартфона"},
     {image: "/images/slider/slide3.jpg", title: "Скидка на аксессуары при покупки смартфона"},
@@ -12,9 +14,11 @@ const currentIndex = ref(0)
 function nextSlide() {
     currentIndex.value = (currentIndex.value + 1) % slides.value.length
 }
+
 function prevSlide() {
-    currentIndex.value =( currentIndex.value - 1 + slides.value.length)  % slides.value.length
+    currentIndex.value = (currentIndex.value - 1 + slides.value.length) % slides.value.length
 }
+
 function goToSlide(index) {
     currentIndex.value = index
 }
@@ -35,13 +39,30 @@ const moveTouch = (e) => {
         else prevSlide()
     }
 }
+
+async function fetchNewProducts() {
+    loading.value = true
+    try {
+        const response = await axios.get("/api/new-products");
+        products.value = response.data
+        loading.value = false
+        console.log(products.value)
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+onMounted(async () => {
+    await fetchNewProducts()
+})
 </script>
 
 <template>
+
     <div class="slider" @touchstart="startTouch" @touchmove="moveTouch">
         <div class="slides" :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
             <div class="slide" v-for="(slide, index) in slides" :key="index">
-                <img :src="slide.image" :alt="slide.title" />
+                <img :src="slide.image" :alt="slide.title"/>
             </div>
         </div>
         <div class="navigation">
@@ -58,37 +79,47 @@ const moveTouch = (e) => {
         </div>
     </div>
 
-    <div class="partners">
-        <h2 class="partners-title">Наши партнеры</h2>
-        <div class="partners-slide">
-            <img src="../images/partner1.jpg" alt="Intel">
-            <img src="../images/partner2.webp" alt="AMD">
-            <img src="../images/partner3.png" alt="ASUS">
-            <img src="../images/partner4.webp" alt="Nvidia">
-        </div>
-    </div>
+    <g-container>
+      <div class="products">
+          <h2 class="product-title">Новые товары</h2>
+          <g-loader v-if="loading">Loading...</g-loader>
+          <g-products-list v-else :products="products"></g-products-list>
+      </div>
 
-    <div class="values">
-        <h2 class="values-title">Наши ценности</h2>
-        <p class="values-description">Наша миссия — сделать топ 1 магазин электронной технике в мире.</p>
-        <div class="values-wrapper">
-            <div class="values-product">
-                <img src="../images/ic-like.svg" alt="Icon">
-                <h3>Качество</h3>
-                <p>Предоставляем высочайшее качество</p>
-            </div>
-            <div class="values-product">
-                <img src="../images/Group.svg" alt="Icon">
-                <h3>Безопасность</h3>
-                <p>Имея большой опыт в работе, предоставляем полную безопастность </p>
-            </div>
-            <div class="values-product">
-                <img src="../images/ic-hand.svg" alt="Icon">
-                <h3>Скорость</h3>
-                <p>Быстрая доставка, безупречное качество товаров, идеальный сервис — всё это показывает, что магазин ценит время и комфорт покупателей.</p>
+
+        <div class="partners">
+            <h2 class="partners-title">Наши партнеры</h2>
+            <div class="partners-slide">
+                <img src="../images/partner1.jpg" alt="Intel">
+                <img src="../images/partner2.webp" alt="AMD">
+                <img src="../images/partner3.png" alt="ASUS">
+                <img src="../images/partner4.webp" alt="Nvidia">
             </div>
         </div>
-    </div>
+
+        <div class="values">
+            <h2 class="values-title">Наши ценности</h2>
+            <p class="values-description">Наша миссия — сделать топ 1 магазин электронной технике в мире.</p>
+            <div class="values-wrapper">
+                <div class="values-product">
+                    <img src="../images/ic-like.svg" alt="Icon">
+                    <h3>Качество</h3>
+                    <p>Предоставляем высочайшее качество</p>
+                </div>
+                <div class="values-product">
+                    <img src="../images/Group.svg" alt="Icon">
+                    <h3>Безопасность</h3>
+                    <p>Имея большой опыт в работе, предоставляем полную безопастность </p>
+                </div>
+                <div class="values-product">
+                    <img src="../images/ic-hand.svg" alt="Icon">
+                    <h3>Скорость</h3>
+                    <p>Быстрая доставка, безупречное качество товаров, идеальный сервис — всё это показывает, что
+                        магазин ценит время и комфорт покупателей.</p>
+                </div>
+            </div>
+        </div>
+    </g-container>
 </template>
 
 
@@ -197,7 +228,7 @@ const moveTouch = (e) => {
     background-color: white;
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, filter 0.3s ease;
 }
 
@@ -224,7 +255,7 @@ const moveTouch = (e) => {
     text-align: center;
 }
 
-.values-product h3  {
+.values-product h3 {
     font-size: 26px;
     font-weight: bold;
     margin-top: 24px;
@@ -239,6 +270,16 @@ const moveTouch = (e) => {
 
 .values-description {
     font-size: 18px;
+}
+
+.products {
+    margin-top: 100px;
+}
+
+.product-title {
+    text-align: center;
+    font-size: 48px;
+    margin-bottom: 30px;
 }
 
 @media (max-width: 1200px) {
@@ -266,6 +307,7 @@ const moveTouch = (e) => {
         grid-template-columns: repeat(2, 1fr);
         margin: 0 50px;
     }
+
     .partners-slide img {
         width: 100%;
     }
