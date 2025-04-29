@@ -2,8 +2,5 @@
 
 </script>
 <template>
-    <g-header></g-header>
-    <g-main>
-    </g-main>
-    <g-footer></g-footer>
+   <router-view></router-view>
 </template>

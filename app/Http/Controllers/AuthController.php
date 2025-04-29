@@ -6,55 +6,42 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
-    public function showLoginForm() {
-        return view('auth.login'); // Создадим этот шаблон позже
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()->symbols()],
+        ]);
+//
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        Auth::login($user);
+        return response()->json(['message' => 'Регистрация прошла успешно!']);
     }
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->intended('/');
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['message' => 'Неверный email или пароль!'], 404);
         }
-        return back()->withErrors([
-            'email' => 'Неверный email или пароль',
-        ])->withInput();
-//        return back()->withErrors(['email' => 'Неверный логин или пароль']);
-    }
 
-    // Форма регистрации
-    public function showRegisterForm() {
-        return view('auth.register'); // Создадим этот шаблон позже
-    }
-
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
-        $user = User::create([
-           'name' => $request->name,
-           'email' => $request->email,
-           'password' => Hash::make($request->password),
-        ]);
-
-        Auth::login($user);
-        return response()->json(['message' =>  'Регистрация успешна']);
+        return response()->json(['message' => 'Вход выполнен']);
     }
 
     public function logout()
     {
         Auth::logout();
-        return response()->json(['message' => 'Выход выполнен']);
+        return response()->json(['message' => 'Вы вышли из системы']);
     }
 }

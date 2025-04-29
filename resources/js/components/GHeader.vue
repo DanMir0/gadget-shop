@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import Products from "@/pages/Products.vue";
+import router from "@/router/router.js";
 
 const menuOpen = ref(false);
 
@@ -12,6 +13,10 @@ function closeMenu(event) {
     if (!event.target.closest(".mobile-menu") && !event.target.closest(".burger-btn")) {
         menuOpen.value = false;
     }
+}
+
+function goToRegister() {
+    router.push('/register')
 }
 
 onMounted(() => {
@@ -43,7 +48,7 @@ onUnmounted(() => {
             <!-- Кнопки на десктопе -->
             <div class="buttons">
                 <g-button class="btn-black">Войти</g-button>
-                <g-button class="btn-outlined">Зарегистрироваться</g-button>
+                <g-button @click="goToRegister" class="btn-outlined">Зарегистрироваться</g-button>
             </div>
 
             <!-- Бургер-кнопка -->

@@ -1,24 +1,42 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Products from "@/pages/Products.vue";
 import Home from "@/pages/Home.vue";
+import Register from "@/pages/Register.vue";
+import DefaultLayout from "@/layouts/DefaultLayout.vue";
+import AuthLayout from "@/layouts/AuthLayout.vue";
+import Login from "@/pages/Login.vue";
 
 const routes = [
     {
         path: '/',
         name: 'Home',
-        component: Home
+        component: DefaultLayout,
+        children: [
+            {path: '', component: Home},
+            {
+                path: '/products/',
+                name: 'Products',
+                component: Products,
+                meta: {title: "Магазин - Все товары", description: "Все товары в магазине" },
+            },
+            {
+                path: '/products/:category?',
+                name: 'Category',
+                component: Products,
+                meta: {title: "Категория товаров"},
+            },
+        ]
     },
+
+
     {
-        path: '/products/',
-        name: 'Products',
-        component: Products,
-        meta: {title: "Магазин - Все товары", description: "Все товары в магазине" },
-    },
-    {
-        path: '/products/:category?',
-        name: 'Category',
-        component: Products,
-        meta: {title: "Категория товаров"},
+        path: '/register',
+        name: 'AuthLayout',
+        component: AuthLayout,
+        children: [
+            {path: '', component: Register,},
+            {path: '/login', name: 'Login', component: Login},
+        ]
     },
 ];
 
