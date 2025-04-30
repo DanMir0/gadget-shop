@@ -9,10 +9,9 @@ import Login from "@/pages/Login.vue";
 const routes = [
     {
         path: '/',
-        name: 'Home',
         component: DefaultLayout,
         children: [
-            {path: '', component: Home},
+            {path: '/', name: 'Home', component: Home},
             {
                 path: '/products/',
                 name: 'Products',

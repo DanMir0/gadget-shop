@@ -19,6 +19,10 @@ function goToRegister() {
     router.push('/register')
 }
 
+function goToLogin() {
+    router.push('/login')
+}
+
 onMounted(() => {
     document.addEventListener("click", closeMenu);
 });
@@ -38,16 +42,15 @@ onUnmounted(() => {
 
             <!-- Навигация на десктопе -->
             <nav class="menu">
-                <router-link :to="{name: 'Home'}" activeClass="active" class="menu-link">Главная</router-link>
-                <router-link :to="{name: 'Products'}" activeClass="active" class="menu-link">Каталог</router-link>
-                <a href="#" class="menu-link">Категории</a>
+                <router-link :to="{name: 'Home'}" exact-active-class="active" class="menu-link">Главная</router-link>
+                <router-link :to="{name: 'Products'}" exact-active-class="active" class="menu-link">Каталог</router-link>
                 <a href="#" class="menu-link">Новинки</a>
                 <a href="#" class="menu-link">Скидки</a>
             </nav>
 
             <!-- Кнопки на десктопе -->
             <div class="buttons">
-                <g-button class="btn-black">Войти</g-button>
+                <g-button @click="goToLogin" class="btn-black">Войти</g-button>
                 <g-button @click="goToRegister" class="btn-outlined">Зарегистрироваться</g-button>
             </div>
 
@@ -66,14 +69,14 @@ onUnmounted(() => {
                 <p class="logo-title">Ninja Devices</p>
             </div>
             <nav class="mobile-nav">
-                <a href="#" class="menu-link">Главная</a>
-                <a href="#" class="menu-link">Категории</a>
+                <router-link :to="{name: 'Home'}" activeClass="active" class="menu-link">Главная</router-link>
+                <router-link :to="{name: 'Products'}" activeClass="active" class="menu-link">Каталог</router-link>
                 <a href="#" class="menu-link">Новинки</a>
                 <a href="#" class="menu-link">Скидки</a>
             </nav>
             <div class="mobile-buttons">
-                <g-button class="btn-black">Войти</g-button>
-                <g-button class="btn-outlined">Зарегистрироваться</g-button>
+                <g-button @click="goToLogin" class="btn-black">Войти</g-button>
+                <g-button @click="goToRegister" class="btn-outlined">Зарегистрироваться</g-button>
             </div>
         </div>
     </header>
