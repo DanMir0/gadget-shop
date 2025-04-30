@@ -1,5 +1,6 @@
 <script setup>
 import {onMounted, ref} from "vue";
+import router from "@/router/router.js";
 
 const loading = ref(false)
 const products = ref([]);
@@ -52,13 +53,23 @@ async function fetchNewProducts() {
     }
 }
 
+function goToProduct() {
+    router.push('/products')
+}
+
 onMounted(async () => {
     await fetchNewProducts()
 })
 </script>
 
 <template>
-
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Добро пожаловать в TechnoTop</h1>
+            <p>Лучшие гаджеты и аксессуары — всё в одном месте</p>
+            <g-button class="hero-btn" @click="goToProduct">Перейти в каталог</g-button>
+        </div>
+    </header>
     <div class="slider" @touchstart="startTouch" @touchmove="moveTouch">
         <div class="slides" :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
             <div class="slide" v-for="(slide, index) in slides" :key="index">
@@ -80,14 +91,49 @@ onMounted(async () => {
     </div>
 
     <g-container>
-      <div class="products">
-          <h2 class="product-title">Новые товары</h2>
-          <g-loader v-if="loading">Loading...</g-loader>
-          <g-products-list v-else :products="products"></g-products-list>
-      </div>
+        <div class="products mt-120">
+            <h2 class="product-title">Новые товары</h2>
+            <g-loader v-if="loading">Loading...</g-loader>
+            <g-products-list v-else :products="products"></g-products-list>
+        </div>
 
+        <section class="why-us mt-120">
+            <h2>Почему выбирают нас?</h2>
+            <div class="reasons">
+                <div class="reason">
+                    <img class="" src="../images/reliability.png" alt="Иконка надежности">
+                    Надёжность и гарантия на всё
+                </div>
+                <div class="reason">
+                    <img class="" src="../images/delivery.png" alt="Иконка доставка">
+                    Доставка по всей России
+                </div>
+                <div class="reason">
+                    <img class="" src="../images/24-hours-support.png" alt="Иконка поддержки">
+                    Быстрая поддержка 24/7
+                </div>
+            </div>
+        </section>
 
-        <div class="partners">
+        <section class="testimonials mt-120">
+            <h2>Отзывы наших клиентов</h2>
+            <div class="testimonial-list">
+                <div class="testimonial">
+                    <p>“Очень доволен сервисом! Смартфон пришел быстро и в отличной упаковке.”</p>
+                    <strong>— Иван, Москва</strong>
+                </div>
+                <div class="testimonial">
+                    <p>“Цены супер! Нашёл тут редкий аксессуар, который нигде не было.”</p>
+                    <strong>— Алина, Казань</strong>
+                </div>
+                <div class="testimonial">
+                    <p>“Цены супер! Нашёл тут редкий аксессуар, который нигде не было.”</p>
+                    <strong>— Алина, Казань</strong>
+                </div>
+            </div>
+        </section>
+
+        <div class="partners mt-120">
             <h2 class="partners-title">Наши партнеры</h2>
             <div class="partners-slide">
                 <img src="../images/partner1.jpg" alt="Intel">
@@ -97,7 +143,7 @@ onMounted(async () => {
             </div>
         </div>
 
-        <div class="values">
+        <div class="values mt-120">
             <h2 class="values-title">Наши ценности</h2>
             <p class="values-description">Наша миссия — сделать топ 1 магазин электронной технике в мире.</p>
             <div class="values-wrapper">
@@ -124,11 +170,122 @@ onMounted(async () => {
 
 
 <style scoped>
+.testimonials {
+    padding: 80px 20px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.testimonials h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+.testimonial-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+.testimonial {
+    max-width: 300px;
+    background: #f4f4f4;
+    padding: 20px;
+    border-radius: 10px;
+    font-style: italic;
+}
+
+.mt-120 {
+    margin-top: 120px;
+}
+
+.why-us {
+    padding: 80px 20px;
+    background: #f8f8f8;
+    text-align: center;
+}
+
+.why-us h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+.reasons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.reason {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    padding: 40px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    font-size: 18px;
+    width: 300px;
+}
+
+.reason img {
+    width: 50px;
+    margin-bottom: 8px;
+}
+
+.hero {
+    background: url('/images/header2.png') no-repeat center center;
+    background-size: cover;
+    height: 1200px; /* На весь экран */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    background: rgba(0, 0, 0, 0.6);
+    display: inline-block;
+    padding: 40px;
+    border-radius: 12px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.hero-btn {
+    background: #ff6b00;
+    border: none;
+    padding: 12px 24px;
+    font-size: 18px;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.hero-btn:hover {
+    background: #e65c00;
+}
+
 .slider {
     position: relative;
     overflow: hidden;
-    max-width: 100%;
+    max-width: 80%;
     border-radius: 12px;
+    margin: 120px auto 0 auto;
 }
 
 .slides {
@@ -177,7 +334,7 @@ onMounted(async () => {
     margin-top: 10px;
     position: absolute;
     z-index: 10;
-    top: 96%;
+    top: 93%;
     left: 50%;
 }
 
@@ -197,7 +354,8 @@ onMounted(async () => {
 
 /* Партнеры */
 .partners {
-    margin-top: 120px;
+    background: #f8f8f8;
+    padding: 80px 20px;
     display: flex;
     flex-direction: column;
     gap: 40px;
@@ -206,7 +364,7 @@ onMounted(async () => {
 }
 
 .partners-title {
-    font-size: 48px;
+    font-size: 36px;
     text-align: center;
     font-weight: bold;
 }
@@ -233,6 +391,8 @@ onMounted(async () => {
 }
 
 .values {
+    background: #f8f8f8;
+    padding: 80px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -263,7 +423,7 @@ onMounted(async () => {
 }
 
 .values-title {
-    font-size: 46px;
+    font-size: 36px;
     font-weight: bold;
     margin-bottom: 21px;
 }
@@ -283,6 +443,22 @@ onMounted(async () => {
 }
 
 @media (max-width: 1200px) {
+    .slider {
+        margin: 60px auto 0 auto;
+    }
+
+    .mt-120 {
+        margin-top: 60px;
+    }
+
+    .hero {
+        height: 800px;
+    }
+
+    .product-title {
+        font-size: 36px;
+    }
+
     .partners-title,
     .values-title {
         font-size: 36px;
@@ -314,6 +490,45 @@ onMounted(async () => {
 }
 
 @media (max-width: 768px) {
+    .navigation {
+        padding: 0
+    }
+
+    .navigation button {
+        font-size: 0.5rem;
+    }
+
+    .mt-120 {
+        margin-top: 40px;
+    }
+
+    .slider {
+        margin: 40px auto 0 auto;
+    }
+
+    .hero {
+        padding: 0 15px;
+        height: 600px;
+        background-attachment: scroll; /* фиксированный фон не работает хорошо на мобилках */
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .hero-content {
+        padding: 24px;
+    }
+
+    .hero-btn {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+
     .partners-title,
     .values-title {
         font-size: 28px;

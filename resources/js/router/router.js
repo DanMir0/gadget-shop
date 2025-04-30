@@ -13,7 +13,7 @@ const routes = [
         children: [
             {path: '/', name: 'Home', component: Home},
             {
-                path: '/products/',
+                path: '/products',
                 name: 'Products',
                 component: Products,
                 meta: {title: "Магазин - Все товары", description: "Все товары в магазине" },
