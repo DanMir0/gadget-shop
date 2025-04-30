@@ -41,7 +41,7 @@ async function login() {
                 </div>
 
                 <div class="form-group">
-                    <input v-model="password" :
+                    <input v-model="password"
                            class="{
                             'custom-input': true,
                             'error-input': errors.email
