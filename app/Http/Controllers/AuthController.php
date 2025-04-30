@@ -17,7 +17,7 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users',
             'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()->symbols()],
         ]);
-//
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -30,11 +30,26 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Неверный email или пароль!'], 404);
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'errors' => ['email' => ['Пользователь с таким email не найден.']],
+            ], 422);
         }
+
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'errors' => ['password' => ['Неверный пароль']],
+            ], 422);
+        }
+
+        Auth::login($user);
 
         return response()->json(['message' => 'Вход выполнен']);
     }

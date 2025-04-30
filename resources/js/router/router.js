@@ -30,11 +30,11 @@ const routes = [
 
 
     {
-        path: '/register',
+        path: '/',
         name: 'AuthLayout',
         component: AuthLayout,
         children: [
-            {path: '', component: Register,},
+            {path: 'register', name: 'Register', component: Register},
             {path: '/login', name: 'Login', component: Login},
         ]
     },
