@@ -27,40 +27,51 @@ async function register() {
 }
 </script>
 <template>
-    <div class="form-container">
-        <h2>Регистрация</h2>
-        <form>
-            <div class="form-group">
-                <input v-model="name" type="text" placeholder="Имя">
-                <div class="error" v-if="errors.name">{{ errors.name[0] }}</div>
-            </div>
+   <div class="wrapper">
+       <div class="form-container">
+           <h2>Регистрация</h2>
+           <form>
+               <div class="form-group">
+                   <input v-model="name" type="text" placeholder="Имя">
+                   <div class="error" v-if="errors.name">{{ errors.name[0] }}</div>
+               </div>
 
-            <div class="form-group">
-                <input v-model="email" class="custom-input" type="email" placeholder="Email">
-                <div class="error" v-if="errors.email">{{ errors.email[0] }}</div>
-            </div>
+               <div class="form-group">
+                   <input v-model="email" class="custom-input" type="email" placeholder="Email">
+                   <div class="error" v-if="errors.email">{{ errors.email[0] }}</div>
+               </div>
 
-            <div class="form-group">
-                <input v-model="password" class="custom-input" type="password" placeholder="Пароль">
-                <div class="error" v-if="errors.password">{{ errors.password[0] }}</div>
-            </div>
+               <div class="form-group">
+                   <input v-model="password" class="custom-input" type="password" placeholder="Пароль">
+                   <div class="error" v-if="errors.password">{{ errors.password[0] }}</div>
+               </div>
 
-            <div class="form-group">
-                <input v-model="password_confirmation" class="custom-input" type="password"
-                       placeholder="Подтверждение пароля">
-                <div class="error" v-if="errors.password_confirmation">{{ errors.password_confirmation[0] }}</div>
-            </div>
-        </form>
+               <div class="form-group">
+                   <input v-model="password_confirmation" class="custom-input" type="password"
+                          placeholder="Подтверждение пароля">
+                   <div class="error" v-if="errors.password_confirmation">{{ errors.password_confirmation[0] }}</div>
+               </div>
+           </form>
 
-        <g-button class="submit-button" @click="register" type="submit">Зарегистрироваться</g-button>
-        <p class="text">У вас уже есть аккаунт? <router-link class="link" :to="{name: 'Login'}">Войти</router-link></p>
-    </div>
+           <g-button class="submit-button" @click="register" type="submit">Зарегистрироваться</g-button>
+           <p class="text">У вас уже есть аккаунт? <router-link class="link" :to="{name: 'Login'}">Войти</router-link></p>
+       </div>
+   </div>
 </template>
 
 
 <style scoped>
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f1f1;
+    padding: 20px;
+}
 
 .form-container {
+    width: 100%;
     max-width: 400px;
     margin: 80px auto;
     background: #ffffff;
