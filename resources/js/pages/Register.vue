@@ -1,5 +1,4 @@
 <script setup>
-
 import {ref} from "vue";
 import router from "@/router/router.js";
 import GButton from "@/components/ui/GButton.vue";
@@ -32,22 +31,22 @@ async function register() {
            <h2>Регистрация</h2>
            <form>
                <div class="form-group">
-                   <input v-model="name" type="text" placeholder="Имя">
+                   <input v-model="name" :class="{'error-input': errors.name}" type="text" placeholder="Имя">
                    <div class="error" v-if="errors.name">{{ errors.name[0] }}</div>
                </div>
 
                <div class="form-group">
-                   <input v-model="email" class="custom-input" type="email" placeholder="Email">
+                   <input v-model="email" :class="{'error-input': errors.email}" type="email" placeholder="Email">
                    <div class="error" v-if="errors.email">{{ errors.email[0] }}</div>
                </div>
 
                <div class="form-group">
-                   <input v-model="password" class="custom-input" type="password" placeholder="Пароль">
+                   <input v-model="password" :class="{'error-input': errors.password}" type="password" placeholder="Пароль">
                    <div class="error" v-if="errors.password">{{ errors.password[0] }}</div>
                </div>
 
                <div class="form-group">
-                   <input v-model="password_confirmation" class="custom-input" type="password"
+                   <input v-model="password_confirmation" :class="{'error-input': errors.password}" type="password"
                           placeholder="Подтверждение пароля">
                    <div class="error" v-if="errors.password_confirmation">{{ errors.password_confirmation[0] }}</div>
                </div>
@@ -105,12 +104,6 @@ async function register() {
     outline: none;
 }
 
-.form-group .error-message {
-    color: #e63946;
-    font-size: 13px;
-    margin-top: 6px;
-}
-
 .submit-button {
     width: 100%;
     padding: 12px;
@@ -130,6 +123,10 @@ async function register() {
 .error {
     color: #ff0000;
     margin-left: 5px;
+}
+
+.error-input {
+    border: 1px solid #ff0000 !important;
 }
 
 .text {
