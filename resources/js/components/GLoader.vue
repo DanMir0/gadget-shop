@@ -14,6 +14,9 @@
     justify-content: center;
     align-items: center;
     height: 100px;
+    position: fixed;
+    top: 46%;
+    left: 46%;
 }
 
 .spinner {

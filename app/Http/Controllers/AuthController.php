@@ -54,9 +54,11 @@ class AuthController extends Controller
         return response()->json(['message' => 'Вход выполнен']);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return response()->json(['message' => 'Вы вышли из системы']);
     }
 }
