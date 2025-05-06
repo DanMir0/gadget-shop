@@ -28,8 +28,9 @@ onMounted(fetchCategories)
 
 <template>
     <nav class="categories">
-        <router-link to="/products" class="link">Все</router-link>
+        <router-link to="/products" exact-active-class="active" class="link">Все</router-link>
         <router-link
+            exact-active-class="active"
             v-for="category in categories"
             :key="category.id"
             :to="`/products/${category.slug}`"
@@ -53,6 +54,10 @@ onMounted(fetchCategories)
 </template>
 
 <style scoped>
+.active {
+    background-color: #f4f4f4;
+}
+
 .categories {
     display: flex;
     align-items: center;
