@@ -14,10 +14,13 @@ import GProduct from "@/components/GProduct.vue";
 import GBreadcrumb from "@/components/GBreadcrumb.vue";
 import GLoader from "@/components/GLoader.vue";
 import GFooter from "@/components/GFooter.vue";
+import GNewProducts from "@/components/GNewProducts.vue";
+import GPagination from "@/components/GPagination.vue";
 
 const app = createApp(App);
 
 app
+    .component('g-pagination', GPagination)
     .component('g-footer', GFooter)
     .component('g-loader', GLoader)
     .component('g-breadcrumbs', GBreadcrumb)
@@ -27,6 +30,7 @@ app
     .component('g-main', GMain)
     .component('g-title-page', GTitlePage)
     .component('g-button', GButton)
+    .component('g-new-products', GNewProducts)
     .component('g-header', GHeader)
     .component('g-categories-menu', GCategoriesMenu)
     .use(router)

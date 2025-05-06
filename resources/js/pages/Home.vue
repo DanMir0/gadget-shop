@@ -1,9 +1,7 @@
 <script setup>
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import router from "@/router/router.js";
 
-const loading = ref(false)
-const products = ref([]);
 const slides = ref([
     {image: "/images/slider/slide3.jpg", title: "Скидка на аксессуары при покупки смартфона"},
     {image: "/images/slider/slide3.jpg", title: "Скидка на аксессуары при покупки смартфона"},
@@ -41,25 +39,10 @@ const moveTouch = (e) => {
     }
 }
 
-async function fetchNewProducts() {
-    loading.value = true
-    try {
-        const response = await axios.get("/api/new-products");
-        products.value = response.data
-        loading.value = false
-        console.log(products.value)
-    } catch (e) {
-        console.log(e)
-    }
-}
-
 function goToProduct() {
     router.push('/products')
 }
 
-onMounted(async () => {
-    await fetchNewProducts()
-})
 </script>
 
 <template>
@@ -91,11 +74,7 @@ onMounted(async () => {
     </div>
 
     <g-container>
-        <div class="products mt-120">
-            <h2 class="product-title">Новые товары</h2>
-            <g-loader v-if="loading">Loading...</g-loader>
-            <g-products-list v-else :products="products"></g-products-list>
-        </div>
+        <g-new-products></g-new-products>
 
         <section class="why-us mt-120">
             <h2>Почему выбирают нас?</h2>
@@ -432,16 +411,6 @@ onMounted(async () => {
     font-size: 18px;
 }
 
-.products {
-    margin-top: 100px;
-}
-
-.product-title {
-    text-align: center;
-    font-size: 48px;
-    margin-bottom: 30px;
-}
-
 @media (max-width: 1200px) {
     .slider {
         margin: 60px auto 0 auto;
@@ -453,10 +422,6 @@ onMounted(async () => {
 
     .hero {
         height: 800px;
-    }
-
-    .product-title {
-        font-size: 36px;
     }
 
     .partners-title,
