@@ -6,6 +6,7 @@ import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import Login from "@/pages/Login.vue";
 import New from "@/pages/New.vue"
+import TermsOfUse from "@/pages/TermsOfUse.vue";
 
 const routes = [
     {
@@ -30,6 +31,12 @@ const routes = [
                 name: 'NewProducts',
                 component: New,
                 meta: {title: "Новинки", description: "Только свежие новые товары"},
+            },
+            {
+                path: '/terms-of-use',
+                name: 'TermsOfUse',
+                component: TermsOfUse,
+                meta: {title: "Условия сервеса"},
             },
         ]
     },

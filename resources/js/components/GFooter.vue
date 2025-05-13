@@ -33,7 +33,7 @@
             <nav class="footer-about">
                 <ul>
                     <li>
-                        <router-link to="" class="link">Условия сервиса</router-link>
+                        <router-link :to="{name: 'TermsOfUse'}" class="link">Условия сервиса</router-link>
                     </li>
                 </ul>
             </nav>
