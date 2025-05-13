@@ -298,12 +298,12 @@ onUnmounted(() => {
 }
 
 .menu-link:hover {
-    color: #a1a399;
+    color: #FFA542;
 }
 
 .active {
-    color: #a1a399;
-    text-decoration: underline 1px solid #a1a399;
+    color: #FFA542;
+    text-decoration: underline 1px solid #FFA542;
 }
 
 /* Медиа-запросы */

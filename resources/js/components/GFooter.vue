@@ -33,7 +33,7 @@
             <nav class="footer-about">
                 <ul>
                     <li>
-                        <router-link :to="{name: 'TermsOfUse'}" class="link">Условия сервиса</router-link>
+                        <router-link :to="{name: 'TermsOfUse'}" exact-active-class="active" class="link">Условия сервиса</router-link>
                     </li>
                 </ul>
             </nav>
@@ -56,6 +56,11 @@
 </template>
 
 <style scoped>
+.active {
+    color: #FFA542;
+    text-decoration: underline 1px solid #FFA542;
+}
+
 .footer {
     display: flex;
     align-items: center;
