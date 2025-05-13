@@ -36,6 +36,7 @@ const termsData = [
 }
 
 .terms-block {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
     background-color: #FFFFFF;
     border-radius: 36px;
     padding: 28px 30px 40px 31px;

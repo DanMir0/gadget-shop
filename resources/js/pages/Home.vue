@@ -150,6 +150,7 @@ function goToProduct() {
 
 <style scoped>
 .testimonials {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
     padding: 80px 20px;
     background-color: #ffffff;
     text-align: center;
@@ -180,6 +181,7 @@ function goToProduct() {
 }
 
 .why-us {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
     padding: 80px 20px;
     background: #f8f8f8;
     text-align: center;
@@ -333,6 +335,7 @@ function goToProduct() {
 
 /* Партнеры */
 .partners {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
     background: #f8f8f8;
     padding: 80px 20px;
     display: flex;
@@ -370,6 +373,7 @@ function goToProduct() {
 }
 
 .values {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
     background: #f8f8f8;
     padding: 80px 20px;
     display: flex;
@@ -501,6 +505,7 @@ function goToProduct() {
     }
 
     .partners {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
         margin-top: 60px;
         margin-bottom: 60px;
         gap: 20px;
