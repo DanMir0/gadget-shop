@@ -8,21 +8,26 @@ use Illuminate\Http\Request;
 
 class ProductStatusController extends Controller
 {
-    public function getNewProducts()
+    public function getNewProducts(Request $request)
     {
         $status = ProductStatus::where('name', 'new')->first();
+        $perPage = $request->query('per_page', 4);
 
-        $newProducts = Product::where('status_id', $status->id)->get()->map(function ($product) {
+        $productsQuery = Product::where('status_id', $status->id);
+
+        $products = $productsQuery->paginate($perPage);
+
+        $products->getCollection()->transform(function ($product) {
             return [
                 'id' => $product->id,
                 'name' => $product->name,
                 'description' => $product->description,
                 'price' => $product->price,
                 'stock' => $product->stock,
-                'image' => asset('storage/' . $product->image), // ✅ Формируем URL изображения
+                'image' => asset('storage/' . $product->image),
             ];
         });
 
-        return response()->json($newProducts);
+        return response()->json($products);
     }
 }

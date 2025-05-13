@@ -5,6 +5,7 @@ import Register from "@/pages/Register.vue";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import Login from "@/pages/Login.vue";
+import New from "@/pages/New.vue"
 
 const routes = [
     {
@@ -24,10 +25,14 @@ const routes = [
                 component: Products,
                 meta: {title: "Категория товаров"},
             },
+            {
+                path: '/new-products',
+                name: 'NewProducts',
+                component: New,
+                meta: {title: "Новинки", description: "Только свежие новые товары"},
+            },
         ]
     },
-
-
     {
         path: '/',
         name: 'AuthLayout',

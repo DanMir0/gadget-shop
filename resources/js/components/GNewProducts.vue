@@ -1,23 +1,41 @@
 <script setup>
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
+import {useRoute} from "vue-router";
+import GPagination from "@/components/GPagination.vue";
 
 const loading = ref(false)
 const products = ref([]);
-async function fetchNewProducts() {
+const currentPage = ref(1);
+const lastPage = ref(1);
+const route = useRoute();
+
+async function fetchNewProducts(page = 1) {
     loading.value = true
     try {
-        const response = await axios.get("/api/new-products");
+        const response = await axios.get("/api/new-products", {
+            params: {page}
+        });
         products.value = response.data
-        loading.value = false
-        console.log(products.value)
+
+        products.value = response.data.data; // Только .data
+        currentPage.value = response.data.current_page;
+        lastPage.value = response.data.last_page;
     } catch (e) {
-        console.log(e)
+        console.error(e)
+    } finally {
+        loading.value = false;
     }
 }
 
 onMounted(async () => {
-    await fetchNewProducts()
+    currentPage.value = Number(route.query.page) || 1;
+    await fetchNewProducts(currentPage.value)
 })
+
+watch(() => route.query.page, (newPage) => {
+    currentPage.value = Number(newPage) || 1;
+    fetchNewProducts(currentPage.value);
+});
 </script>
 
 <template>
@@ -26,9 +44,14 @@ onMounted(async () => {
         <g-loader v-if="loading">Loading...</g-loader>
         <g-products-list v-else :products="products"></g-products-list>
     </div>
+    <g-pagination class="mb-120" :lastPage="lastPage" :currentPage="currentPage"></g-pagination>
 </template>
 
 <style scoped>
+.mb-120 {
+    margin-bottom: 120px;
+}
+
 .products {
     margin-top: 120px;
 }

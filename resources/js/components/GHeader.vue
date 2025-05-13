@@ -57,7 +57,8 @@ onUnmounted(() => {
                 <router-link :to="{name: 'Home'}" exact-active-class="active" class="menu-link">Главная</router-link>
                 <router-link :to="{name: 'Products'}" exact-active-class="active" class="menu-link">Каталог
                 </router-link>
-                <a href="#" class="menu-link">Новинки</a>
+                <router-link :to="{name: 'NewProducts'}" exact-active-class="active" class="menu-link">Новинки
+                </router-link>
                 <a href="#" class="menu-link">Скидки</a>
             </nav>
 

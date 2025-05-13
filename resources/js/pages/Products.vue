@@ -103,7 +103,7 @@ onMounted(async () => {
         <g-products-list v-else class="mt-50" :products="products"></g-products-list>
 
         <!-- Пагинация -->
-        <g-pagination :lastPage="lastPage" :currentPage="currentPage" :visiblePages="visiblePages" :selectedSlug="selectedSlug"></g-pagination>
+        <g-pagination :lastPage="lastPage" :currentPage="currentPage" :selectedSlug="selectedSlug"></g-pagination>
     </g-container>
 
 </template>

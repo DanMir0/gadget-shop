@@ -2,7 +2,7 @@
 import router from "@/router/router.js";
 import {computed} from "vue";
 
-const props = defineProps(['currentPage', 'lastPage', 'visiblePages', 'selectedSlug'])
+const props = defineProps(['currentPage', 'lastPage', 'selectedSlug'])
 
 function changePage(page) {
     if (page >= 1 && page <= props.lastPage) {
