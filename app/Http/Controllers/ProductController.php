@@ -26,13 +26,14 @@ class ProductController extends Controller
         $products = $productsQuery->paginate($perPage);
 
         $products->getCollection()->transform(function ($product) {
+            $cleanImagePath = ltrim(trim($product->image, " \t\n\r\0\x0B\"'"), '/');
             return [
                 'id' => $product->id,
                 'name' => $product->name,
                 'description' => $product->description,
                 'price' => $product->price,
                 'stock' => $product->stock,
-                'image' => asset('storage/' . $product->image), // ✅ Формируем URL изображения
+                'image' => asset('storage/' . $cleanImagePath), // ✅ Формируем URL изображения
             ];
         });
 
