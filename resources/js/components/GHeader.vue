@@ -5,8 +5,8 @@ import router from "@/router/router.js";
 import axios from "axios";
 
 const props = defineProps({
-    user: {
-        type: Object,
+    isAuthResolved: {
+        type: Boolean,
     }
 })
 const menuOpen = ref(false);
@@ -31,7 +31,7 @@ function goToLogin() {
 
 async function goToLogout() {
     const response = await axios.post('/logout')
-    props.user = null
+    props.isAuthResolved = false
 }
 
 onMounted(() => {
@@ -63,7 +63,7 @@ onUnmounted(() => {
             </nav>
 
             <!-- Кнопки на десктопе -->
-            <div v-if="!user" class="buttons">
+            <div v-if="!isAuthResolved" class="buttons">
                 <g-button @click="goToLogin" class="btn-black">Войти</g-button>
                 <g-button @click="goToRegister" class="btn-outlined">Зарегистрироваться</g-button>
             </div>
@@ -85,7 +85,7 @@ onUnmounted(() => {
                         </g>
                     </svg>
                 </router-link>
-                <router-link class="favorite" to="">
+                <router-link class="favorite" :to="{name: 'Favorites'}">
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                          viewBox="0 0 512.000000 457.000000"
                          preserveAspectRatio="xMidYMid meet"
@@ -125,12 +125,12 @@ onUnmounted(() => {
                 <a href="#" class="menu-link">Новинки</a>
                 <a href="#" class="menu-link">Скидки</a>
             </nav>
-            <div v-if="!user" class="mobile-buttons">
+            <div v-if="!isAuthResolved" class="mobile-buttons">
                 <g-button @click="goToLogin" class="btn-black">Войти</g-button>
                 <g-button @click="goToRegister" class="btn-outlined">Зарегистрироваться</g-button>
             </div>
             <div v-else class="buttons">
-                <router-link class="favorite" to="">
+                <router-link class="favorite" :to="{name: 'Favorites'}">
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                          viewBox="0 0 512.000000 457.000000"
                          preserveAspectRatio="xMidYMid meet"
