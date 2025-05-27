@@ -1,24 +1,13 @@
 <script setup>
-import {onMounted, ref} from "vue";
-import axios from "axios";
+import {useAuth} from "@/composoble/useAuth.js";
 
-const products = ref([]);
-
-onMounted(async () => {
-    try {
-        const response = await axios.get(`/api/favorites/getProducts`);
-        products.value = response.data.data
-        console.log(response.data)
-    } catch (e) {
-        console.error('Ошибка получения избранного', e);
-    }
-})
-
+const {userFavorites} = useAuth();
+console.log(userFavorites)
 </script>
 
 <template>
     <g-container>
-            <g-products-list :products="products"></g-products-list>
+            <g-products-list :products="userFavorites.data"></g-products-list>
     </g-container>
 </template>
 

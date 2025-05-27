@@ -7,6 +7,7 @@ import AuthLayout from "@/layouts/AuthLayout.vue";
 import Login from "@/pages/Login.vue";
 import New from "@/pages/New.vue"
 import TermsOfUse from "@/pages/TermsOfUse.vue";
+import Favorites from "@/pages/Favorites.vue";
 
 const routes = [
     {
@@ -37,6 +38,12 @@ const routes = [
                 name: 'TermsOfUse',
                 component: TermsOfUse,
                 meta: {title: "Условия сервеса"},
+            },
+            {
+                path: '/favorites',
+                name: 'Favorites',
+                component: Favorites,
+                meta: {title: "Избранное"},
             },
         ]
     },
