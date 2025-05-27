@@ -40,21 +40,22 @@ class FavoriteController extends Controller
                 'price' => $product->price,
                 'stock' => $product->stock,
                 'image' => asset('storage/' . $cleanImagePath),
+                'is_favorite' => true,
             ];
         });
         return response()->json($favorites);
     }
 
-//    public function toggle(Request $request, Product $product)
-//    {
-//        $user = $request->user();
-//
-//        if ($user->favorites()->where('product_id', $product->id)->exists()) {
-//            $user->favorites()->detach($product->id);
-//            return response()->json(['favorited' => false]);
-//        } else {
-//            $user->favorites()->attach($product->id);
-//            return response()->json(['favorited' => true]);
-//        }
-//    }
+    public function toggle(Request $request, Product $product)
+    {
+        $user = $request->user();
+
+        if ($user->favorites()->where('product_id', $product->id)->exists()) {
+            $user->favorites()->detach($product->id);
+            return response()->json(['favorited' => false]);
+        } else {
+            $user->favorites()->attach($product->id);
+            return response()->json(['favorited' => true]);
+        }
+    }
 }

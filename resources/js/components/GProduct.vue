@@ -1,5 +1,7 @@
 <script setup>
 import GButton from "@/components/ui/GButton.vue";
+import {ref} from "vue";
+import axios from "axios";
 
 const props = defineProps({
     product: {
@@ -8,12 +10,47 @@ const props = defineProps({
     }
 });
 
+const isFavorite = ref(props.product.is_favorite)
 
+async function toggleFavorite() {
+    isFavorite.value = !isFavorite.value
+    try {
+        const response = await axios.post(`/api/favorites/${props.product.id}`)
+        isFavorite.value = response.data.favorited;
+    } catch (e) {
+
+    }
+}
 </script>
 
 <template>
     <article class="product">
-        <img class="product-image" :src="product.image" :alt="product.name">
+       <div class="image-wrapper">
+           <img class="product-image" :src="product.image" :alt="product.name">
+           <button class="favorite-button" @click="toggleFavorite">
+               <svg
+                   version="1.0"
+                   xmlns="http://www.w3.org/2000/svg"
+                   width="26"
+                   height="26"
+                   viewBox="0 0 512 457"
+                   preserveAspectRatio="xMidYMid meet"
+                   :fill="isFavorite ? 'red' : 'none'"
+                   stroke="red"
+                   stroke-width="260"
+               >
+                   <g transform="translate(0,457) scale(0.1,-0.1)">
+                       <path d="M1335 4559 c-628 -86 -1133 -533 -1285 -1134 -74 -290 -64 -577 30
+            -856 62 -187 141 -331 270 -494 82 -104 1951 -1977 2010 -2014 55 -36 138 -61
+            200 -61 55 0 141 24 190 52 45 27 1854 1830 1972 1967 197 227 308 448 369
+            731 31 140 33 436 6 575 -64 317 -198 567 -426 796 -230 229 -488 367 -802
+            425 -143 27 -430 25 -565 -4 -254 -55 -502 -174 -676 -323 -31 -27 -61 -49
+            -66 -49 -6 0 -34 21 -64 46 -178 153 -424 271 -675 324 -114 24 -377 35 -488
+            19z"/>
+                   </g>
+               </svg>
+           </button>
+       </div>
         <div class="product-info">
             <div class="product-title">
                 <p class="text product-name">{{ product.name }}</p>
@@ -31,6 +68,28 @@ const props = defineProps({
 </template>
 
 <style scoped>
+.image-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.favorite-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 10;
+}
+
+.favorite-button svg {
+    transition: fill 0.3s ease;
+}
+
+
+
 .product {
     display: flex;
     flex-direction: column;

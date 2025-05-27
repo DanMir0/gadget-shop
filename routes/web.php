@@ -13,6 +13,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware('auth:sanctum')->get('/api/favorites', [FavoriteController::class, 'getProducts']);
+Route::middleware('auth:sanctum')->post('/api/favorites/{product}', [FavoriteController::class, 'toggle']);
 
 
 Route::get('/products', [ProductController::class, 'index']);

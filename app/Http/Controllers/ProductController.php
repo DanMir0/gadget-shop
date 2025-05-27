@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -25,15 +26,20 @@ class ProductController extends Controller
 
         $products = $productsQuery->paginate($perPage);
 
-        $products->getCollection()->transform(function ($product) {
+        $user = Auth::user();
+        $userFavorites = $user ? $user->favorites()->pluck('product_id')->toArray() : [];
+
+        $products->getCollection()->transform(function ($product) use ($userFavorites) {
             $cleanImagePath = ltrim(trim($product->image, " \t\n\r\0\x0B\"'"), '/');
+
             return [
                 'id' => $product->id,
                 'name' => $product->name,
                 'description' => $product->description,
                 'price' => $product->price,
                 'stock' => $product->stock,
-                'image' => asset('storage/' . $cleanImagePath), // ✅ Формируем URL изображения
+                'image' => asset('storage/' . $cleanImagePath),
+                'is_favorite' => in_array($product->id, $userFavorites),
             ];
         });
 
