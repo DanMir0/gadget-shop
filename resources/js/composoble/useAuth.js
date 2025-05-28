@@ -30,9 +30,9 @@ export function useAuth() {
     }
 
     // Вход пользователя
-    async function login(credentials) {
+    async function login(email, password) {
         try {
-            const response = await axios.post('/login', credentials)
+            const response = await axios.post('/api/login', {email: email, password: password})
             user.value = response.data.user
             isAuthenticated.value = true
             await fetchFavorites()
@@ -64,6 +64,7 @@ export function useAuth() {
             isAuthenticated.value = false
             userFavorites.value = []
         }
+
     }
 
     // Обновить данные пользователя вручную

@@ -27,7 +27,6 @@ function goToLogin() {
 
 async function goToLogout() {
     await logout()
-    await refreshUser()
 }
 
 onMounted(() => {

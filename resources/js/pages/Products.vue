@@ -1,6 +1,9 @@
 <script setup>
-import {onMounted, ref, watch} from "vue";
+import {onMounted, ref, watch, watchEffect} from "vue";
 import {useRoute, useRouter} from "vue-router";
+import {useAuth} from "@/composoble/useAuth.js";
+
+const { isAuthenticated } = useAuth()
 
 // pagination
 const router = useRouter();
@@ -45,6 +48,10 @@ async function fetchProducts() {
     }
     loading.value = false;
 }
+
+watch(isAuthenticated, () => {
+    fetchProducts()
+})
 
 // pagination
 watch(() => route.query.page, (newPage) => {

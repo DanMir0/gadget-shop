@@ -1,25 +1,26 @@
 <script setup>
 import {ref} from "vue";
 import router from "@/router/router.js";
+import {useAuth} from "@/composoble/useAuth.js";
 
 const email = ref("");
 const password = ref("");
 const errors = ref({});
 
-async function login() {
-    errors.value = {}
+const {login} = useAuth()
+async function clickLogin() {
     try {
-        await axios.get('http://localhost:8000/sanctum/csrf-cookie')
-        await axios.post('/api/login', {
-            email: email.value,
-            password: password.value,
-        });
-        router.push('/');
+        await axios.get('/sanctum/csrf-cookie') // <- важно!
+        await login(email.value, password.value)
+        router.push('/')
     } catch (error) {
-        if (error.response && error.response.status === 422) {
-            errors.value = error.response.data.errors;
+        if (error.response?.status === 422) {
+            errors.value = error.response.data.errors
+        } else {
+            console.error('Ошибка при логине', error)
         }
     }
+
 }
 </script>
 
@@ -53,7 +54,7 @@ async function login() {
                 </div>
             </form>
 
-            <g-button class="submit-button" @click="login" type="submit">Войти</g-button>
+            <g-button class="submit-button" @click="clickLogin" type="submit">Войти</g-button>
             <div class="links">
                 <router-link class="link" :to="{name: 'Register'}">Зарегистрироваться</router-link>
                 <router-link class="link" :to="{name: ''}">Забыли пароль?</router-link>
