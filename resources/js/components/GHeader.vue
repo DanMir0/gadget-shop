@@ -1,14 +1,10 @@
 <script setup>
-import {ref, onMounted, onUnmounted} from "vue";
+import {ref, onMounted, onUnmounted } from "vue";
 import Products from "@/pages/Products.vue";
 import router from "@/router/router.js";
-import axios from "axios";
+import {useAuth} from "@/composoble/useAuth.js";
 
-const props = defineProps({
-    isAuthResolved: {
-        type: Boolean,
-    }
-})
+const { isAuthenticated, logout, refreshUser} = useAuth()
 const menuOpen = ref(false);
 
 function toggleMenu() {
@@ -30,8 +26,8 @@ function goToLogin() {
 }
 
 async function goToLogout() {
-    const response = await axios.post('/logout')
-    props.isAuthResolved = false
+    await logout()
+    await refreshUser()
 }
 
 onMounted(() => {
@@ -63,7 +59,7 @@ onUnmounted(() => {
             </nav>
 
             <!-- Кнопки на десктопе -->
-            <div v-if="!isAuthResolved" class="buttons">
+            <div v-if="!isAuthenticated" class="buttons">
                 <g-button @click="goToLogin" class="btn-black">Войти</g-button>
                 <g-button @click="goToRegister" class="btn-outlined">Зарегистрироваться</g-button>
             </div>
@@ -125,7 +121,7 @@ onUnmounted(() => {
                 <a href="#" class="menu-link">Новинки</a>
                 <a href="#" class="menu-link">Скидки</a>
             </nav>
-            <div v-if="!isAuthResolved" class="mobile-buttons">
+            <div v-if="!isAuthenticated" class="mobile-buttons">
                 <g-button @click="goToLogin" class="btn-black">Войти</g-button>
                 <g-button @click="goToRegister" class="btn-outlined">Зарегистрироваться</g-button>
             </div>

@@ -9,6 +9,7 @@ const errors = ref({});
 async function login() {
     errors.value = {}
     try {
+        await axios.get('http://localhost:8000/sanctum/csrf-cookie')
         await axios.post('/api/login', {
             email: email.value,
             password: password.value,
