@@ -7,6 +7,12 @@ use Illuminate\Support\Str;
 
 class Categorie extends Model
 {
+    protected $fillable = ['name'];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'category_id');
+    }
     protected static function boot()
     {
         parent::boot();

@@ -16,34 +16,6 @@ class FavoriteController extends Controller
 
         $user = Auth::user();
         return response()->json($user->favorites);
-//        $user = Auth::user();
-//        $favorites = $user->favorites()->get();
-//        return response()->json($favorites);
-    }
-
-    public function getProducts(Request $request)
-    {
-        $user = $request->user();
-
-        $favoriteQuery = $user->favorites()->getQuery();
-
-        $perPage = $request->query('per_page', 8);
-        $favorites = $favoriteQuery->paginate($perPage);
-
-        $favorites->getCollection()->transform(function ($product) {
-            $cleanImagePath = ltrim(trim($product->image, " \t\n\r\0\x0B\"'"), '/');
-
-            return [
-                'id' => $product->id,
-                'name' => $product->name,
-                'description' => $product->description,
-                'price' => $product->price,
-                'stock' => $product->stock,
-                'image' => asset('storage/' . $cleanImagePath),
-                'is_favorite' => true,
-            ];
-        });
-        return response()->json($favorites);
     }
 
     public function toggle(Request $request, Product $product)
@@ -58,4 +30,40 @@ class FavoriteController extends Controller
             return response()->json(['favorited' => true]);
         }
     }
+
+
+    public function getProductsWithCategories(Request $request)
+    {
+        $user = $request->user();
+
+        // Загружаем избранные товары с категорией
+        $favorites = $user->favorites()->with('category')->get();
+
+        // Группируем по названию категории
+        $grouped = $favorites->groupBy(function ($product) {
+            return $product->category->name ?? 'Без категории';
+        });
+
+        // Преобразуем в нужный формат
+        $result = $grouped->map(function ($products, $categoryName) {
+            return [
+                'category' => $categoryName,
+                'products' => $products->map(function ($product) {
+                    $cleanImagePath = ltrim(trim($product->image, " \t\n\r\0\x0B\"'"), '/');
+                    return [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'description' => $product->description,
+                        'price' => $product->price,
+                        'stock' => $product->stock,
+                        'image' => asset('storage/' . $cleanImagePath),
+                        'is_favorite' => true,
+                    ];
+                })->values()
+            ];
+        })->values();
+
+        return response()->json($result);
+    }
+
 }

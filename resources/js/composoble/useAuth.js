@@ -17,7 +17,7 @@ export function useAuth() {
             isAuthenticated.value = !!user.value?.id
 
             if (isAuthenticated.value) {
-                const favoritesResponse = await axios.get('/api/favorites')
+                const favoritesResponse = await axios.get('/api/product-categories')
                 userFavorites.value = favoritesResponse.data
             }
         } catch (e) {
@@ -35,7 +35,7 @@ export function useAuth() {
             const response = await axios.post('/api/login', {email: email, password: password})
             user.value = response.data.user
             isAuthenticated.value = true
-            await fetchFavorites()
+            await fetchCategoriesFavorites()
             return response
         } catch (e) {
             throw e
@@ -48,7 +48,7 @@ export function useAuth() {
             const response = await axios.post('/register', data)
             user.value = response.data.user
             isAuthenticated.value = true
-            await fetchFavorites()
+            await fetchCategoriesFavorites()
             return response
         } catch (e) {
             throw e
@@ -79,10 +79,9 @@ export function useAuth() {
         }
     }
 
-    // Получить избранное
-    async function fetchFavorites() {
+    async function fetchCategoriesFavorites() {
         try {
-            const response = await axios.get('/api/favorites')
+            const response = await axios.get('/api/product-categories')
             userFavorites.value = response.data
         } catch (e) {
             userFavorites.value = []
