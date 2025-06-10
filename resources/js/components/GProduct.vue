@@ -7,11 +7,15 @@ const props = defineProps({
     product: {
         type: Object,
         required: true,
+    },
+    path: {
+        type: String,
     }
 });
 
-const isFavorite = ref(props.product.is_favorite)
+const emit =  defineEmits(['remove-from-favorites'])
 
+const isFavorite = ref(props.product.is_favorite)
 async function toggleFavorite() {
     isFavorite.value = !isFavorite.value
     try {
@@ -21,13 +25,23 @@ async function toggleFavorite() {
 
     }
 }
+
+async function handlerToggle(product) {
+    if (props.path !== '/favorites') {
+       await toggleFavorite()
+    } else {
+        await toggleFavorite()
+        emit('remove-from-favorites', product)
+    }
+
+}
 </script>
 
 <template>
     <article class="product">
        <div class="image-wrapper">
            <img class="product-image" :src="product.image" :alt="product.name">
-           <button class="favorite-button" @click="toggleFavorite">
+           <button class="favorite-button" @click="handlerToggle(product)">
                <svg
                    version="1.0"
                    xmlns="http://www.w3.org/2000/svg"
@@ -49,6 +63,7 @@ async function toggleFavorite() {
             19z"/>
                    </g>
                </svg>
+
            </button>
        </div>
         <div class="product-info">
