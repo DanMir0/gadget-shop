@@ -8,7 +8,7 @@ const {userFavorites} = useAuth();
 <template>
     <g-container>
         <h1>Избранное</h1>
-        <div v-for="(item, index) in userFavorites" :key="index">
+        <div class="block-items" v-for="(item, index) in userFavorites" :key="index">
             <h3 class="category-title">{{item.category}}</h3>
             <g-products-list class="mb-47" :products="item.products"></g-products-list>
         </div>
@@ -28,5 +28,14 @@ h1 {
 .category-title {
     color: #838383;
     margin-bottom: 23px;
+}
+
+@media (max-width: 1200px) {
+    .block-items {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
 }
 </style>
