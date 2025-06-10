@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductStatusController extends Controller
 {
@@ -17,7 +18,10 @@ class ProductStatusController extends Controller
 
         $products = $productsQuery->paginate($perPage);
 
-        $products->getCollection()->transform(function ($product) {
+        $user = Auth::user();
+        $userFavorites = $user ? $user->favorites()->pluck('product_id')->toArray() : [];
+
+        $products->getCollection()->transform(function ($product) use ($userFavorites) {
 
             $cleanImagePath = ltrim(trim($product->image, " \t\n\r\0\x0B\"'"), '/');
 
@@ -28,6 +32,7 @@ class ProductStatusController extends Controller
                 'price' => $product->price,
                 'stock' => $product->stock,
                 'image' => asset('storage/' . $cleanImagePath),
+                'is_favorite' => in_array($product->id, $userFavorites),
             ];
         });
 
