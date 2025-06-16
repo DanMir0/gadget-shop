@@ -23,10 +23,12 @@ a {
 }
 
 /* Сбрасываем шрифты */
-body {
+html, body {
     font-family: 'Montserrat', sans-serif;
     line-height: 1.5;
     background-color: #EAEAEA;
+    height: 100%;
+    margin: 0;
 }
 
 /* Убираем стандартные стили кнопок */
