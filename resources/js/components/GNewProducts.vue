@@ -39,11 +39,9 @@ watch(() => route.query.page, (newPage) => {
 </script>
 
 <template>
-    <div class="products">
-        <h2 class="product-title">Новые товары</h2>
-        <g-loader v-if="loading">Loading...</g-loader>
-        <g-products-list v-else :products="products"></g-products-list>
-    </div>
+    <g-title-page class="title">Новые товары</g-title-page>
+    <g-loader v-if="loading">Loading...</g-loader>
+    <g-products-list v-else :products="products"></g-products-list>
     <g-pagination class="mb-120" :lastPage="lastPage" :currentPage="currentPage"></g-pagination>
 </template>
 
@@ -52,19 +50,8 @@ watch(() => route.query.page, (newPage) => {
     margin-bottom: 120px;
 }
 
-.products {
-    margin-top: 120px;
-}
-
-.product-title {
-    text-align: center;
-    font-size: 48px;
-    margin-bottom: 30px;
-}
-
-@media (max-width: 1200px) {
-    .product-title {
-        font-size: 36px;
-    }
+.title {
+    margin-top: 50px;
+    margin-bottom: 20px;
 }
 </style>

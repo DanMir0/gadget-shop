@@ -3,13 +3,14 @@
 </script>
 
 <template>
-<div>
+<div class="container">
     <slot></slot>
 </div>
 </template>
 
 <style scoped>
-div {
+.container {
+    width: 100%;
     max-width: 1320px;
     margin: 0 auto;
     padding: 15px;
