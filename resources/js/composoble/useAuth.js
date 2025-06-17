@@ -88,8 +88,6 @@ export function useAuth() {
         }
     }
 
-    onMounted(initAuth)
-
     return {
         user,
         isAuthenticated,

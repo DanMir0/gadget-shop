@@ -1,7 +1,7 @@
 <script setup>
 import {useAuth} from "@/composoble/useAuth.js";
 
-const {user, isAuthResolved} = useAuth();
+const {isAuthResolved} = useAuth();
 </script>
 
 <template>
