@@ -31,6 +31,7 @@ async function fetchCategories() {
 }
 
 async function fetchProducts() {
+    if (loading.value) return
     loading.value = true;
     try {
         const response = await axios.get(`/api/products`, {
@@ -48,10 +49,6 @@ async function fetchProducts() {
     }
     loading.value = false;
 }
-
-watch(isAuthenticated, () => {
-    fetchProducts()
-})
 
 // pagination
 watch(() => route.query.page, (newPage) => {
@@ -89,11 +86,6 @@ watch(
     },
     {immediate: true}
 );
-
-onMounted(async () => {
-    await fetchCategories();
-    await fetchProducts();
-})
 </script>
 
 <template>
