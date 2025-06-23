@@ -1,19 +1,11 @@
 <script setup>
-import {onMounted, ref, watch} from "vue";
+import {ref, watch} from "vue";
 import router from "@/router/router.js";
+import {useCategories} from "../composoble/useCategories.js";
 
-const categories = ref([]);
+const {categories} = useCategories()
 
 const selected = ref("Все");
-
-async function fetchCategories() {
-    try {
-        const response = await axios.get(`/api/categories`);
-        categories.value = response.data;
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 watch(selected, (newVal) => {
     if (newVal === "Все") {
@@ -22,8 +14,6 @@ watch(selected, (newVal) => {
         router.push(`/products/${newVal}`)
     }
 })
-
-onMounted(fetchCategories)
 </script>
 
 <template>
