@@ -99,5 +99,6 @@ export function useAuth() {
         logout,
         refreshUser,
         initAuth,
+        fetchCategoriesFavorites,
     }
 }

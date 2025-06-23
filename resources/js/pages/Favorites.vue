@@ -3,7 +3,7 @@ import {useAuth} from "@/composoble/useAuth.js";
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 
-const {userFavorites} = useAuth();
+const {userFavorites, fetchCategoriesFavorites} = useAuth();
 
 const path = ref("")
 
@@ -19,6 +19,9 @@ async function removeFromFavorites(product) {
 onMounted(() => {
     const route = useRoute()
     path.value = route.path
+})
+onMounted(async () => {
+    await fetchCategoriesFavorites()
 })
 
 </script>
