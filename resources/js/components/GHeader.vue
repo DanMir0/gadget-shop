@@ -1,11 +1,17 @@
 <script setup>
-import {ref, onMounted, onUnmounted } from "vue";
+import {ref, onMounted, onUnmounted, computed} from "vue";
 import Products from "@/pages/Products.vue";
 import router from "@/router/router.js";
 import {useAuth} from "@/composoble/useAuth.js";
+import {useRoute} from "vue-router";
 
-const { isAuthenticated, logout, refreshUser} = useAuth()
+const { isAuthenticated, logout} = useAuth()
 const menuOpen = ref(false);
+const route = useRoute()
+const isCatalogActive = computed(() => {
+    console.log(route.name)
+    return route.name === 'Products' || route.path.startsWith('/products')
+})
 
 function toggleMenu() {
     menuOpen.value = !menuOpen.value;
@@ -29,6 +35,7 @@ async function goToLogout() {
     await logout()
 }
 
+
 onMounted(() => {
     document.addEventListener("click", closeMenu);
 });
@@ -49,10 +56,10 @@ onUnmounted(() => {
 
             <!-- Навигация на десктопе -->
             <nav class="menu">
-                <router-link :to="{name: 'Home'}" exact-active-class="active" class="menu-link">Главная</router-link>
-                <router-link :to="{name: 'Products'}" exact-active-class="active" class="menu-link">Каталог
+                <router-link :to="{name: 'Home'}" :class="{'active': route.name === 'Home'}" class="menu-link">Главная</router-link>
+                <router-link :to="{name: 'Products'}" :class="{'active': isCatalogActive}" class="menu-link">Каталог
                 </router-link>
-                <router-link :to="{name: 'NewProducts'}" exact-active-class="active" class="menu-link">Новинки
+                <router-link :to="{name: 'NewProducts'}" :class="{'active': route.name === 'NewProducts'}" class="menu-link">Новинки
                 </router-link>
                 <a href="#" class="menu-link">Скидки</a>
             </nav>
@@ -115,9 +122,11 @@ onUnmounted(() => {
                 <p class="logo-title">Ninja Devices</p>
             </div>
             <nav class="mobile-nav">
-                <router-link :to="{name: 'Home'}" activeClass="active" class="menu-link">Главная</router-link>
-                <router-link :to="{name: 'Products'}" activeClass="active" class="menu-link">Каталог</router-link>
-                <a href="#" class="menu-link">Новинки</a>
+                <router-link :to="{name: 'Home'}" :class="{'active': route.name === 'Home'}" @click="menuOpen = false" class="menu-link">Главная</router-link>
+                <router-link :to="{name: 'Products'}" :class="{'active': isCatalogActive}" @click="menuOpen = false" class="menu-link">Каталог
+                </router-link>
+                <router-link :to="{name: 'NewProducts'}" :class="{'active': route.name === 'NewProducts'}" @click="menuOpen = false" class="menu-link">Новинки
+                </router-link>
                 <a href="#" class="menu-link">Скидки</a>
             </nav>
             <div v-if="!isAuthenticated" class="mobile-buttons">
