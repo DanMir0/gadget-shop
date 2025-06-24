@@ -1,46 +1,62 @@
 <script setup>
-import {ref, watch} from "vue";
-import router from "@/router/router.js";
-import {useCategories} from "../composoble/useCategories.js";
+import { computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useCategoryStore } from "@/stores/categories.js";
+import { storeToRefs } from "pinia";
 
-const {categories} = useCategories()
+const categoryStore = useCategoryStore();
+const { categories } = storeToRefs(categoryStore);
 
-const selected = ref("Все");
+const route = useRoute();
+const router = useRouter();
 
-watch(selected, (newVal) => {
-    if (newVal === "Все") {
-        router.push("/products")
-    } else {
-        router.push(`/products/${newVal}`)
+const selected = computed({
+    get() {
+        return route.params.category ?? "Все";
+    },
+    set(value) {
+        if (value === "Все") {
+            router.push({ path: "/products", query: { page: 1 } });
+        } else {
+            router.push({ path: `/products/${value}`, query: { page: 1 } });
+        }
     }
-})
+});
 </script>
 
 <template>
     <nav class="categories">
-        <router-link to="/products" exact-active-class="active" class="link">Все</router-link>
         <router-link
+            to="/products"
             exact-active-class="active"
+            class="link"
+        >
+            Все
+        </router-link>
+        <router-link
             v-for="category in categories"
             :key="category.id"
             :to="`/products/${category.slug}`"
-            class="link">
+            exact-active-class="active"
+            class="link"
+        >
             {{ category.name }}
         </router-link>
     </nav>
 
-    <!--    мобильное меню-->
+    <!-- мобильное меню -->
     <div class="categories-mobile">
         <select v-model="selected" class="categories-mobile-selected">
             <option>Все</option>
-            <option v-for="category in categories"
-                    :key="category.id"
-                    :value="category.slug">
+            <option
+                v-for="category in categories"
+                :key="category.id"
+                :value="category.slug"
+            >
                 {{ category.name }}
             </option>
         </select>
     </div>
-
 </template>
 
 <style scoped>
@@ -94,7 +110,7 @@ watch(selected, (newVal) => {
 
 .categories-mobile-selected:focus {
     outline: none;
-    border-color: #000; /* При фокусе становится более чёткой */
+    border-color: #000;
 }
 
 .categories-mobile-selected:hover {

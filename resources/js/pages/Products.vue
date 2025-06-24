@@ -1,16 +1,18 @@
 <script setup>
-import {onMounted, ref, watch} from "vue";
-import {useRoute, useRouter} from "vue-router";
-import {useCategories} from "../composoble/useCategories.js";
-
-// pagination
-const router = useRouter();
-
-const { categories } = useCategories();
+import { nextTick, onMounted, ref, watch } from "vue";
+import { useRoute } from "vue-router";
+import router from "@/router/router.js";
+import { useCategoryStore } from "@/stores/categories.js";
+import { storeToRefs } from "pinia";
+import axios from "axios";
 
 const route = useRoute();
+
+const categoryStore = useCategoryStore();
+const { categories } = storeToRefs(categoryStore);
+
 const selectedCategory = ref(0);
-const selectedSlug = ref("")
+const selectedSlug = ref("");
 const selectedCategoryName = ref("Все");
 const products = ref([]);
 const loading = ref(false);
@@ -20,70 +22,75 @@ const currentPage = ref(Number(route.query.page) || 1);
 const lastPage = ref(1);
 const perPage = 8;
 
-async function fetchProducts() {
-    if (loading.value) return
+async function fetchProducts(categoryId = selectedCategory.value) {
+    if (loading.value) return;
     loading.value = true;
+
     try {
         const response = await axios.get(`/api/products`, {
             params: {
-                // pagination
                 page: currentPage.value,
                 per_page: perPage,
-                category: selectedCategory.value,
-            }
+                category: categoryId
+            },
         });
         products.value = response.data.data;
         lastPage.value = response.data.last_page;
     } catch (error) {
-        console.log(error)
+        console.error(error);
     }
+
     loading.value = false;
 }
 
-function handleCategoryChange(slug) {
-    if (!slug) {
-        document.title = "Магазин - Все товары";
-        selectedCategory.value = 0;
-        selectedCategoryName.value = "Все";
+async function handleCategoryChange(slug) {
+    const category = categories.value.find((cat) => cat.slug === slug);
+
+    if (category) {
+        selectedCategory.value = category.id;
+        selectedSlug.value = category.slug;
+        selectedCategoryName.value = category.name;
+        document.title = `Магазин - ${category.name}`;
     } else {
-        const category = categories.value.find(cat => cat.slug === slug);
-        if (category) {
-            document.title = `Магазин - ${category.name}`;
-            selectedSlug.value = category.slug;
-            selectedCategory.value = category.id;
-            selectedCategoryName.value = category.name;
-        } else {
-            document.title = "Магазин";
-            selectedCategory.value = 0;
-            selectedCategoryName.value = "Все";
-        }
+        selectedCategory.value = 0;
+        selectedSlug.value = "";
+        selectedCategoryName.value = "Все";
+        document.title = "Магазин - Все товары";
     }
 
-    currentPage.value = 1; // ✅ Сброс страницы при смене категории
-    router.push({ query: { page: 1, category: selectedSlug.value || undefined } }); // ✅ Обновляем URL
+    currentPage.value = 1;
 
-    fetchProducts()
+    router.push({
+        path: selectedSlug.value ? `/products/${selectedSlug.value}` : '/products',
+        query: { page: 1 }
+    });
+
+    await nextTick();
+    await fetchProducts(category ? category.id : 0);
 }
 
-// pagination
-watch(() => route.query.page, (newPage) => {
-    currentPage.value = Number(newPage) || 1;
-    fetchProducts();
-}, {immediate: true});
+
+onMounted(async () => {
+    if (!categories.value.length) {
+        await categoryStore.fetchCategories();
+    }
+    handleCategoryChange(route.params.category);
+});
 
 watch(
     () => route.params.category,
-    (slug) => {
-        if (categories.value.length > 0) {
-            handleCategoryChange(slug);
+    async (newSlug) => {
+        if (!categories.value.length) {
+            await categoryStore.fetchCategories();
         }
-    },
+        handleCategoryChange(newSlug);
+    }
 );
-onMounted(async () => {
-    // Вручную вызываем обработку категории, чтобы правильно задать хлебные крошки
-    const slug = route.params.category;
-    handleCategoryChange(slug);
-});
+
+watch(() => route.query.page, (newPage) => {
+    currentPage.value = Number(newPage) || 1;
+    fetchProducts();
+}, { immediate: true });
 </script>
 
 <template>
@@ -91,18 +98,28 @@ onMounted(async () => {
         <div class="mt-50">
             <g-title-page>Магазин</g-title-page>
         </div>
-        <g-categories-menu></g-categories-menu>
 
-        <g-breadcrumb class="mt-50" :selectedSlug="selectedSlug"
-                      :selectedCategory="selectedCategoryName"></g-breadcrumb>
+        <g-categories-menu />
+
+        <g-breadcrumb
+            class="mt-50"
+            :selectedSlug="selectedSlug"
+            :selectedCategory="selectedCategoryName"
+        />
 
         <g-loader v-if="loading">Loading...</g-loader>
-        <g-products-list v-else class="mt-50" :products="products"></g-products-list>
+        <g-products-list
+            v-else
+            class="mt-50"
+            :products="products"
+        />
 
-        <!-- Пагинация -->
-        <g-pagination :lastPage="lastPage" :currentPage="currentPage" :selectedSlug="selectedSlug"></g-pagination>
+        <g-pagination
+            :lastPage="lastPage"
+            :currentPage="currentPage"
+            :selectedSlug="selectedSlug"
+        />
     </g-container>
-
 </template>
 
 <style scoped>
