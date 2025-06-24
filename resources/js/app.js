@@ -1,5 +1,6 @@
 import './bootstrap';
 import { createApp } from 'vue';
+import { createPinia } from "pinia";
 import App from './components/App.vue';
 import router from "./router/router.js";
 import '../css/app.css';
@@ -19,6 +20,8 @@ import GPagination from "./components/GPagination.vue";
 
 const app = createApp(App);
 
+const pinia = createPinia();
+
 app
     .component('g-pagination', GPagination)
     .component('g-footer', GFooter)
@@ -33,5 +36,6 @@ app
     .component('g-new-products', GNewProducts)
     .component('g-header', GHeader)
     .component('g-categories-menu', GCategoriesMenu)
+    .use(pinia)
     .use(router)
     .mount('#app');
