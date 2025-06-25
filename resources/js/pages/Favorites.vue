@@ -1,29 +1,22 @@
 <script setup>
-import {useAuth} from "@/composoble/useAuth.js";
-import {onMounted, ref} from "vue";
+import {useFavoritesStore} from "@/stores/favorites";
+import {storeToRefs} from "pinia";
+import {computed, onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 
-const {userFavorites, fetchCategoriesFavorites} = useAuth();
+const route = useRoute();
+const path = ref(route.path);
 
-const path = ref("")
+const favoritesStore = useFavoritesStore();
+const {userFavorites} = storeToRefs(favoritesStore);
 
-async function removeFromFavorites(product) {
-    userFavorites.value = userFavorites.value.map(category => {
-        return {
-            ...category,
-            products: category.products.filter(p => p.id !== product.id)
-        };
-    }).filter(category => category.products.length > 0);
+function removeFromFavorites(product) {
+    favoritesStore.removeFromFavorites(product.id); // Удалить из избранного
 }
 
-onMounted(() => {
-    const route = useRoute()
-    path.value = route.path
-})
 onMounted(async () => {
-    await fetchCategoriesFavorites()
-})
-
+    await favoritesStore.fetchFavorites(); // Загрузить данные из API
+});
 </script>
 
 <template>
@@ -31,8 +24,11 @@ onMounted(async () => {
         <h1>Избранное</h1>
         <div class="block-items" v-for="(item, index) in userFavorites" :key="index">
             <h3 class="category-title">{{ item.category }}</h3>
-            <g-products-list @remove-from-favorites="removeFromFavorites" :path="path" class="mb-47"
-                             :products="item.products"></g-products-list>
+            <g-products-list
+                class="mb-47"
+                :products="item.products"
+                path="/favorites"
+                @remove-from-favorites="removeFromFavorites"></g-products-list>
         </div>
     </g-container>
 </template>

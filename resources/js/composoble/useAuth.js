@@ -1,10 +1,9 @@
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import axios from 'axios'
 
 const user = ref(null)
 const isAuthenticated = ref(false)
 const isAuthResolved = ref(false)
-const userFavorites = ref([])
 const loading = ref(false)
 
 export function useAuth() {
@@ -15,11 +14,6 @@ export function useAuth() {
             const response = await axios.get('/user')
             user.value = response.data
             isAuthenticated.value = !!user.value?.id
-
-            if (isAuthenticated.value) {
-                const favoritesResponse = await axios.get('/api/product-categories')
-                userFavorites.value = favoritesResponse.data
-            }
         } catch (e) {
             user.value = null
             isAuthenticated.value = false
@@ -32,10 +26,9 @@ export function useAuth() {
     // Вход пользователя
     async function login(email, password) {
         try {
-            const response = await axios.post('/api/login', {email: email, password: password})
+            const response = await axios.post('/api/login', { email, password })
             user.value = response.data.user
             isAuthenticated.value = true
-            await fetchCategoriesFavorites()
             return response
         } catch (e) {
             throw e
@@ -48,7 +41,6 @@ export function useAuth() {
             const response = await axios.post('/register', data)
             user.value = response.data.user
             isAuthenticated.value = true
-            await fetchCategoriesFavorites()
             return response
         } catch (e) {
             throw e
@@ -62,9 +54,7 @@ export function useAuth() {
         } finally {
             user.value = null
             isAuthenticated.value = false
-            userFavorites.value = []
         }
-
     }
 
     // Обновить данные пользователя вручную
@@ -79,26 +69,15 @@ export function useAuth() {
         }
     }
 
-    async function fetchCategoriesFavorites() {
-        try {
-            const response = await axios.get('/api/product-categories')
-            userFavorites.value = response.data
-        } catch (e) {
-            userFavorites.value = []
-        }
-    }
-
     return {
         user,
         isAuthenticated,
         isAuthResolved,
-        userFavorites,
         loading,
         login,
         register,
         logout,
         refreshUser,
         initAuth,
-        fetchCategoriesFavorites,
     }
 }
