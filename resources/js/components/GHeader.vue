@@ -91,7 +91,8 @@ onUnmounted(() => {
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                          viewBox="0 0 512.000000 457.000000"
                          preserveAspectRatio="xMidYMid meet"
-                         class="icon favorite-img">
+                         class="icon favorite-img"
+                         :class="{'active-heart': route.name === 'Favorites'}">
                         <g transform="translate(0.000000,457.000000) scale(0.100000,-0.100000)"
                            stroke="none">
                             <path d="M1335 4559 c-628 -86 -1133 -533 -1285 -1134 -74 -290 -64 -577 30
@@ -158,6 +159,10 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.active-heart {
+    fill: red !important;
+}
+
 .icon {
     width: 24px;
     height: 24px;
