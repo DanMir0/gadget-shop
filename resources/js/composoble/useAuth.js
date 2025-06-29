@@ -38,7 +38,7 @@ export function useAuth() {
     // Регистрация пользователя
     async function register(data) {
         try {
-            const response = await axios.post('/register', data)
+            const response = await axios.post('/api/register', data)
             user.value = response.data.user
             isAuthenticated.value = true
             return response

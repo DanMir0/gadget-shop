@@ -2,6 +2,7 @@
 import {ref} from "vue";
 import router from "@/router/router.js";
 import GButton from "@/components/ui/GButton.vue";
+import {useAuth} from "../composoble/useAuth.js";
 
 const name = ref("");
 const email = ref("");
@@ -9,14 +10,16 @@ const password = ref("");
 const password_confirmation = ref("");
 const errors = ref({});
 
-async function register() {
+const { register } = useAuth()
+
+async function handleRegister() {
     try {
-        await axios.post('/api/register', {
+        await register({
             name: name.value,
             email: email.value,
             password: password.value,
             password_confirmation: password_confirmation.value
-        });
+        })
         router.push('/');
     } catch (error) {
         if (error.response && error.response.status === 422) {
@@ -52,7 +55,7 @@ async function register() {
                </div>
            </form>
 
-           <g-button class="submit-button" @click="register" type="submit">Зарегистрироваться</g-button>
+           <g-button class="submit-button" @click="handleRegister" type="submit">Зарегистрироваться</g-button>
            <p class="text">У вас уже есть аккаунт? <router-link class="link" :to="{name: 'Login'}">Войти</router-link></p>
        </div>
    </div>
