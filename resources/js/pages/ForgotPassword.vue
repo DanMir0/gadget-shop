@@ -16,7 +16,7 @@ async function forgotPassword() {
         success.value = 'Письмо с инструкциями отправлено на почту.'
     } catch (e) {
         if (e.response.status === 422) {
-            errors.value = e.response.data
+            errors.value = e.response.data || {message: e.response.data.message}
         }
     }
 }
@@ -26,9 +26,20 @@ async function forgotPassword() {
     <div class="wrapper">
         <div class="container">
             <h2>Забыли пароль?</h2>
-            <input v-model="email" type="email" placeholder="Введите Email">
-            <div v-if="errors.email" class="error">{{ errors.email[0] }}</div>
-            <g-button @click="forgotPassword">Отправить ссылку</g-button>
+            <div class="form-group">
+                <input
+                    v-model="email"
+                    :class="{
+                            'custom-input': true,
+                            'error-input': errors
+                          }"
+                    type="email"
+                    placeholder="Введите Email">
+                <div v-if="errors.email || errors.message" class="error">
+                    {{ errors.email?.[0] || errors.message }}
+                </div>
+            </div>
+            <g-button class="submit-button" @click="forgotPassword">Отправить ссылку</g-button>
             <div v-if="success" class="succes">{{ success }}</div>
         </div>
 
@@ -53,5 +64,55 @@ async function forgotPassword() {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: #ff0000;
+    margin-left: 5px;
+}
+
+.error-input {
+    border: 1px solid #ff0000 !important;
 }
 </style>
