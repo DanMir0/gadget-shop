@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 import Products from "@/pages/Products.vue";
 import Home from "@/pages/Home.vue";
 import Register from "@/pages/Register.vue";
@@ -8,6 +8,8 @@ import Login from "@/pages/Login.vue";
 import New from "@/pages/New.vue"
 import TermsOfUse from "@/pages/TermsOfUse.vue";
 import Favorites from "@/pages/Favorites.vue";
+import ForgotPassword from "@/pages/ForgotPassword.vue";
+import ResetPassword from "@/pages/ResetPassword.vue";
 
 const routes = [
     {
@@ -19,7 +21,7 @@ const routes = [
                 path: '/products',
                 name: 'Products',
                 component: Products,
-                meta: {title: "Магазин - Все товары", description: "Все товары в магазине" },
+                meta: {title: "Магазин - Все товары", description: "Все товары в магазине"},
             },
             {
                 path: '/products/:category?',
@@ -52,8 +54,30 @@ const routes = [
         name: 'AuthLayout',
         component: AuthLayout,
         children: [
-            {path: 'register', name: 'Register', component: Register},
-            {path: '/login', name: 'Login', component: Login},
+            {
+                path: 'register',
+                name: 'Register',
+                component: Register,
+                meta: {title: "Регистрация"}
+            },
+            {
+                path: '/login',
+                name: 'Login',
+                component: Login,
+                meta: {title: "Войти"}
+            },
+            {
+                path: '/forgot-password',
+                name: 'ForgotPassword',
+                component: ForgotPassword,
+                meta: {title: "Забыли пароль"},
+            },
+            {
+                path: '/reset-password',
+                name: 'ResetPassword',
+                component: ResetPassword,
+                props: true
+            }
         ]
     },
 ];

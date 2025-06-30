@@ -57,7 +57,7 @@ async function clickLogin() {
             <g-button class="submit-button" @click="clickLogin" type="submit">Войти</g-button>
             <div class="links">
                 <router-link class="link" :to="{name: 'Register'}">Зарегистрироваться</router-link>
-                <router-link class="link" :to="{name: ''}">Забыли пароль?</router-link>
+                <router-link class="link" :to="{name: 'ForgotPassword'}">Забыли пароль?</router-link>
             </div>
         </div>
     </div>
