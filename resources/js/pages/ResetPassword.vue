@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import {ref} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
 import axios from 'axios'
 
 const route = useRoute()
@@ -27,7 +27,7 @@ async function resetPassword() {
         })
 
         success.value = true
-        setTimeout(() => router.push({ name: 'Login' }), 2000)
+        setTimeout(() => router.push({name: 'Login'}), 2000)
     } catch (e) {
         if (e.response?.status === 422) {
             errors.value = e.response.data.errors || {}
@@ -41,13 +41,30 @@ async function resetPassword() {
         <div class="container">
             <h2>Сброс пароля</h2>
 
-            <input v-model="email" type="email" readonly />
+            <input  class="form-group" v-model="email" type="email" readonly/>
+            <div class="form-group">
+                <input
+                    v-model="password"
+                    type="password"
+                    placeholder="Новый пароль"
+                    :class="{
+                            'custom-input': true,
+                            'error-input': errors.password
+                          }"/>
+                <div class="error" v-if="errors.password">{{ errors.password[0] }}</div>
+            </div>
 
-            <input v-model="password" type="password" placeholder="Новый пароль" />
-            <div class="error" v-if="errors.password">{{ errors.password[0] }}</div>
-
-            <input v-model="password_confirmation" type="password" placeholder="Подтвердите пароль" />
-            <div class="error" v-if="errors.password_confirmation">{{ errors.password_confirmation[0] }}</div>
+            <div class="form-group">
+                <input
+                    v-model="password_confirmation"
+                    type="password"
+                    placeholder="Подтвердите пароль"
+                    :class="{
+                            'custom-input': true,
+                            'error-input': errors.password_confirmation
+                          }"/>
+                <div class="error" v-if="errors.password_confirmation">{{ errors.password_confirmation[0] }}</div>
+            </div>
 
             <button @click="resetPassword">Сбросить пароль</button>
 
@@ -58,38 +75,74 @@ async function resetPassword() {
 
 <style scoped>
 .wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
-    background: #f1f1f1;
-}
-.container {
-    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f1f1;
     padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.container {
     width: 100%;
     max-width: 400px;
+    margin: 80px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
 input {
     width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
+    padding: 10px 14px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
 }
+
+input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
 button {
     width: 100%;
-    padding: 10px;
-    background: #007bff;
-    color: white;
+    padding: 12px;
+    background-color: #007bff;
     border: none;
     border-radius: 8px;
+    color: white;
+    font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.25s ease;
 }
+
+button:hover {
+    background-color: #0056b3;
+}
+
 .error {
-    color: red;
-    font-size: 14px;
+    color: #ff0000;
+    margin-left: 5px;
 }
+
+.error-input {
+    border: 1px solid #ff0000 !important;
+}
+
 .success {
     color: green;
     margin-top: 10px;
