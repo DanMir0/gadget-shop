@@ -31,7 +31,7 @@ async function forgotPassword() {
                     v-model="email"
                     :class="{
                             'custom-input': true,
-                            'error-input': errors
+                            'error-input': errors.email
                           }"
                     type="email"
                     placeholder="Введите Email">
@@ -40,7 +40,7 @@ async function forgotPassword() {
                 </div>
             </div>
             <g-button class="submit-button" @click="forgotPassword">Отправить ссылку</g-button>
-            <div v-if="success" class="succes">{{ success }}</div>
+            <div v-if="success" class="success">{{ success }}</div>
         </div>
 
     </div>
@@ -114,5 +114,10 @@ h2 {
 
 .error-input {
     border: 1px solid #ff0000 !important;
+}
+
+.success {
+    color: green;
+    margin-top: 10px;
 }
 </style>
