@@ -4,6 +4,7 @@ import {ref} from "vue";
 import axios from "axios";
 import {useAuth} from "@/composoble/useAuth.js";
 import router from "@/router/router.js";
+import {useCartStore} from "@/stores/cart.js";
 
 const props = defineProps({
     product: {
@@ -16,8 +17,12 @@ const props = defineProps({
 });
 const {isAuthenticated} = useAuth()
 const emit =  defineEmits(['remove-from-favorites'])
-
+const cart = useCartStore()
 const isFavorite = ref(props.product.is_favorite)
+
+async function addToCart(product) {
+    cart.addToCart(product)
+}
 async function toggleFavorite() {
     if (!isAuthenticated.value) router.push({name: 'Login'})
     isFavorite.value = !isFavorite.value
@@ -80,7 +85,7 @@ async function handlerToggle(product) {
             <div class="product-block-stock">
                 <p class="product-stock">Осталось: <strong>{{ product.stock }}</strong></p>
             </div>
-            <g-button class="buy-button">Купить</g-button>
+            <g-button class="buy-button" @click="addToCart(product)">Купить</g-button>
         </div>
     </article>
 </template>
@@ -195,7 +200,6 @@ async function handlerToggle(product) {
         padding: 14px;
         min-height: auto;
     }
-
 }
 </style>
 

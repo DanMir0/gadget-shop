@@ -10,6 +10,7 @@ import TermsOfUse from "@/pages/TermsOfUse.vue";
 import Favorites from "@/pages/Favorites.vue";
 import ForgotPassword from "@/pages/ForgotPassword.vue";
 import ResetPassword from "@/pages/ResetPassword.vue";
+import Cart from "@/pages/Cart.vue";
 
 const routes = [
     {
@@ -46,6 +47,12 @@ const routes = [
                 name: 'Favorites',
                 component: Favorites,
                 meta: {title: "Избранное"},
+            },
+            {
+                path: '/cart',
+                name: 'Cart',
+                component: Cart,
+                meta: {title: "Корзина"},
             },
         ]
     },

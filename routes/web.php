@@ -24,6 +24,8 @@ Route::get('/api/categories', [\App\Http\Controllers\CategorieController::class,
 
 Route::get('/api/new-products', [\App\Http\Controllers\ProductStatusController::class, 'getNewProducts']);
 
+Route::post('/api/orders', [\App\Http\Controllers\OrderController::class, 'store']);
+
 Route::get('{any}', function () {
     return view('welcome');
 })->where('any', '.*');

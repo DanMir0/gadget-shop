@@ -71,7 +71,7 @@ onUnmounted(() => {
             </div>
 
             <div v-else class="buttons">
-                <router-link to="">
+                <router-link :to="{name: 'Cart'}">
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                          viewBox="0 0 24.000000 24.000000"
                          preserveAspectRatio="xMidYMid meet"

@@ -17,10 +17,12 @@ import GLoader from "./components/GLoader.vue";
 import GFooter from "./components/GFooter.vue";
 import GNewProducts from "./components/GNewProducts.vue";
 import GPagination from "./components/GPagination.vue";
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 const app = createApp(App);
 
 const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate)
 
 app
     .component('g-pagination', GPagination)
