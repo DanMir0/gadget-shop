@@ -5,11 +5,10 @@ import router from "@/router/router.js";
 import {useAuth} from "@/composoble/useAuth.js";
 import {useRoute} from "vue-router";
 
-const { isAuthenticated, logout} = useAuth()
+const {isAuthenticated, logout} = useAuth()
 const menuOpen = ref(false);
 const route = useRoute()
 const isCatalogActive = computed(() => {
-    console.log(route.name)
     return route.name === 'Products' || route.path.startsWith('/products')
 })
 
@@ -35,7 +34,6 @@ async function goToLogout() {
     await logout()
 }
 
-
 onMounted(() => {
     document.addEventListener("click", closeMenu);
 });
@@ -56,10 +54,12 @@ onUnmounted(() => {
 
             <!-- Навигация на десктопе -->
             <nav class="menu">
-                <router-link :to="{name: 'Home'}" :class="{'active': route.name === 'Home'}" class="menu-link">Главная</router-link>
+                <router-link :to="{name: 'Home'}" :class="{'active': route.name === 'Home'}" class="menu-link">Главная
+                </router-link>
                 <router-link :to="{name: 'Products'}" :class="{'active': isCatalogActive}" class="menu-link">Каталог
                 </router-link>
-                <router-link :to="{name: 'NewProducts'}" :class="{'active': route.name === 'NewProducts'}" class="menu-link">Новинки
+                <router-link :to="{name: 'NewProducts'}" :class="{'active': route.name === 'NewProducts'}"
+                             class="menu-link">Новинки
                 </router-link>
                 <a href="#" class="menu-link">Скидки</a>
             </nav>
@@ -75,7 +75,8 @@ onUnmounted(() => {
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                          viewBox="0 0 24.000000 24.000000"
                          preserveAspectRatio="xMidYMid meet"
-                         class="icon shop-img">
+                         class="icon shop-img"
+                         :class="{'active-shop': route.name === 'Cart'}">>
                         <g transform="translate(0.000000,24.000000) scale(0.100000,-0.100000)" stroke="none">
                             <path d="M5 221 c-3 -5 5 -11 17 -13 17 -2 25 -14 34 -53 7 -27 11 -60 7 -72
 -3 -13 -1 -23 5 -23 6 0 8 -9 5 -20 -4 -16 0 -20 17 -20 17 0 21 4 17 20 -4
@@ -123,10 +124,14 @@ onUnmounted(() => {
                 <p class="logo-title">Ninja Devices</p>
             </div>
             <nav class="mobile-nav">
-                <router-link :to="{name: 'Home'}" :class="{'active': route.name === 'Home'}" @click="menuOpen = false" class="menu-link">Главная</router-link>
-                <router-link :to="{name: 'Products'}" :class="{'active': isCatalogActive}" @click="menuOpen = false" class="menu-link">Каталог
+                <router-link :to="{name: 'Home'}" :class="{'active': route.name === 'Home'}" @click="menuOpen = false"
+                             class="menu-link">Главная
                 </router-link>
-                <router-link :to="{name: 'NewProducts'}" :class="{'active': route.name === 'NewProducts'}" @click="menuOpen = false" class="menu-link">Новинки
+                <router-link :to="{name: 'Products'}" :class="{'active': isCatalogActive}" @click="menuOpen = false"
+                             class="menu-link">Каталог
+                </router-link>
+                <router-link :to="{name: 'NewProducts'}" :class="{'active': route.name === 'NewProducts'}"
+                             @click="menuOpen = false" class="menu-link">Новинки
                 </router-link>
                 <a href="#" class="menu-link">Скидки</a>
             </nav>
@@ -159,6 +164,10 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.active-shop {
+    fill: #FFA542 !important;
+}
+
 .active-heart {
     fill: red !important;
 }
