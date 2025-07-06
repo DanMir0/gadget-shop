@@ -2,10 +2,10 @@
 import {ref, onMounted, onUnmounted, computed} from "vue";
 import Products from "@/pages/Products.vue";
 import router from "@/router/router.js";
-import {useAuth} from "@/composoble/useAuth.js";
 import {useRoute} from "vue-router";
+import {useAuthStore} from "@/stores/auth.js";
 
-const {isAuthenticated, logout} = useAuth()
+const auth = useAuthStore()
 const menuOpen = ref(false);
 const route = useRoute()
 const isCatalogActive = computed(() => {
@@ -31,7 +31,7 @@ function goToLogin() {
 }
 
 async function goToLogout() {
-    await logout()
+    await auth.logout()
 }
 
 onMounted(() => {
@@ -65,7 +65,7 @@ onUnmounted(() => {
             </nav>
 
             <!-- Кнопки на десктопе -->
-            <div v-if="!isAuthenticated" class="buttons">
+            <div v-if="!auth.isAuthenticated" class="buttons">
                 <g-button @click="goToLogin" class="btn-black">Войти</g-button>
                 <g-button @click="goToRegister" class="btn-outlined">Зарегистрироваться</g-button>
             </div>
@@ -135,7 +135,7 @@ onUnmounted(() => {
                 </router-link>
                 <a href="#" class="menu-link">Скидки</a>
             </nav>
-            <div v-if="!isAuthenticated" class="mobile-buttons">
+            <div v-if="!auth.isAuthenticated" class="mobile-buttons">
                 <g-button @click="goToLogin" class="btn-black">Войти</g-button>
                 <g-button @click="goToRegister" class="btn-outlined">Зарегистрироваться</g-button>
             </div>

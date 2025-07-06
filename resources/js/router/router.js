@@ -11,6 +11,7 @@ import Favorites from "@/pages/Favorites.vue";
 import ForgotPassword from "@/pages/ForgotPassword.vue";
 import ResetPassword from "@/pages/ResetPassword.vue";
 import Cart from "@/pages/Cart.vue";
+import {useAuthStore} from "@/stores/auth.js";
 
 const routes = [
     {
@@ -46,13 +47,13 @@ const routes = [
                 path: '/favorites',
                 name: 'Favorites',
                 component: Favorites,
-                meta: {title: "Избранное"},
+                meta: {title: "Избранное", requiresAuth: true},
             },
             {
                 path: '/cart',
                 name: 'Cart',
                 component: Cart,
-                meta: {title: "Корзина"},
+                meta: {title: "Корзина", requiresAuth: true},
             },
         ]
     },
@@ -99,7 +100,7 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     document.title = to.meta.title || "Магазин";
 
     if (to.meta.description) {
@@ -114,7 +115,21 @@ router.beforeEach((to, from, next) => {
         }
     }
 
+    const auth = useAuthStore();
+
+    // Если авторизация ещё не проверена, подгружаем пользователя
+    if (!auth.isAuthResolved) {
+        await auth.fetchUser();
+    }
+
+    const protectedPages = ['/cart', '/favorites',]; // тут укажи свои защищённые страницы
+
+    if (protectedPages.includes(to.path) && !auth.isAuthenticated) {
+        return next('/login'); // редирект на страницу входа
+    }
+
     next();
+
 })
 
 export default router;

@@ -2,7 +2,7 @@
 import {ref} from "vue";
 import router from "@/router/router.js";
 import GButton from "@/components/ui/GButton.vue";
-import {useAuth} from "../composoble/useAuth.js";
+import {useAuthStore} from "@/stores/auth.js";
 
 const name = ref("");
 const email = ref("");
@@ -10,11 +10,11 @@ const password = ref("");
 const password_confirmation = ref("");
 const errors = ref({});
 
-const { register } = useAuth()
+const auth = useAuthStore()
 
 async function handleRegister() {
     try {
-        await register({
+        await auth.register({
             name: name.value,
             email: email.value,
             password: password.value,

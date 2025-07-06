@@ -1,10 +1,11 @@
 <script setup>
 import { onMounted } from 'vue'
-import { useAuth } from '../composoble/useAuth.js'
+import {useAuthStore} from "@/stores/auth.js";
 
-const auth = useAuth()
+const authStore = useAuthStore()
 
-onMounted(() => {auth.initAuth()
+onMounted(() => {
+    authStore.fetchUser()
 })
 </script>
 <template>

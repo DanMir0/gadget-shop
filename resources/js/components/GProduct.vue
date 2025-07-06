@@ -2,9 +2,9 @@
 import GButton from "@/components/ui/GButton.vue";
 import {ref} from "vue";
 import axios from "axios";
-import {useAuth} from "@/composoble/useAuth.js";
 import router from "@/router/router.js";
 import {useCartStore} from "@/stores/cart.js";
+import {useAuthStore} from "@/stores/auth.js";
 
 const props = defineProps({
     product: {
@@ -15,7 +15,7 @@ const props = defineProps({
         type: String,
     }
 });
-const {isAuthenticated} = useAuth()
+const auth = useAuthStore()
 const emit =  defineEmits(['remove-from-favorites'])
 const cart = useCartStore()
 const isFavorite = ref(props.product.is_favorite)
@@ -24,7 +24,7 @@ async function addToCart(product) {
     cart.addToCart(product)
 }
 async function toggleFavorite() {
-    if (!isAuthenticated.value) router.push({name: 'Login'})
+    if (!auth.isAuthenticated) router.push({name: 'Login'})
     isFavorite.value = !isFavorite.value
     try {
         const response = await axios.post(`/api/favorites/${props.product.id}`)

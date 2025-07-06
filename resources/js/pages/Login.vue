@@ -1,17 +1,17 @@
 <script setup>
 import {ref} from "vue";
 import router from "@/router/router.js";
-import {useAuth} from "@/composoble/useAuth.js";
+import {useAuthStore} from "@/stores/auth.js";
 
 const email = ref("");
 const password = ref("");
 const errors = ref({});
 
-const {login} = useAuth()
+const auth = useAuthStore()
 async function clickLogin() {
     try {
         await axios.get('/sanctum/csrf-cookie') // <- важно!
-        await login(email.value, password.value)
+        await auth.login(email.value, password.value)
         router.push('/')
     } catch (error) {
         if (error.response?.status === 422) {

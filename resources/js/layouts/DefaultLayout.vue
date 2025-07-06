@@ -1,14 +1,14 @@
 <script setup>
-import {useAuth} from "@/composoble/useAuth.js";
+import {useAuthStore} from "@/stores/auth.js";
 
-const {isAuthResolved} = useAuth();
+const auth = useAuthStore();
 </script>
 
 <template>
 <div class="layout">
-    <g-loader v-if="!isAuthResolved"></g-loader>
+    <g-loader v-if="!auth.isAuthResolved"></g-loader>
     <div v-else class="layout-inner">
-        <g-header :isAuthResolved="isAuthResolved"></g-header>
+        <g-header :isAuthResolved="auth.isAuthResolved"></g-header>
 
         <g-main class="main-content"> <slot></slot></g-main>
 

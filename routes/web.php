@@ -8,10 +8,10 @@ use App\Http\Controllers\ProductController;
 
 Route::post('/api/register', [AuthController::class, 'register']);
 Route::post('/api/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/api/logout', [AuthController::class, 'logout']);
 Route::post('/api/forgot-password', [\App\Http\Controllers\ForgotPasswordController::class, 'sendResetLinkEmail']);
 Route::post('/api/reset-password', [\App\Http\Controllers\ResetPasswordController::class, 'reset']);
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/api/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware('auth:sanctum')->get('/api/product-categories', [FavoriteController::class, 'getProductsWithCategories']);

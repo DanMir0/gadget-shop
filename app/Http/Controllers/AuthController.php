@@ -25,7 +25,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return response()->json(['message' => 'Регистрация прошла успешно!']);
+        return response()->json($user);
     }
 
     public function login(Request $request)
@@ -51,7 +51,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return response()->json(['message' => 'Вход выполнен']);
+        return response()->json($user);
     }
 
     public function logout(Request $request)
