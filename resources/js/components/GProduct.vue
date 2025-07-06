@@ -1,6 +1,6 @@
 <script setup>
 import GButton from "@/components/ui/GButton.vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import axios from "axios";
 import router from "@/router/router.js";
 import {useCartStore} from "@/stores/cart.js";
@@ -16,13 +16,21 @@ const props = defineProps({
     }
 });
 const auth = useAuthStore()
-const emit =  defineEmits(['remove-from-favorites'])
+const emit = defineEmits(['remove-from-favorites'])
 const cart = useCartStore()
 const isFavorite = ref(props.product.is_favorite)
 
-async function addToCart(product) {
-    cart.addToCart(product)
+const inCart = computed(() => cart.hasProduct(props.product.id));
+const quantity = computed(() => cart.getQuantity(props.product.id));
+
+function add() {
+    cart.addToCart(props.product);
 }
+
+async function decrease() {
+    cart.decreaseQuantity(props.product.id)
+}
+
 async function toggleFavorite() {
     if (!auth.isAuthenticated) router.push({name: 'Login'})
     isFavorite.value = !isFavorite.value
@@ -36,7 +44,7 @@ async function toggleFavorite() {
 
 async function handlerToggle(product) {
     if (props.path !== '/favorites') {
-       await toggleFavorite()
+        await toggleFavorite()
     } else {
         await toggleFavorite()
         emit('remove-from-favorites', product)
@@ -47,33 +55,33 @@ async function handlerToggle(product) {
 
 <template>
     <article class="product">
-       <div class="image-wrapper">
-           <img class="product-image" :src="product.image" :alt="product.name">
-           <button class="favorite-button" @click="handlerToggle(product)">
-               <svg
-                   version="1.0"
-                   xmlns="http://www.w3.org/2000/svg"
-                   width="26"
-                   height="26"
-                   viewBox="0 0 512 457"
-                   preserveAspectRatio="xMidYMid meet"
-                   :fill="isFavorite ? 'red' : 'none'"
-                   stroke="red"
-                   stroke-width="260"
-               >
-                   <g transform="translate(0,457) scale(0.1,-0.1)">
-                       <path d="M1335 4559 c-628 -86 -1133 -533 -1285 -1134 -74 -290 -64 -577 30
+        <div class="image-wrapper">
+            <img class="product-image" :src="product.image" :alt="product.name">
+            <button class="favorite-button" @click="handlerToggle(product)">
+                <svg
+                    version="1.0"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="26"
+                    height="26"
+                    viewBox="0 0 512 457"
+                    preserveAspectRatio="xMidYMid meet"
+                    :fill="isFavorite ? 'red' : 'none'"
+                    stroke="red"
+                    stroke-width="260"
+                >
+                    <g transform="translate(0,457) scale(0.1,-0.1)">
+                        <path d="M1335 4559 c-628 -86 -1133 -533 -1285 -1134 -74 -290 -64 -577 30
             -856 62 -187 141 -331 270 -494 82 -104 1951 -1977 2010 -2014 55 -36 138 -61
             200 -61 55 0 141 24 190 52 45 27 1854 1830 1972 1967 197 227 308 448 369
             731 31 140 33 436 6 575 -64 317 -198 567 -426 796 -230 229 -488 367 -802
             425 -143 27 -430 25 -565 -4 -254 -55 -502 -174 -676 -323 -31 -27 -61 -49
             -66 -49 -6 0 -34 21 -64 46 -178 153 -424 271 -675 324 -114 24 -377 35 -488
             19z"/>
-                   </g>
-               </svg>
+                    </g>
+                </svg>
 
-           </button>
-       </div>
+            </button>
+        </div>
         <div class="product-info">
             <div class="product-title">
                 <p class="text product-name">{{ product.name }}</p>
@@ -85,12 +93,51 @@ async function handlerToggle(product) {
             <div class="product-block-stock">
                 <p class="product-stock">Осталось: <strong>{{ product.stock }}</strong></p>
             </div>
-            <g-button class="buy-button" @click="addToCart(product)">Купить</g-button>
+            <div class="group-btn" v-if="inCart">
+                <g-button class="cart-btn" @click="decrease">-</g-button>
+                <span class="cart-qty">{{ quantity }}</span>
+                <g-button class="cart-btn" @click="add">+</g-button>
+            </div>
+            <template v-else>
+                <g-button class="buy-button" @click="add">Купить</g-button>
+            </template>
         </div>
     </article>
 </template>
 
 <style scoped>
+.cart-btn {
+    background-color: #FFA542; /* Оранжевый */
+    color: white;
+    border: none;
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s ease-in-out;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.cart-btn:hover {
+    background-color: #E44D26; /* Темно-оранжевый */
+    transform: scale(1.1);
+}
+
+.cart-qty {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    min-width: 24px;
+    text-align: center;
+}
+
+.group-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .image-wrapper {
     position: relative;
     width: 100%;
@@ -110,7 +157,6 @@ async function handlerToggle(product) {
 .favorite-button svg {
     transition: fill 0.3s ease;
 }
-
 
 
 .product {
