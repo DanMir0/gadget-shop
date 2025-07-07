@@ -23,12 +23,20 @@ const isFavorite = ref(props.product.is_favorite)
 const inCart = computed(() => cart.hasProduct(props.product.id));
 const quantity = computed(() => cart.getQuantity(props.product.id));
 
-function add() {
+async function add() {
     cart.addToCart(props.product);
+    const data = {
+        product_id: props.product.id,
+        quantity: quantity.value,
+    }
+    const response = await axios.post('/api/cart', data)
 }
 
 async function decrease() {
     cart.decreaseQuantity(props.product.id)
+    await axios.delete('/cart', {
+        data: {product_id: props.product.id}
+    })
 }
 
 async function toggleFavorite() {

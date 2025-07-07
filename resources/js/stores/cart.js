@@ -1,9 +1,27 @@
 import { defineStore } from "pinia";
+import axios from "axios";
 
 export const useCartStore = defineStore('cart', {
-    state: () => ({
-        items: []
-    }),
+    state: () => {
+        let storedItems = []
+
+        try {
+            const raw = localStorage.getItem('pinia-cart')
+            if (raw) {
+                const parsed = JSON.parse(raw)
+                if (Array.isArray(parsed?.items)) {
+                    storedItems = parsed.items
+                }
+            }
+        } catch (e) {
+            console.warn("Ошибка при чтении pinia-cart:", e)
+        }
+
+        return {
+            items: storedItems
+        }
+
+    },
     getters: {
         totalPrice: (state) =>
             state.items.reduce((sum, item) => sum + item.price * item.quantity, 0),
@@ -20,6 +38,15 @@ export const useCartStore = defineStore('cart', {
         },
     },
     actions: {
+        async loadCart() {
+          try {
+              const response = await axios.get('/api/get_cart')
+              console.log(response)
+              this.items = response.data
+          } catch (e) {
+              console.error(e)
+          }
+        },
         addToCart(product) {
             const existing = this.items.find((item) => item.id === product.id)
             if (existing) {

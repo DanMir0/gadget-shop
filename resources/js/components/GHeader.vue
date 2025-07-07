@@ -4,7 +4,9 @@ import Products from "@/pages/Products.vue";
 import router from "@/router/router.js";
 import {useRoute} from "vue-router";
 import {useAuthStore} from "@/stores/auth.js";
+import {useCartStore} from "@/stores/cart.js";
 
+const cart = useCartStore()
 const auth = useAuthStore()
 const menuOpen = ref(false);
 const route = useRoute()
@@ -15,7 +17,6 @@ const isCatalogActive = computed(() => {
 function toggleMenu() {
     menuOpen.value = !menuOpen.value;
 }
-
 function closeMenu(event) {
     if (!event.target.closest(".mobile-menu") && !event.target.closest(".burger-btn")) {
         menuOpen.value = false;
@@ -32,6 +33,7 @@ function goToLogin() {
 
 async function goToLogout() {
     await auth.logout()
+    cart.clearCart()
 }
 
 onMounted(() => {

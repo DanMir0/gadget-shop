@@ -2,16 +2,19 @@
 import {ref} from "vue";
 import router from "@/router/router.js";
 import {useAuthStore} from "@/stores/auth.js";
+import {useCartStore} from "@/stores/cart.js";
 
 const email = ref("");
 const password = ref("");
 const errors = ref({});
 
 const auth = useAuthStore()
+const cart = useCartStore()
 async function clickLogin() {
     try {
         await axios.get('/sanctum/csrf-cookie') // <- важно!
         await auth.login(email.value, password.value)
+        await cart.loadCart()
         router.push('/')
     } catch (error) {
         if (error.response?.status === 422) {

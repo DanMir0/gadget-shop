@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\FavoriteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,10 @@ Route::get('/api/categories', [\App\Http\Controllers\CategorieController::class,
 Route::get('/api/new-products', [\App\Http\Controllers\ProductStatusController::class, 'getNewProducts']);
 
 Route::post('/api/orders', [\App\Http\Controllers\OrderController::class, 'store']);
+
+Route::post('/api/cart', [CartController::class, 'postCart']);
+Route::delete('/cart', [CartController::class, 'decreaseCart']);
+Route::get('/api/get_cart', [CartController::class, 'getCart']);
 
 Route::get('{any}', function () {
     return view('welcome');
