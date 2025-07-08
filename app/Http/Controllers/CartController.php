@@ -66,10 +66,14 @@ class CartController extends Controller
     {
         $userId = auth()->id();
 
-        $cartItems = Cart::where('user_id', $userId)
-            ->select('id', 'user_id', 'product_id', 'quantity')
+        $cartItems = Cart::select('p.name', 'p.price', 'p.description', 'p.stock', 'p.image', 'c.quantity', 'c.user_id', 'c.product_id')
+            ->from('cart as c')
+            ->join('products as p', 'c.product_id', '=', 'p.id')
+            ->where('c.user_id', $userId)
             ->get();
-
+//        where('user_id', $userId)
+//            ->select('id', 'user_id', 'product_id', 'quantity')
+//            ->get();
         return response()->json($cartItems);
     }
 }
