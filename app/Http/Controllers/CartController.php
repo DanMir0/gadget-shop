@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -66,14 +67,35 @@ class CartController extends Controller
     {
         $userId = auth()->id();
 
-        $cartItems = Cart::select('p.name', 'p.price', 'p.description', 'p.stock', 'p.image', 'c.quantity', 'c.user_id', 'c.product_id')
-            ->from('cart as c')
+        $cartItems = DB::table('cart as c')
             ->join('products as p', 'c.product_id', '=', 'p.id')
             ->where('c.user_id', $userId)
-            ->get();
-//        where('user_id', $userId)
-//            ->select('id', 'user_id', 'product_id', 'quantity')
-//            ->get();
+            ->select(
+                'p.id',
+                'p.name',
+                'p.price',
+                'p.description',
+                'p.stock',
+                'p.image',
+                'c.quantity',
+                'c.user_id',
+                'c.product_id'
+            )
+            ->get()
+            ->map(function ($item) {
+                $cleanImagePath = ltrim(trim($item->image, " \t\n\r\0\x0B\"'"), '/');
+
+                return [
+                    'id' => $item->product_id,
+                    'name' => $item->name,
+                    'description' => $item->description,
+                    'price' => $item->price,
+                    'stock' => $item->stock,
+                    'image' => asset('storage/' . $cleanImagePath),
+                    'quantity' => $item->quantity,
+                ];
+            });
+
         return response()->json($cartItems);
     }
 }

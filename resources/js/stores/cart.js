@@ -41,7 +41,6 @@ export const useCartStore = defineStore('cart', {
         async loadCart() {
           try {
               const response = await axios.get('/api/get_cart')
-              console.log(response)
               this.items = response.data
           } catch (e) {
               console.error(e)
