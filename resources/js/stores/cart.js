@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import {defineStore} from "pinia";
 import axios from "axios";
 
 export const useCartStore = defineStore('cart', {
@@ -23,8 +23,10 @@ export const useCartStore = defineStore('cart', {
 
     },
     getters: {
-        totalPrice: (state) =>
-            state.items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+        totalPrice: (state) => {
+            const total = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+            return Number(total.toFixed(2))
+        },
         totalCount: (state) =>
             state.items.reduce((sum, item) => sum + item.quantity, 0),
         hasProduct: (state) => {
@@ -39,19 +41,19 @@ export const useCartStore = defineStore('cart', {
     },
     actions: {
         async loadCart() {
-          try {
-              const response = await axios.get('/api/get_cart')
-              this.items = response.data
-          } catch (e) {
-              console.error(e)
-          }
+            try {
+                const response = await axios.get('/api/get_cart')
+                this.items = response.data
+            } catch (e) {
+                console.error(e)
+            }
         },
         addToCart(product) {
             const existing = this.items.find((item) => item.id === product.id)
             if (existing) {
                 existing.quantity += 1
             } else {
-                this.items.push({ ...product, quantity: 1 })
+                this.items.push({...product, quantity: 1})
             }
         },
         removeFromCart(productId) {
