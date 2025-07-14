@@ -15,6 +15,7 @@ const props = defineProps({
         type: String,
     }
 });
+
 const auth = useAuthStore()
 const emit = defineEmits(['remove-from-favorites'])
 const cart = useCartStore()
@@ -22,8 +23,11 @@ const isFavorite = ref(props.product.is_favorite)
 
 const inCart = computed(() => cart.hasProduct(props.product.id));
 const quantity = computed(() => cart.getQuantity(props.product.id));
+const isOutOfStock = computed(() => quantity.value >= props.product.stock)
 
 async function add() {
+    if (isOutOfStock.value) return
+
     cart.addToCart(props.product);
     const data = {
         product_id: props.product.id,
@@ -101,19 +105,35 @@ async function handlerToggle(product) {
             <div class="product-block-stock">
                 <p class="product-stock">Осталось: <strong>{{ product.stock }}</strong></p>
             </div>
-            <div class="group-btn" v-if="inCart">
-                <g-button class="cart-btn" @click="decrease">-</g-button>
-                <span class="cart-qty">{{ quantity }}</span>
-                <g-button class="cart-btn" @click="add">+</g-button>
-            </div>
-            <template v-else>
-                <g-button class="buy-button" @click="add">Купить</g-button>
+            <template v-if="inCart">
+                <div class="group-btn">
+                    <g-button class="cart-btn" @click="decrease">-</g-button>
+                    <span class="cart-qty">{{ quantity }}</span>
+                    <g-button class="cart-btn" @click="add" :disabled="isOutOfStock">+</g-button>
+                </div>
+                <p v-if="isOutOfStock" class="out-of-stock">Нет в наличии</p>
             </template>
+            <template v-else-if="!isOutOfStock">
+                <g-button class="buy-button" @click="add" :disabled="product.stock <= 0">Купить</g-button>
+            </template>
+            <p v-else class="out-of-stock">Нет в наличии</p>
         </div>
     </article>
 </template>
 
 <style scoped>
+.out-of-stock {
+    background-color: #dddddd;
+    color: #000000;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
 .cart-btn {
     background-color: #FFA542; /* Оранжевый */
     color: white;
@@ -165,7 +185,6 @@ async function handlerToggle(product) {
 .favorite-button svg {
     transition: fill 0.3s ease;
 }
-
 
 .product {
     display: flex;

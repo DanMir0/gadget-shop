@@ -1,11 +1,15 @@
 <script setup>
 defineProps({
-    hoverClass: String // Пропс для передаваемого класса
+    hoverClass: String, // Пропс для передаваемого класса
+    disabled: {
+        type: Boolean,
+        default: false,
+    }
 });
 </script>
 
 <template>
-    <button class="hoverClass">
+    <button class="hoverClass" :disabled="disabled" :class="{'disabled': disabled}">
         <slot></slot>
     </button>
 </template>
@@ -29,5 +33,10 @@ button:hover {
 
 button:active {
     transform: translateY(0);
+}
+
+.disabled {
+    background-color: #80808087 !important;
+    pointer-events: none;
 }
 </style>
