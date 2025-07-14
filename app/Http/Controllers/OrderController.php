@@ -26,19 +26,22 @@ class OrderController extends Controller
 
         return DB::transaction(function () use ($validated) {
             $total = 0;
-            $orderItemData = [];
+            $productsToUpdate  = [];
 
             foreach ($validated['items'] as $item) {
-                $product = \App\Models\Product::findOrFail($item['product_id']);
-                $price  = $product->price;
+                $product = \App\Models\Product::lockForUpdate()->findOrFail($item['product_id']);
 
-                $total += $price * $item['quantity'];
+                // Проверка, хватает ли товара
+                if ($product->stock < $item['quantity']) {
+                    abort(400, "Недостаточно товара: {$product->name}");
+                }
 
-                $orderItemsData[] = [
-                    'product_id' => $item['product_id'],
+                $productsToUpdate[] = [
+                    'product' => $product,
                     'quantity' => $item['quantity'],
-                    'price' => $price,
                 ];
+
+                $total += $product->price * $item['quantity'];
             }
 
             $order = Order::create([
@@ -47,13 +50,18 @@ class OrderController extends Controller
                 'status' => 'pending',
             ]);
 
-            foreach ($orderItemsData as $itemData) {
+            foreach ($productsToUpdate as $item) {
+                $product = $item['product'];
+                $quantity = $item['quantity'];
+
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'product_id' => $itemData['product_id'],
-                    'quantity' => $itemData['quantity'],
-                    'price' => $itemData['price'],
+                    'product_id' => $product->id,
+                    'quantity' => $quantity,
+                    'price' => $product->price,
                 ]);
+
+                $product->decrement('stock', $quantity);
             }
 
             return response()->json([
