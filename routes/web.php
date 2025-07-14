@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -25,7 +26,10 @@ Route::get('/api/categories', [\App\Http\Controllers\CategorieController::class,
 
 Route::get('/api/new-products', [\App\Http\Controllers\ProductStatusController::class, 'getNewProducts']);
 
-Route::post('/api/orders', [\App\Http\Controllers\OrderController::class, 'store']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::post('/orders', [OrderController::class, 'store']);
+});
 
 Route::post('/api/cart', [CartController::class, 'postCart']);
 Route::delete('/cart', [CartController::class, 'decreaseCart']);

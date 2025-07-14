@@ -19,7 +19,7 @@ async function submitOrder() {
             }))
         }
 
-        await axios.post('/api/orders', order)
+        await axios.post('/orders', order)
         alert("Заказ оформлен!")
         cart.clearCart()
         showConfirmModal.value = false
