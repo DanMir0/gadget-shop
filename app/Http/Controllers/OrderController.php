@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -22,6 +23,14 @@ class OrderController extends Controller
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|integer|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
+
+            'address.full_name' => 'required|string|max:255',
+            'address.phone' => 'required|regex:/^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/',
+            'address.city' => 'required|string',
+            'address.street' => 'required|string',
+            'address.house' => 'required|string',
+            'address.apartment' => 'nullable|string',
+            'address.comments' => 'nullable|string',
         ]);
 
         return DB::transaction(function () use ($validated) {
@@ -63,6 +72,11 @@ class OrderController extends Controller
 
                 $product->decrement('stock', $quantity);
             }
+
+            Address::create(array_merge(
+                $validated['address'],
+                ['order_id' => $order->id]
+            ));
 
             return response()->json([
                 'message' => 'Заказ создан успешно',

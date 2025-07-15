@@ -1,10 +1,21 @@
 <script setup>
 import {useCartStore} from "@/stores/cart.js";
 import axios from "axios";
-import {ref} from "vue";
+import {onMounted, ref, watch} from "vue";
+import IMask from "imask";
 
 const cart = useCartStore()
 const showConfirmModal = ref(false)
+const address = ref({
+    full_name: '',
+    phone: '',
+    city: '',
+    street: '',
+    house: '',
+    apartment: '',
+    comments: ''
+})
+const errors = ref({})
 
 function confirmOrder() {
     showConfirmModal.value = true
@@ -16,18 +27,46 @@ async function submitOrder() {
             items: cart.items.map(({id, quantity}) => ({
                 product_id: id,
                 quantity,
-            }))
+            })),
+            address: address.value
         }
 
         await axios.post('/orders', order)
         alert("Заказ оформлен!")
         cart.clearCart()
-        showConfirmModal.value = false
     } catch (e) {
-        alert("ошибка при оформлении заказа")
-        console.error(e)
+        if (e.response?.status === 422) {
+            errors.value = e.response.data.errors
+        } else {
+            alert("Ошибка при заказе. Попробуйте позже!")
+        }
+        console.log(errors.value)
+    } finally {
+        showConfirmModal.value = false
     }
 }
+
+
+onMounted(() => {
+    const input = document.getElementById('phone-input');
+    if (input) {
+        const mask = IMask(input, {
+            mask: '+{7} (000) 000-00-00'
+        });
+
+        // Синхронизируем IMask с Vue ref
+        mask.on('accept', () => {
+            address.value.phone = mask.value;
+        });
+
+        // Если нужно, чтобы при изменении model обновлялся input:
+        watch(() => address.value.phone, (newVal) => {
+            if (mask.value !== newVal) {
+                mask.value = newVal;
+            }
+        });
+    }
+});
 </script>
 
 <template>
@@ -48,6 +87,54 @@ async function submitOrder() {
                 <p class="total-label">Итого:</p>
                 <p class="total-price">{{ cart.totalPrice }}₽</p>
             </div>
+            <form class="address-form">
+                <!-- ФИО (на новой строке) -->
+                <div class="form-group full-width">
+                    <input v-model="address.full_name" type="text" placeholder="ФИО" required />
+                    <div class="error" v-if="errors['address.full_name']">{{ errors['address.full_name'][0] }}</div>
+                </div>
+
+                <!-- Телефон (на новой строке) -->
+                <div class="form-group full-width">
+                    <input
+                        id="phone-input"
+                        type="tel"
+                        placeholder="+7 (___) ___-__-__"
+                        required
+                    />
+                    <div class="error" v-if="errors['address.phone']">{{ errors['address.phone'][0] }}</div>
+                </div>
+
+                <!-- Город и улица -->
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <input v-model="address.city" type="text" placeholder="Город" required />
+                        <div class="error" v-if="errors['address.city']">{{ errors['address.city'][0] }}</div>
+                    </div>
+                    <div class="form-group half-width">
+                        <input v-model="address.street" type="text" placeholder="Улица" required />
+                        <div class="error" v-if="errors['address.street']">{{ errors['address.street'][0] }}</div>
+                    </div>
+                </div>
+
+                <!-- Дом и квартира -->
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <input v-model="address.house" type="text" placeholder="Дом" required />
+                        <div class="error" v-if="errors['address.house']">{{ errors['address.house'][0] }}</div>
+                    </div>
+                    <div class="form-group half-width">
+                        <input v-model="address.apartment" type="text" placeholder="Квартира" />
+                        <div class="error" v-if="errors['address.apartment']">{{ errors['address.apartment'][0] }}</div>
+                    </div>
+                </div>
+
+                <!-- Комментарий (на новой строке) -->
+                <div class="form-group full-width">
+                    <textarea v-model="address.comments" placeholder="Комментарий к доставке"></textarea>
+                    <div class="error" v-if="errors['address.comments']">{{ errors['address.comments'][0] }}</div>
+                </div>
+            </form>
 
             <button class="submit-button" @click="confirmOrder">Оформить заказ</button>
         </div>
@@ -73,6 +160,60 @@ async function submitOrder() {
 </template>
 
 <style scoped>
+.address-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.half-width {
+    width: 100%;
+}
+
+@media (min-width: 600px) {
+    .half-width {
+        width: calc(50% - 10px);
+    }
+}
+
+input, textarea {
+    padding: 10px 14px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.error {
+    margin-left: 5px;
+    color: #e53935;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;
