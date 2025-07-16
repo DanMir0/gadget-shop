@@ -345,7 +345,7 @@ onUnmounted(() => {
 
 @media (max-width: 500px) {
     .logo-img {
-        height: 80px;
+        height: 50px;
     }
 
     .logo-title {

@@ -240,9 +240,14 @@ async function handlerToggle(product) {
 }
 
 .product-image {
+    display: block;
     width: 100%;
-    object-fit: cover;
+    height: 264px; /* одинаковая высота для всех карточек */
+    object-fit: contain; /* сохраняет пропорции, не обрезает */
+    object-position: center; /* по центру */
     border-radius: 10px;
+    background-color: #f8f8f8; /* светлый фон, если изображение меньше */
+    padding: 10px; /* отступы внутри, если нужно */
 }
 
 .product-stock {
