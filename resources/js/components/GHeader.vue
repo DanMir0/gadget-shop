@@ -63,7 +63,9 @@ onUnmounted(() => {
                 <router-link :to="{name: 'NewProducts'}" :class="{'active': route.name === 'NewProducts'}"
                              class="menu-link">Новинки
                 </router-link>
-                <a href="#" class="menu-link">Скидки</a>
+                <router-link :to="{name: 'AboutUs'}" :class="{'active': route.name === 'AboutUs'}"
+                             class="menu-link">О нас
+                </router-link>
             </nav>
 
             <!-- Кнопки на десктопе -->

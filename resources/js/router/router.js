@@ -12,6 +12,7 @@ import ForgotPassword from "@/pages/ForgotPassword.vue";
 import ResetPassword from "@/pages/ResetPassword.vue";
 import Cart from "@/pages/Cart.vue";
 import {useAuthStore} from "@/stores/auth.js";
+import AboutUs from "@/pages/AboutUs.vue";
 
 const routes = [
     {
@@ -54,6 +55,12 @@ const routes = [
                 name: 'Cart',
                 component: Cart,
                 meta: {title: "Корзина", requiresAuth: true},
+            },
+            {
+                path: '/about-us',
+                name: 'AboutUs',
+                component: AboutUs,
+                meta: {title: "О нас"},
             },
         ]
     },
