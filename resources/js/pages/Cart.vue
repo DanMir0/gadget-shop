@@ -3,6 +3,8 @@ import {useCartStore} from "@/stores/cart.js";
 import axios from "axios";
 import {onMounted, ref, watch} from "vue";
 import IMask from "imask";
+import GButton from "@/components/ui/GButton.vue";
+import router from "@/router/router.js";
 
 const cart = useCartStore()
 const showConfirmModal = ref(false)
@@ -71,10 +73,13 @@ onMounted(() => {
 
 <template>
     <g-container>
-        <h1 class="title">Корзина</h1>
+        <h1 v-show="cart.items.length !== 0" class="title">Корзина</h1>
 
         <div v-if="cart.items.length === 0" class="empty-cart">
-            Ваша корзина пуста
+            <img src="../images/shop.svg">
+            <h2>Корзина пуста</h2>
+            <p>Но это никогда не поздно исправить :)</p>
+            <g-button @click="router.push({name: 'Products'})">В каталог товаров</g-button>
         </div>
 
         <div v-else class="cart-wrapper">
@@ -160,6 +165,28 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.empty-cart {
+    margin: 120px 0;
+}
+.empty-cart h2 {
+    margin-top: 30px;
+}
+
+.empty-cart p {
+    color: #838383;
+}
+
+.empty-cart button {
+    margin-top: 30px;
+    background-color: #101010;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 20px;
+    width: 100%;
+    max-width: 540px;
+}
+
 .address-form {
     display: flex;
     flex-direction: column;
@@ -407,6 +434,10 @@ textarea {
     .submit-button {
         font-size: 14px;
         padding: 12px 16px;
+    }
+
+    .empty-cart img {
+        width: 289px;
     }
 }
 
