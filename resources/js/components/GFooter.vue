@@ -18,13 +18,13 @@
             <nav>
                 <ul class="footer-links">
                     <li>
-                        <router-link to="" class="link">Избранное</router-link>
+                        <router-link :to="{name: 'Favorites'}" class="link">Избранное</router-link>
                     </li>
                     <li>
-                        <router-link to="" class="link">Корзина</router-link>
+                        <router-link :to="{name: 'Cart'}" class="link">Корзина</router-link>
                     </li>
                     <li>
-                        <router-link to="" class="link">Контакты</router-link>
+                        <router-link :to="{name: 'AboutUs'}" class="link">Контакты</router-link>
                     </li>
                 </ul>
             </nav>
