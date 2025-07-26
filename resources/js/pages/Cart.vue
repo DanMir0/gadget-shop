@@ -84,7 +84,7 @@ onMounted(() => {
 
         <div v-else class="cart-wrapper">
             <div class="scrollable-row">
-                <g-products-list class="lists-cart" :products="cart.items"/>
+                <g-products-list class="lists-cart" :products="cart.items" :is-cart="true"/>
             </div>
             <hr class="cart-separator"/>
 
@@ -353,10 +353,9 @@ textarea {
 }
 
 .lists-cart {
-    display: flex;
+    display: flex !important;
     flex-direction: row;
-    justify-content: flex-start;
-    gap: 20px;
+    justify-content: flex-start !important;
 }
 
 .cart-separator {

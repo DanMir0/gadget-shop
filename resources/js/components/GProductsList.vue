@@ -6,7 +6,8 @@ const props = defineProps({
     },
     path: {
         type: String,
-    }
+    },
+    isCart: Boolean
 })
 
 defineEmits(['remove-from-favorites'])
@@ -14,12 +15,28 @@ defineEmits(['remove-from-favorites'])
 
 <template>
     <div class="lists">
-        <g-product @remove-from-favorites="$emit('remove-from-favorites', product)" :path="props.path" v-for="product in props.products" :key="product.id" :product="product"></g-product>
+        <g-product :class="['product-card', { 'cart-card': isCart }]" @remove-from-favorites="$emit('remove-from-favorites', product)" :path="props.path" v-for="product in props.products" :key="product.id" :product="product"></g-product>
 
     </div>
 </template>
 
 <style scoped>
+.cart-card {
+    min-height: 420px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    min-width: 280px !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cart-card img {
+    height: 160px;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
 .lists {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
