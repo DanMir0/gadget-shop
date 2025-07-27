@@ -8,6 +8,7 @@ import router from "@/router/router.js";
 
 const cart = useCartStore()
 const showConfirmModal = ref(false)
+const showCreateOrder = ref(false)
 const address = ref({
     full_name: '',
     phone: '',
@@ -18,6 +19,7 @@ const address = ref({
     comments: ''
 })
 const errors = ref({})
+const orderId = ref()
 
 function confirmOrder() {
     showConfirmModal.value = true
@@ -33,8 +35,9 @@ async function submitOrder() {
             address: address.value
         }
 
-        await axios.post('/orders', order)
-        alert("Заказ оформлен!")
+        const response = await axios.post('/orders', order)
+        orderId.value = response.data.order.id
+        showCreateOrder.value = true
         cart.clearCart()
     } catch (e) {
         if (e.response?.status === 422) {
@@ -42,7 +45,6 @@ async function submitOrder() {
         } else {
             alert("Ошибка при заказе. Попробуйте позже!")
         }
-        console.log(errors.value)
     } finally {
         showConfirmModal.value = false
     }
@@ -95,7 +97,7 @@ onMounted(() => {
             <form class="address-form">
                 <!-- ФИО (на новой строке) -->
                 <div class="form-group full-width">
-                    <input v-model="address.full_name" type="text" placeholder="ФИО" required />
+                    <input v-model="address.full_name" type="text" placeholder="ФИО" required/>
                     <div class="error" v-if="errors['address.full_name']">{{ errors['address.full_name'][0] }}</div>
                 </div>
 
@@ -113,11 +115,11 @@ onMounted(() => {
                 <!-- Город и улица -->
                 <div class="form-row">
                     <div class="form-group half-width">
-                        <input v-model="address.city" type="text" placeholder="Город" required />
+                        <input v-model="address.city" type="text" placeholder="Город" required/>
                         <div class="error" v-if="errors['address.city']">{{ errors['address.city'][0] }}</div>
                     </div>
                     <div class="form-group half-width">
-                        <input v-model="address.street" type="text" placeholder="Улица" required />
+                        <input v-model="address.street" type="text" placeholder="Улица" required/>
                         <div class="error" v-if="errors['address.street']">{{ errors['address.street'][0] }}</div>
                     </div>
                 </div>
@@ -125,11 +127,11 @@ onMounted(() => {
                 <!-- Дом и квартира -->
                 <div class="form-row">
                     <div class="form-group half-width">
-                        <input v-model="address.house" type="text" placeholder="Дом" required />
+                        <input v-model="address.house" type="text" placeholder="Дом" required/>
                         <div class="error" v-if="errors['address.house']">{{ errors['address.house'][0] }}</div>
                     </div>
                     <div class="form-group half-width">
-                        <input v-model="address.apartment" type="text" placeholder="Квартира" />
+                        <input v-model="address.apartment" type="text" placeholder="Квартира"/>
                         <div class="error" v-if="errors['address.apartment']">{{ errors['address.apartment'][0] }}</div>
                     </div>
                 </div>
@@ -162,12 +164,30 @@ onMounted(() => {
             </div>
         </div>
     </div>
+    <div v-if="showCreateOrder" class="modal-overlay">
+        <div class="modal">
+            <p class="modal-order-text">Заказ размещен.</p>
+            <p class="modal-order-text">Номер вашего заказа №{{ orderId }}. </p>
+            <button class="submit-button my-20" @click="showConfirmModal = false">Ок</button>
+        </div>
+    </div>
 </template>
 
 <style scoped>
+.modal-order-text {
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.my-20 {
+    margin-top: 20px;
+}
+
 .empty-cart {
     margin: 120px 0;
 }
+
 .empty-cart h2 {
     margin-top: 30px;
 }
