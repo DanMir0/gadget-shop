@@ -43,7 +43,7 @@ async function fetchProducts(categoryId = selectedCategory.value) {
     loading.value = false;
 }
 
-async function handleCategoryChange(slug) {
+async function handleCategoryChange(slug, preservePage = false) {
     const category = categories.value.find((cat) => cat.slug === slug);
 
     if (category) {
@@ -57,12 +57,13 @@ async function handleCategoryChange(slug) {
         selectedCategoryName.value = "Все";
         document.title = "Магазин - Все товары";
     }
-
-    currentPage.value = 1;
+    if (!preservePage) {
+        currentPage.value = 1;
+    }
 
     router.push({
         path: selectedSlug.value ? `/products/${selectedSlug.value}` : '/products',
-        query: { page: 1 }
+        query: { page: currentPage.value }
     });
 
     await nextTick();
@@ -74,7 +75,10 @@ onMounted(async () => {
     if (!categories.value.length) {
         await categoryStore.fetchCategories();
     }
-    handleCategoryChange(route.params.category);
+
+    currentPage.value = Number(route.query.page) || 1
+
+   await handleCategoryChange(route.params.category, true);
 });
 
 watch(
@@ -83,7 +87,7 @@ watch(
         if (!categories.value.length) {
             await categoryStore.fetchCategories();
         }
-        handleCategoryChange(newSlug);
+       await handleCategoryChange(newSlug);
     }
 );
 
