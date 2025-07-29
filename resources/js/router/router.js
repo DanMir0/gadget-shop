@@ -13,51 +13,52 @@ import ResetPassword from "@/pages/ResetPassword.vue";
 import Cart from "@/pages/Cart.vue";
 import {useAuthStore} from "@/stores/auth.js";
 import AboutUs from "@/pages/AboutUs.vue";
+import {useLangStore} from "@/stores/lang.js";
 
 const routes = [
     {
-        path: '/',
+        path: '/:lang',
         component: DefaultLayout,
         children: [
-            {path: '/', name: 'Home', component: Home},
+            {path: '', name: 'Home', component: Home},
             {
-                path: '/products',
+                path: 'products',
                 name: 'Products',
                 component: Products,
                 meta: {title: "Магазин - Все товары", description: "Все товары в магазине"},
             },
             {
-                path: '/products/:category?',
+                path: 'products/:category?',
                 name: 'Category',
                 component: Products,
                 meta: {title: "Категория товаров"},
             },
             {
-                path: '/new-products',
+                path: 'new-products',
                 name: 'NewProducts',
                 component: New,
                 meta: {title: "Новинки", description: "Только свежие новые товары"},
             },
             {
-                path: '/terms-of-use',
+                path: 'terms-of-use',
                 name: 'TermsOfUse',
                 component: TermsOfUse,
                 meta: {title: "Условия сервеса"},
             },
             {
-                path: '/favorites',
+                path: 'favorites',
                 name: 'Favorites',
                 component: Favorites,
                 meta: {title: "Избранное", requiresAuth: true},
             },
             {
-                path: '/cart',
+                path: 'cart',
                 name: 'Cart',
                 component: Cart,
                 meta: {title: "Корзина", requiresAuth: true},
             },
             {
-                path: '/about-us',
+                path: 'about-us',
                 name: 'AboutUs',
                 component: AboutUs,
                 meta: {title: "О нас"},
@@ -65,7 +66,7 @@ const routes = [
         ]
     },
     {
-        path: '/',
+        path: '/:lang',
         name: 'AuthLayout',
         component: AuthLayout,
         children: [
@@ -76,31 +77,30 @@ const routes = [
                 meta: {title: "Регистрация"}
             },
             {
-                path: '/login',
+                path: 'login',
                 name: 'Login',
                 component: Login,
                 meta: {title: "Войти"}
             },
             {
-                path: '/forgot-password',
+                path: 'forgot-password',
                 name: 'ForgotPassword',
                 component: ForgotPassword,
                 meta: {title: "Забыли пароль"},
             },
             {
-                path: '/reset-password',
+                path: 'reset-password',
                 name: 'ResetPassword',
                 component: ResetPassword,
                 props: true
             }
         ]
     },
+    {
+        path: '/',
+        redirect: '/ru'
+    }
 ];
-
-// { path: '/:lang/', name: 'Home', component: Home },
-// { path: '/:lang/products', name: 'Products', component: Products },
-// { path: '/:lang/products/:category', name: 'ProductCategory', component: Products },
-// { path: '/', redirect: '/ru/' } // Редирект на русский по умолчанию
 
 const router = createRouter({
     history: createWebHistory(),
@@ -108,6 +108,16 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+    const langStore = useLangStore();
+
+    const lang = to.params.lang;
+    const supportedLangs = ['ru', 'en'];
+
+    if (!supportedLangs.includes(lang)) {
+        return next('/ru');
+    }
+    langStore.setLang(lang)
+
     document.title = to.meta.title || "Магазин";
 
     if (to.meta.description) {

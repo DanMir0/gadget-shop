@@ -1,10 +1,23 @@
 <script setup>
-// import {useRoute, useRouter} from "vue-router";
-//
-// const route = useRoute();
-// const router = useRouter();
-//
-// const currentLanguage = route.params.lang || 'ru';
+import {useRoute, useRouter} from "vue-router";
+import {useLangStore} from "@/stores/lang.js";
+
+const router = useRouter()
+const route = useRoute()
+const langStore = useLangStore();
+
+function switchLanguage(newLang) {
+    if (newLang === route.params.lang) return
+
+    langStore.setLang(newLang)
+
+    const newRoute = {
+        ...route,
+        params: { ...route.params, lang: newLang },
+    };
+
+    router.push(newRoute)
+}
 </script>
 
 <template>
@@ -18,7 +31,7 @@
             <nav>
                 <ul class="footer-links">
                     <li>
-                        <router-link :to="{name: 'Favorites'}" class="link">Избранное</router-link>
+                        <router-link :to="{name: 'Favorites', }" class="link">Избранное</router-link>
                     </li>
                     <li>
                         <router-link :to="{name: 'Cart'}" class="link">Корзина</router-link>
@@ -40,9 +53,9 @@
             <div class="footer-language">
                 <img alt="Иконка планеты" src="../images/RU.svg">
                 <!--                // ru-->
-                <router-link to="#" class="language">Рус</router-link>
+                <button @click="switchLanguage('ru')" :class="{ active: route.params.lang === 'ru'}" class="language">Рус</button>
                 <!--                // en-->
-                <router-link to="#" class="language">Eng</router-link>
+                <button @click="switchLanguage('en')" :class="{ active: route.params.lang === 'en'}" class="language">Eng</button>
             </div>
         </div>
         <div class="footer-social">

@@ -18,8 +18,16 @@ import GFooter from "./components/GFooter.vue";
 import GNewProducts from "./components/GNewProducts.vue";
 import GPagination from "./components/GPagination.vue";
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import {createI18n} from "vue-i18n";
+import ru from './locales/ru.json';
+import en from './locales/en.json'
 
 const app = createApp(App);
+
+const i18n = createI18n({
+    locale: 'ru',
+    messages: {ru, en}
+});
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate)
@@ -40,4 +48,5 @@ app
     .component('g-categories-menu', GCategoriesMenu)
     .use(pinia)
     .use(router)
+    .use(i18n)
     .mount('#app');

@@ -1,6 +1,9 @@
 <script setup>
 import {ref} from "vue";
 import router from "@/router/router.js";
+import {useI18n} from "vue-i18n";
+
+const { t } = useI18n()
 
 const slides = ref([
     {image: "/images/slider/slide3.jpg", title: "Скидка на аксессуары при покупки смартфона"},
@@ -40,7 +43,7 @@ const moveTouch = (e) => {
 }
 
 function goToProduct() {
-    router.push('/products')
+    router.push({ name: 'Products', params: { lang: router.currentRoute.value.params.lang } })
 }
 
 </script>
@@ -48,9 +51,9 @@ function goToProduct() {
 <template>
     <header class="hero">
         <div class="hero-content">
-            <h1>Добро пожаловать в TechnoTop</h1>
-            <p>Лучшие гаджеты и аксессуары — всё в одном месте</p>
-            <g-button class="hero-btn" @click="goToProduct">Перейти в каталог</g-button>
+            <h1>{{ t('home.title')}}</h1>
+            <p>{{ t('home.subtitle')}}</p>
+            <g-button class="hero-btn" @click="goToProduct">{{ t('home.go_to_catalog')}}</g-button>
         </div>
     </header>
     <div class="slider" @touchstart="startTouch" @touchmove="moveTouch">
@@ -77,43 +80,43 @@ function goToProduct() {
         <g-new-products></g-new-products>
 
         <section class="why-us mt-120">
-            <h2>Почему выбирают нас?</h2>
+            <h2>{{ t('home.why_us')}}</h2>
             <div class="reasons">
                 <div class="reason">
                     <img class="" src="../images/reliability.png" alt="Иконка надежности">
-                    Надёжность и гарантия на всё
+                    {{ t('home.reliability')}}
                 </div>
                 <div class="reason">
                     <img class="" src="../images/delivery.png" alt="Иконка доставка">
-                    Доставка по всей России
+                    {{ t('home.delivery')}}
                 </div>
                 <div class="reason">
                     <img class="" src="../images/24-hours-support.png" alt="Иконка поддержки">
-                    Быстрая поддержка 24/7
+                    {{ t('home.support') }}
                 </div>
             </div>
         </section>
 
         <section class="testimonials mt-120">
-            <h2>Отзывы наших клиентов</h2>
+            <h2>{{ t('home.reviews') }}</h2>
             <div class="testimonial-list">
                 <div class="testimonial">
-                    <p>“Очень доволен сервисом! Смартфон пришел быстро и в отличной упаковке.”</p>
-                    <strong>— Иван, Москва</strong>
+                    <p>{{ t('home.review_1') }}</p>
+                    <strong>— {{ t('home.review_1_name') }}</strong>
                 </div>
                 <div class="testimonial">
-                    <p>“Цены супер! Нашёл тут редкий аксессуар, который нигде не было.”</p>
-                    <strong>— Алина, Казань</strong>
+                    <p>{{ t('home.review_2') }}</p>
+                    <strong>— {{ t('home.review_2_name') }}</strong>
                 </div>
                 <div class="testimonial">
-                    <p>“Цены супер! Нашёл тут редкий аксессуар, который нигде не было.”</p>
-                    <strong>— Алина, Казань</strong>
+                    <p>{{ t('home.review_2') }}</p>
+                    <strong>— {{ t('home.review_2_name') }}</strong>
                 </div>
             </div>
         </section>
 
         <div class="partners mt-120">
-            <h2 class="partners-title">Наши партнеры</h2>
+            <h2 class="partners-title">{{ t('home.partners') }}</h2>
             <div class="partners-slide">
                 <img src="../images/partner1.jpg" alt="Intel">
                 <img src="../images/partner2.webp" alt="AMD">
@@ -123,24 +126,23 @@ function goToProduct() {
         </div>
 
         <div class="values mt-120">
-            <h2 class="values-title">Наши ценности</h2>
-            <p class="values-description">Наша миссия — сделать топ 1 магазин электронной технике в мире.</p>
+            <h2 class="values-title">{{ t('home.partners') }}</h2>
+            <p class="values-description">{{ t('home.mission') }}.</p>
             <div class="values-wrapper">
                 <div class="values-product">
                     <img src="../images/ic-like.svg" alt="Icon">
-                    <h3>Качество</h3>
-                    <p>Предоставляем высочайшее качество</p>
+                    <h3>{{ t('home.quality') }}</h3>
+                    <p>{{ t('home.quality_desc') }}</p>
                 </div>
                 <div class="values-product">
                     <img src="../images/Group.svg" alt="Icon">
-                    <h3>Безопасность</h3>
-                    <p>Имея большой опыт в работе, предоставляем полную безопастность </p>
+                    <h3>{{ t('home.safety') }}</h3>
+                    <p>{{ t('home.safety_desc') }} </p>
                 </div>
                 <div class="values-product">
                     <img src="../images/ic-hand.svg" alt="Icon">
-                    <h3>Скорость</h3>
-                    <p>Быстрая доставка, безупречное качество товаров, идеальный сервис — всё это показывает, что
-                        магазин ценит время и комфорт покупателей.</p>
+                    <h3>{{ t('home.speed') }}</h3>
+                    <p>{{ t('home.speed_desc') }}.</p>
                 </div>
             </div>
         </div>

@@ -1,0 +1,25 @@
+{
+    "home": {
+        "title": "Welcome to TechnoTop",
+        "subtitle": "Top gadgets and accessories — all in one place",
+        "go_to_catalog": "Go to catalog",
+        "why_us": "Why choose us?",
+        "reliability": "Reliability and warranty on everything",
+        "delivery": "Delivery all over Russia",
+        "support": "Fast support 24/7",
+        "reviews": "Customer reviews",
+        "review_1": "“Very satisfied! The smartphone arrived quickly and well packed.”",
+        "review_1_name": "Ivan, Moscow",
+        "review_2": "“Great prices! Found a rare accessory I couldn’t find anywhere else.”",
+        "review_2_name": "Alina, Kazan",
+        "partners": "Our partners",
+        "values": "Our values",
+        "mission": "Our mission is to become the No.1 electronics store in the world.",
+        "quality": "Quality",
+        "quality_desc": "We provide the highest quality",
+        "safety": "Safety",
+        "safety_desc": "With a lot of experience, we ensure full safety",
+        "speed": "Speed",
+        "speed_desc": "Fast delivery, flawless product quality, perfect service — all this shows that the store values customers' time and comfort."
+    }
+}
