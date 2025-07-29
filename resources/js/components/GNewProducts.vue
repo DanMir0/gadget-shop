@@ -2,13 +2,14 @@
 import {onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import GPagination from "@/components/GPagination.vue";
+import {useI18n} from "vue-i18n";
 
 const loading = ref(false)
 const products = ref([]);
 const currentPage = ref(1);
 const lastPage = ref(1);
 const route = useRoute();
-
+const { t } = useI18n()
 async function fetchNewProducts(page = 1) {
     loading.value = true
     try {
@@ -39,8 +40,8 @@ watch(() => route.query.page, (newPage) => {
 </script>
 
 <template>
-    <g-title-page class="title">Новые товары</g-title-page>
-    <g-loader v-if="loading">Loading...</g-loader>
+    <g-title-page class="title">{{ t('new_products.title') }}</g-title-page>
+    <g-loader v-if="loading">{{ t('new_products.loading') }}</g-loader>
     <g-products-list v-else :products="products"></g-products-list>
     <g-pagination class="mb-120" :lastPage="lastPage" :currentPage="currentPage"></g-pagination>
 </template>

@@ -57,5 +57,9 @@
     "forgot_pass": {
         "title": "Forgot your password?",
         "send_link": "Send link"
+    },
+    "new_products": {
+        "title": "New products",
+        "loading": "Loading..."
     }
 }

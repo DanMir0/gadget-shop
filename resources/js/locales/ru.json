@@ -57,5 +57,9 @@
     "forgot_pass": {
         "title": "Забыли пароль?",
         "send_link": "Отправить ссылку"
+    },
+    "new_products": {
+        "title": "Новые товары",
+        "loading": "Загрузка..."
     }
 }
