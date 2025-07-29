@@ -1,11 +1,12 @@
 <script setup>
 import {useRoute, useRouter} from "vue-router";
 import {useLangStore} from "@/stores/lang.js";
+import {useI18n} from "vue-i18n";
 
 const router = useRouter()
 const route = useRoute()
 const langStore = useLangStore();
-
+const { t } = useI18n()
 function switchLanguage(newLang) {
     if (newLang === route.params.lang) return
 
@@ -31,13 +32,13 @@ function switchLanguage(newLang) {
             <nav>
                 <ul class="footer-links">
                     <li>
-                        <router-link :to="{name: 'Favorites', }" class="link">Избранное</router-link>
+                        <router-link :to="{name: 'Favorites'}" class="link">{{ t('footer.favorites') }}</router-link>
                     </li>
                     <li>
-                        <router-link :to="{name: 'Cart'}" class="link">Корзина</router-link>
+                        <router-link :to="{name: 'Cart'}" class="link">{{ t('footer.cart') }}</router-link>
                     </li>
                     <li>
-                        <router-link :to="{name: 'AboutUs'}" class="link">Контакты</router-link>
+                        <router-link :to="{name: 'AboutUs'}" class="link">{{ t('footer.contacts') }}</router-link>
                     </li>
                 </ul>
             </nav>
@@ -46,7 +47,7 @@ function switchLanguage(newLang) {
             <nav class="footer-about">
                 <ul>
                     <li>
-                        <router-link :to="{name: 'TermsOfUse'}" exact-active-class="active" class="link">Условия сервиса</router-link>
+                        <router-link :to="{name: 'TermsOfUse'}" exact-active-class="active" class="link">{{ t('footer.terms_of_service') }}</router-link>
                     </li>
                 </ul>
             </nav>

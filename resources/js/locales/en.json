@@ -21,5 +21,20 @@
         "safety_desc": "With a lot of experience, we ensure full safety",
         "speed": "Speed",
         "speed_desc": "Fast delivery, flawless product quality, perfect service — all this shows that the store values customers' time and comfort."
+    },
+    "header": {
+        "home": "Home",
+        "catalog": "Catalog",
+        "new": "New products",
+        "about_us": "About us",
+        "sign_in": "Sign in",
+        "sign_up": "Sign up",
+        "logout": "Logout"
+    },
+    "footer": {
+        "favorites": "Favorites",
+        "cart": "Shopping cart",
+        "contacts": "Contacts",
+        "terms_of_service": "Terms of Service"
     }
 }

@@ -5,11 +5,15 @@ import router from "@/router/router.js";
 import {useRoute} from "vue-router";
 import {useAuthStore} from "@/stores/auth.js";
 import {useCartStore} from "@/stores/cart.js";
+import {useLangStore} from "@/stores/lang.js";
+import {useI18n} from "vue-i18n";
 
+const { t } = useI18n()
 const cart = useCartStore()
 const auth = useAuthStore()
 const menuOpen = ref(false);
 const route = useRoute()
+const langStore = useLangStore();
 const isCatalogActive = computed(() => {
     return route.name === 'Products' || route.path.startsWith('/products')
 })
@@ -17,6 +21,7 @@ const isCatalogActive = computed(() => {
 function toggleMenu() {
     menuOpen.value = !menuOpen.value;
 }
+
 function closeMenu(event) {
     if (!event.target.closest(".mobile-menu") && !event.target.closest(".burger-btn")) {
         menuOpen.value = false;
@@ -24,11 +29,11 @@ function closeMenu(event) {
 }
 
 function goToRegister() {
-    router.push('/register')
+   router.push({name: 'Register', params: {lang: langStore.currentLang}}, )
 }
 
 function goToLogin() {
-    router.push('/login')
+    router.push({name: 'Login', params: {lang: langStore.currentLang}}, )
 }
 
 async function goToLogout() {
@@ -56,22 +61,26 @@ onUnmounted(() => {
 
             <!-- Навигация на десктопе -->
             <nav class="menu">
-                <router-link :to="{name: 'Home'}" :class="{'active': route.name === 'Home'}" class="menu-link">Главная
+                <router-link :to="{name: 'Home', params: {lang: langStore.currentLang}}"
+                             :class="{'active': route.name === 'Home'}" class="menu-link">{{ t('header.home') }}
                 </router-link>
-                <router-link :to="{name: 'Products'}" :class="{'active': isCatalogActive}" class="menu-link">Каталог
+                <router-link :to="{name: 'Products', params: {lang: langStore.currentLang}}"
+                             :class="{'active': isCatalogActive}" class="menu-link">{{ t('header.catalog') }}
                 </router-link>
-                <router-link :to="{name: 'NewProducts'}" :class="{'active': route.name === 'NewProducts'}"
-                             class="menu-link">Новинки
+                <router-link :to="{name: 'NewProducts', params: {lang: langStore.currentLang}}"
+                             :class="{'active': route.name === 'NewProducts'}"
+                             class="menu-link">{{ t('header.new') }}
                 </router-link>
-                <router-link :to="{name: 'AboutUs'}" :class="{'active': route.name === 'AboutUs'}"
-                             class="menu-link">О нас
+                <router-link :to="{name: 'AboutUs', params: {lang: langStore.currentLang}}"
+                             :class="{'active': route.name === 'AboutUs'}"
+                             class="menu-link">{{ t('header.about_us') }}
                 </router-link>
             </nav>
 
             <!-- Кнопки на десктопе -->
             <div v-if="!auth.isAuthenticated" class="buttons">
-                <g-button @click="goToLogin" class="btn-black">Войти</g-button>
-                <g-button @click="goToRegister" class="btn-outlined">Зарегистрироваться</g-button>
+                <g-button @click="goToLogin" class="btn-black">{{ t('header.sign_in') }}</g-button>
+                <g-button @click="goToRegister" class="btn-outlined">{{ t('header.sign_up') }}</g-button>
             </div>
 
             <div v-else class="buttons">
@@ -80,7 +89,7 @@ onUnmounted(() => {
                          viewBox="0 0 24.000000 24.000000"
                          preserveAspectRatio="xMidYMid meet"
                          class="icon shop-img"
-                         :class="{'active-shop': route.name === 'Cart'}">>
+                         :class="{'active-shop': route.name === 'Cart',  params: {lang: langStore.currentLang}}">>
                         <g transform="translate(0.000000,24.000000) scale(0.100000,-0.100000)" stroke="none">
                             <path d="M5 221 c-3 -5 5 -11 17 -13 17 -2 25 -14 34 -53 7 -27 11 -60 7 -72
 -3 -13 -1 -23 5 -23 6 0 8 -9 5 -20 -4 -16 0 -20 17 -20 17 0 21 4 17 20 -4
@@ -92,7 +101,7 @@ onUnmounted(() => {
                         </g>
                     </svg>
                 </router-link>
-                <router-link class="favorite" :to="{name: 'Favorites'}">
+                <router-link class="favorite" :to="{name: 'Favorites',  params: {lang: langStore.currentLang}}">
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                          viewBox="0 0 512.000000 457.000000"
                          preserveAspectRatio="xMidYMid meet"
@@ -110,7 +119,7 @@ onUnmounted(() => {
                         </g>
                     </svg>
                 </router-link>
-                <g-button @click="goToLogout" class="btn-black">Выйти</g-button>
+                <g-button @click="goToLogout" class="btn-black">{{ t('header.logout') }}</g-button>
             </div>
 
             <!-- Бургер-кнопка -->
@@ -128,23 +137,46 @@ onUnmounted(() => {
                 <p class="logo-title">Ninja Devices</p>
             </div>
             <nav class="mobile-nav">
-                <router-link :to="{name: 'Home'}" :class="{'active': route.name === 'Home'}" @click="menuOpen = false"
-                             class="menu-link">Главная
+                <router-link :to="{name: 'Home', params: {lang: langStore.currentLang}}"
+                             :class="{'active': route.name === 'Home'}" @click="menuOpen = false"
+                             class="menu-link">{{ t('header.home')}}
                 </router-link>
-                <router-link :to="{name: 'Products'}" :class="{'active': isCatalogActive}" @click="menuOpen = false"
-                             class="menu-link">Каталог
+                <router-link :to="{name: 'Products', params: {lang: langStore.currentLang}}"
+                             :class="{'active': isCatalogActive}" @click="menuOpen = false"
+                             class="menu-link">{{ t('header.catalog')}}
                 </router-link>
-                <router-link :to="{name: 'NewProducts'}" :class="{'active': route.name === 'NewProducts'}"
-                             @click="menuOpen = false" class="menu-link">Новинки
+                <router-link :to="{name: 'NewProducts', params: {lang: langStore.currentLang}}"
+                             :class="{'active': route.name === 'NewProducts'}"
+                             @click="menuOpen = false" class="menu-link">{{ t('header.new')}}
                 </router-link>
-                <a href="#" class="menu-link">Скидки</a>
+                <router-link :to="{name: 'AboutUs', params: {lang: langStore.currentLang}}"
+                             :class="{'active': route.name === 'AboutUs'}"
+                             class="menu-link">{{ t('header.about_us')}}
+                </router-link>
             </nav>
             <div v-if="!auth.isAuthenticated" class="mobile-buttons">
-                <g-button @click="goToLogin" class="btn-black">Войти</g-button>
-                <g-button @click="goToRegister" class="btn-outlined">Зарегистрироваться</g-button>
+                <g-button @click="goToLogin" class="btn-black">{{ t('header.sign_in') }}</g-button>
+                <g-button @click="goToRegister" class="btn-outlined">{{ t('header.sign_up') }}</g-button>
             </div>
             <div v-else class="buttons">
-                <router-link class="favorite" :to="{name: 'Favorites'}">
+                <router-link :to="{name: 'Cart'}">
+                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24.000000 24.000000"
+                         preserveAspectRatio="xMidYMid meet"
+                         class="icon shop-img"
+                         :class="{'active-shop': route.name === 'Cart',  params: {lang: langStore.currentLang}}">>
+                        <g transform="translate(0.000000,24.000000) scale(0.100000,-0.100000)" stroke="none">
+                            <path d="M5 221 c-3 -5 5 -11 17 -13 17 -2 25 -14 34 -53 7 -27 11 -60 7 -72
+-3 -13 -1 -23 5 -23 6 0 8 -9 5 -20 -4 -16 0 -20 17 -20 17 0 21 4 17 20 -4
+17 0 20 33 20 33 0 37 -3 33 -20 -4 -15 0 -20 16 -20 16 0 20 6 19 25 -2 24
+-5 25 -73 27 l-70 2 67 3 c36 2 70 9 75 16 9 11 33 86 33 101 0 3 -40 6 -89 6
+-70 0 -90 3 -95 15 -6 16 -41 20 -51 6z m215 -50 c0 -4 -5 -22 -11 -40 -11
+-30 -13 -31 -70 -31 -32 0 -59 4 -59 9 0 5 -3 23 -6 40 l-6 31 76 0 c42 0 76
+-4 76 -9z"/>
+                        </g>
+                    </svg>
+                </router-link>
+                <router-link class="favorite" :to="{name: 'Favorites',  params: {lang: langStore.currentLang}}">
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                          viewBox="0 0 512.000000 457.000000"
                          preserveAspectRatio="xMidYMid meet"
@@ -161,7 +193,7 @@ onUnmounted(() => {
                         </g>
                     </svg>
                 </router-link>
-                <g-button @click="goToLogout" class="btn-black">Выйти</g-button>
+                <g-button @click="goToLogout" class="btn-black">{{ t('header.logout') }}</g-button>
             </div>
         </div>
     </header>
