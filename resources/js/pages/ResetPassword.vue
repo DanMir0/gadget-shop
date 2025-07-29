@@ -2,13 +2,14 @@
 import {ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import axios from 'axios'
+import {useI18n} from "vue-i18n";
 
 const route = useRoute()
 const router = useRouter()
 
 const token = ref(route.query.token || '')
 const email = ref(decodeURIComponent(route.query.email || ''))
-
+const {t} = useI18n()
 const password = ref('')
 const password_confirmation = ref('')
 const errors = ref({})
@@ -39,14 +40,14 @@ async function resetPassword() {
 <template>
     <div class="wrapper">
         <div class="container">
-            <h2>Сброс пароля</h2>
+            <h2>{{ t('reset_pass.title') }}</h2>
 
             <input  class="form-group" v-model="email" type="email" readonly/>
             <div class="form-group">
                 <input
                     v-model="password"
                     type="password"
-                    placeholder="Новый пароль"
+                    :placeholder="route.params.lang === 'ru' ? 'Новый пароль' : 'New password'"
                     :class="{
                             'custom-input': true,
                             'error-input': errors.password
@@ -58,7 +59,7 @@ async function resetPassword() {
                 <input
                     v-model="password_confirmation"
                     type="password"
-                    placeholder="Подтвердите пароль"
+                    :placeholder="route.params.lang === 'ru' ? 'Подтвердите пароль' : 'Confirm password'"
                     :class="{
                             'custom-input': true,
                             'error-input': errors.password_confirmation
@@ -66,9 +67,9 @@ async function resetPassword() {
                 <div class="error" v-if="errors.password_confirmation">{{ errors.password_confirmation[0] }}</div>
             </div>
 
-            <button @click="resetPassword">Сбросить пароль</button>
+            <button @click="resetPassword">{{ t('reset_pass.reset_pass') }}</button>
 
-            <div class="success" v-if="success">Пароль успешно сброшен! Перенаправление...</div>
+            <div class="success" v-if="success">{{ t('reset_pass.msg') }}</div>
         </div>
     </div>
 </template>

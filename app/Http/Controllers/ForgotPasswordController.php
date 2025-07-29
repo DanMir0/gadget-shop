@@ -12,6 +12,10 @@ class ForgotPasswordController extends Controller
     {
         $request->validate(['email' => 'required|email']);
 
+        if ($request->has('lang')) {
+            app()->setLocale($request->get('lang')); // 'en' или 'ru'
+        }
+
         $status = Password::sendResetLink(
             $request->only('email')
         );

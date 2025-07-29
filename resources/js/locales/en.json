@@ -48,5 +48,14 @@
         "sign_in": "Sign in",
         "sign_up": "Sign up",
         "acc_already": "Do you already have an account?"
+    },
+    "reset_pass": {
+        "title": "Password reset",
+        "reset_pass": "Reset password",
+        "msg": "Password successfully reset! Redirecting..."
+    },
+    "forgot_pass": {
+        "title": "Forgot your password?",
+        "send_link": "Send link"
     }
 }

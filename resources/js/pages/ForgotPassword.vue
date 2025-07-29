@@ -2,18 +2,21 @@
 import GButton from "@/components/ui/GButton.vue";
 import {ref} from "vue";
 import axios from "axios";
+import {useI18n} from "vue-i18n";
+import {useRoute} from "vue-router";
 
 const email = ref('')
 const success = ref('')
 const errors = ref({})
-
+const {t} = useI18n()
+const route = useRoute()
 async function forgotPassword() {
     errors.value = {}
     success.value = ''
 
     try {
-        await axios.post('/api/forgot-password', {email: email.value})
-        success.value = 'Письмо с инструкциями отправлено на почту.'
+        await axios.post('/api/forgot-password', {email: email.value, lang: route.params.lang})
+        success.value = route.params.lang === 'ru' ? 'Письмо с инструкциями отправлено на почту.' : 'A letter with instructions has been sent to the post office.'
     } catch (e) {
         if (e.response.status === 422) {
             errors.value = e.response.data || {message: e.response.data.message}
@@ -25,7 +28,7 @@ async function forgotPassword() {
 <template>
     <div class="wrapper">
         <div class="container">
-            <h2>Забыли пароль?</h2>
+            <h2>{{ t('forgot_pass.title')}}</h2>
             <div class="form-group">
                 <input
                     v-model="email"
@@ -34,12 +37,12 @@ async function forgotPassword() {
                             'error-input': errors.email
                           }"
                     type="email"
-                    placeholder="Введите Email">
+                    :placeholder="route.params.lang === 'ru' ? 'Введите Email' : 'Enter Email'">
                 <div v-if="errors.email || errors.message" class="error">
                     {{ errors.email?.[0] || errors.message }}
                 </div>
             </div>
-            <g-button class="submit-button" @click="forgotPassword">Отправить ссылку</g-button>
+            <g-button class="submit-button" @click="forgotPassword">{{ t('forgot_pass.send_link') }}</g-button>
             <div v-if="success" class="success">{{ success }}</div>
         </div>
 
