@@ -3,15 +3,17 @@ import {ref} from "vue";
 import router from "@/router/router.js";
 import GButton from "@/components/ui/GButton.vue";
 import {useAuthStore} from "@/stores/auth.js";
+import {useI18n} from "vue-i18n";
+import {useRoute} from "vue-router";
 
 const name = ref("");
 const email = ref("");
 const password = ref("");
 const password_confirmation = ref("");
 const errors = ref({});
-
+const {t} = useI18n()
 const auth = useAuthStore()
-
+const route = useRoute()
 async function handleRegister() {
     try {
         await auth.register({
@@ -31,10 +33,10 @@ async function handleRegister() {
 <template>
    <div class="wrapper">
        <div class="form-container">
-           <h2>Регистрация</h2>
+           <h2>{{ t('register.title')}}</h2>
            <form>
                <div class="form-group">
-                   <input v-model="name" :class="{'error-input': errors.name}" type="text" placeholder="Имя">
+                   <input v-model="name" :class="{'error-input': errors.name}" type="text" :placeholder="route.params.lang === 'ru' ? 'Имя' : 'Name'">
                    <div class="error" v-if="errors.name">{{ errors.name[0] }}</div>
                </div>
 
@@ -44,19 +46,19 @@ async function handleRegister() {
                </div>
 
                <div class="form-group">
-                   <input v-model="password" :class="{'error-input': errors.password}" type="password" placeholder="Пароль">
+                   <input v-model="password" :class="{'error-input': errors.password}" type="password" :placeholder="route.params.lang === 'ru' ? 'Пароль' : 'Password'">
                    <div class="error" v-if="errors.password">{{ errors.password[0] }}</div>
                </div>
 
                <div class="form-group">
                    <input v-model="password_confirmation" :class="{'error-input': errors.password}" type="password"
-                          placeholder="Подтверждение пароля">
+                          :placeholder="route.params.lang === 'ru' ? 'Подтверждение пароля' : 'Confirm password' ">
                    <div class="error" v-if="errors.password_confirmation">{{ errors.password_confirmation[0] }}</div>
                </div>
            </form>
 
-           <g-button class="submit-button" @click="handleRegister" type="submit">Зарегистрироваться</g-button>
-           <p class="text">У вас уже есть аккаунт? <router-link class="link" :to="{name: 'Login'}">Войти</router-link></p>
+           <g-button class="submit-button" @click="handleRegister" type="submit">{{ t('register.sign_up') }}</g-button>
+           <p class="text">{{ t('register.acc_already') }} <router-link class="link" :to="{name: 'Login'}">{{ t('register.sign_in') }}</router-link></p>
        </div>
    </div>
 </template>
