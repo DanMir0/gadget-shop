@@ -3,13 +3,17 @@ import {ref} from "vue";
 import router from "@/router/router.js";
 import {useAuthStore} from "@/stores/auth.js";
 import {useCartStore} from "@/stores/cart.js";
+import {useI18n} from "vue-i18n";
+import {useRoute} from "vue-router";
 
 const email = ref("");
 const password = ref("");
 const errors = ref({});
-
+const {t} = useI18n()
 const auth = useAuthStore()
 const cart = useCartStore()
+const route = useRoute()
+
 async function clickLogin() {
     try {
         await axios.get('/sanctum/csrf-cookie') // <- важно!
@@ -30,7 +34,7 @@ async function clickLogin() {
 <template>
     <div class="wrapper">
         <div class="form-container">
-            <h2>Авторизация</h2>
+            <h2>{{ t('login.title') }}</h2>
             <form>
                 <div class="form-group">
                     <input
@@ -52,15 +56,15 @@ async function clickLogin() {
                             'error-input': errors.email
                           }"
                            type="password"
-                           placeholder="Пароль">
+                           :placeholder="route.params.lang === 'ru' ? 'Пароль' : 'Password' ">
                     <div class="error" v-if="errors.password">{{ errors.password[0] }}</div>
                 </div>
             </form>
 
-            <g-button class="submit-button" @click="clickLogin" type="submit">Войти</g-button>
+            <g-button class="submit-button" @click="clickLogin" type="submit">{{ t('login.sign_in') }}</g-button>
             <div class="links">
-                <router-link class="link" :to="{name: 'Register'}">Зарегистрироваться</router-link>
-                <router-link class="link" :to="{name: 'ForgotPassword'}">Забыли пароль?</router-link>
+                <router-link class="link" :to="{name: 'Register'}">{{ t('login.sign_up') }}</router-link>
+                <router-link class="link" :to="{name: 'ForgotPassword'}">{{ t('login.forgot_pass') }}</router-link>
             </div>
         </div>
     </div>

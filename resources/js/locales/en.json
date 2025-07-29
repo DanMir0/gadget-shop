@@ -36,5 +36,11 @@
         "cart": "Shopping cart",
         "contacts": "Contacts",
         "terms_of_service": "Terms of Service"
+    },
+    "login": {
+        "title": "Authorization",
+        "sign_in": "Sign in",
+        "sign_up": "Sign up",
+        "forgot_pass": "Forgot your password?"
     }
 }
