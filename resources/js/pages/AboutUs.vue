@@ -1,6 +1,8 @@
 <script setup>
-
 import GContainer from "@/components/GContainer.vue";
+import {useI18n} from "vue-i18n";
+
+const {t} = useI18n()
 </script>
 
 <template>
@@ -8,7 +10,7 @@ import GContainer from "@/components/GContainer.vue";
         <div class="about-us">
             <div class="block-wrapper">
                 <div class="map">
-                    <h2>Наш офис</h2>
+                    <h2>{{ t('about_us.title') }}</h2>
                     <div class="map-container">
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d194.82496764940115!2d84.9620023032552!3d56.46444731477038!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x432693522d8a5b21%3A0x6c89ff24e3caf63a!2z0YPQuy4g0JLQtdGA0YjQuNC90LjQvdCwLCAyNy82LCDQotC-0LzRgdC6LCDQotC-0LzRgdC60LDRjyDQvtCx0LsuLCDQoNC-0YHRgdC40Y8sIDYzNDAzNA!5e0!3m2!1sru!2s!4v1753284531455!5m2!1sru!2s"
@@ -21,8 +23,8 @@ import GContainer from "@/components/GContainer.vue";
                     <div class="address-wrapper">
                         <div class="address-icon"></div>
                         <div class="address">
-                            <span>ул.Вершинина, 27/6, Томск, Томская обл., Россия</span><br/>
-                            <small>1 этаж, 1 кабинет</small>
+                            <span>{{ t('about_us.address') }}</span><br/>
+                            <small>{{ t('about_us.room') }}</small>
                         </div>
                     </div>
 

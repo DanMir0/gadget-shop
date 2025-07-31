@@ -61,5 +61,10 @@
     "new_products": {
         "title": "New products",
         "loading": "Loading..."
+    },
+    "about_us": {
+        "title": "Our office",
+        "address": "Vershinina str. 27/6, Tomsk, Tomsk region, Russia",
+        "room": "1 floor, 1 office"
     }
 }
