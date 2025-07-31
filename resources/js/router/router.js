@@ -135,8 +135,8 @@ router.beforeEach(async (to, from, next) => {
     const auth = useAuthStore();
 
     // Если авторизация ещё не проверена, подгружаем пользователя
-    if (!auth.isAuthResolved) {
-        await auth.fetchUser();
+    if (to.meta.requiresAuth && !auth.isAuthenticated) {
+        return next({ name: 'Login', params: { lang } });
     }
 
     const protectedPages = ['/cart', '/favorites',]; // тут укажи свои защищённые страницы
