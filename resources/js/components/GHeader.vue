@@ -14,9 +14,6 @@ const auth = useAuthStore()
 const menuOpen = ref(false);
 const route = useRoute()
 const langStore = useLangStore();
-const isCatalogActive = computed(() => {
-    return route.name === 'Products' || route.path.startsWith('/products')
-})
 
 function toggleMenu() {
     menuOpen.value = !menuOpen.value;
@@ -65,7 +62,7 @@ onUnmounted(() => {
                              :class="{'active': route.name === 'Home'}" class="menu-link">{{ t('header.home') }}
                 </router-link>
                 <router-link :to="{name: 'Products', params: {lang: langStore.currentLang}}"
-                             :class="{'active': isCatalogActive}" class="menu-link">{{ t('header.catalog') }}
+                             :class="{'active': route.name === 'Products'}" class="menu-link">{{ t('header.catalog') }}
                 </router-link>
                 <router-link :to="{name: 'NewProducts', params: {lang: langStore.currentLang}}"
                              :class="{'active': route.name === 'NewProducts'}"
@@ -142,7 +139,7 @@ onUnmounted(() => {
                              class="menu-link">{{ t('header.home')}}
                 </router-link>
                 <router-link :to="{name: 'Products', params: {lang: langStore.currentLang}}"
-                             :class="{'active': isCatalogActive}" @click="menuOpen = false"
+                             :class="{'active': route.name === 'Products'}" @click="menuOpen = false"
                              class="menu-link">{{ t('header.catalog')}}
                 </router-link>
                 <router-link :to="{name: 'NewProducts', params: {lang: langStore.currentLang}}"

@@ -22,16 +22,10 @@ const routes = [
         children: [
             {path: '', name: 'Home', component: Home},
             {
-                path: 'products',
+                path: 'products/:category?',
                 name: 'Products',
                 component: Products,
                 meta: {title: "Магазин - Все товары", description: "Все товары в магазине"},
-            },
-            {
-                path: 'products/:category?',
-                name: 'Category',
-                component: Products,
-                meta: {title: "Категория товаров"},
             },
             {
                 path: 'new-products',

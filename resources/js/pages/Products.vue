@@ -1,16 +1,17 @@
 <script setup>
-import { nextTick, onMounted, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import {nextTick, onMounted, ref, watch} from "vue";
+import {useRoute} from "vue-router";
 import router from "@/router/router.js";
-import { useCategoryStore } from "@/stores/categories.js";
-import { storeToRefs } from "pinia";
+import {useCategoryStore} from "@/stores/categories.js";
+import {storeToRefs} from "pinia";
 import axios from "axios";
+import {useLangStore} from "@/stores/lang.js";
 
 const route = useRoute();
 
 const categoryStore = useCategoryStore();
-const { categories } = storeToRefs(categoryStore);
-
+const {categories} = storeToRefs(categoryStore);
+const langStore = useLangStore()
 const selectedCategory = ref(0);
 const selectedSlug = ref("");
 const selectedCategoryName = ref("Все");
@@ -62,8 +63,12 @@ async function handleCategoryChange(slug, preservePage = false) {
     }
 
     router.push({
-        path: selectedSlug.value ? `/products/${selectedSlug.value}` : '/products',
-        query: { page: currentPage.value }
+        name: 'Products',
+        params: {
+            lang: langStore.currentLang,
+            category: selectedSlug.value || undefined
+        },
+        query: {page: currentPage.value}
     });
 
     await nextTick();

@@ -1,12 +1,13 @@
 <script setup>
-import { computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useCategoryStore } from "@/stores/categories.js";
-import { storeToRefs } from "pinia";
+import {computed} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {useCategoryStore} from "@/stores/categories.js";
+import {storeToRefs} from "pinia";
+import {useLangStore} from "@/stores/lang.js";
 
 const categoryStore = useCategoryStore();
-const { categories } = storeToRefs(categoryStore);
-
+const {categories} = storeToRefs(categoryStore);
+const langStore = useLangStore()
 const route = useRoute();
 const router = useRouter();
 
@@ -15,11 +16,14 @@ const selected = computed({
         return route.params.category ?? "Все";
     },
     set(value) {
-        if (value === "Все") {
-            router.push({ path: "/products", query: { page: 1 } });
-        } else {
-            router.push({ path: `/products/${value}`, query: { page: 1 } });
-        }
+        router.push({
+            name: "Products",
+            params: {
+                lang: langStore.currentLang,
+                category: value === "Все" ? undefined : value,
+            },
+            query: {page: 1},
+        });
     }
 });
 </script>
@@ -27,7 +31,11 @@ const selected = computed({
 <template>
     <nav class="categories">
         <router-link
-            to="/products"
+            :to="{
+                    name: 'Products',
+                    params: { lang: langStore.currentLang },
+                    query: { page: 1 }
+                }"
             exact-active-class="active"
             class="link"
         >
@@ -36,7 +44,14 @@ const selected = computed({
         <router-link
             v-for="category in categories"
             :key="category.id"
-            :to="`/products/${category.slug}`"
+            :to="{
+                    name: 'Products',
+                    params: {
+                        lang: langStore.currentLang,
+                        category: category.slug
+                    },
+                    query: { page: 1 }
+                }"
             exact-active-class="active"
             class="link"
         >

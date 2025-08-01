@@ -1,13 +1,31 @@
 <script setup>
+import {useLangStore} from "@/stores/lang.js";
+
 const props = defineProps({selectedCategory: String, selectedSlug: String});
+const langStore = useLangStore()
 </script>
 
 <template>
     <nav class="breadcrumbs">
-        <router-link to="/products" activeClass="active" class="breadcrumb-link center">Магазин</router-link>
+        <router-link :to="{
+                            name: 'Products',
+                            params: { lang: langStore.currentLang },
+                            query: { page: 1 }
+                          }"
+                     :class="{active: selectedCategory === 'Все'}" class="breadcrumb-link center">Магазин
+        </router-link>
         <span v-if="selectedCategory !== 'Все'">
-            / <router-link :class="{active: selectedCategory !== 'Все'}" :to="`/products/${selectedSlug}`" class="breadcrumb-link center">
-            {{selectedCategory }}
+            / <router-link :class="{active: selectedCategory !== 'Все'}"
+                           :to="{
+                                name: 'Products',
+                                params: {
+                                    lang: langStore.currentLang,
+                                    category: selectedSlug
+                                },
+                                query: { page: 1 }
+                                }"
+                           class="breadcrumb-link center">
+            {{ selectedCategory }}
         </router-link>
         </span>
     </nav>
