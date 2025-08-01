@@ -62,7 +62,7 @@ async function handleCategoryChange(slug, preservePage = false) {
         currentPage.value = 1;
     }
 
-    router.push({
+    router.replace({
         name: 'Products',
         params: {
             lang: langStore.currentLang,
@@ -70,11 +70,7 @@ async function handleCategoryChange(slug, preservePage = false) {
         },
         query: {page: currentPage.value}
     });
-
-    await nextTick();
-    await fetchProducts(category ? category.id : 0);
 }
-
 
 onMounted(async () => {
     if (!categories.value.length) {
@@ -87,19 +83,16 @@ onMounted(async () => {
 });
 
 watch(
-    () => route.params.category,
-    async (newSlug) => {
-        if (!categories.value.length) {
-            await categoryStore.fetchCategories();
-        }
-       await handleCategoryChange(newSlug);
-    }
-);
+    () => [route.query.page, route.params.category],
+    async ([newPage, newCategory]) => {
+        currentPage.value = Number(newPage) || 1;
+        const category = categories.value.find((cat) => cat.slug === newCategory);
+        selectedCategory.value = category ? category.id : 0;
 
-watch(() => route.query.page, (newPage) => {
-    currentPage.value = Number(newPage) || 1;
-    fetchProducts();
-}, { immediate: true });
+        await fetchProducts(); // всегда загружаем заново
+    },
+    { immediate: true }
+);
 </script>
 
 <template>
