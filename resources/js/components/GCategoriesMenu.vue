@@ -4,12 +4,14 @@ import {useRoute, useRouter} from "vue-router";
 import {useCategoryStore} from "@/stores/categories.js";
 import {storeToRefs} from "pinia";
 import {useLangStore} from "@/stores/lang.js";
-
+import {useI18n} from "vue-i18n";
+const props = defineProps(['categoryTranslations'])
 const categoryStore = useCategoryStore();
 const {categories} = storeToRefs(categoryStore);
 const langStore = useLangStore()
 const route = useRoute();
 const router = useRouter();
+const {t} = useI18n()
 
 const selected = computed({
     get() {
@@ -39,7 +41,7 @@ const selected = computed({
             exact-active-class="active"
             class="link"
         >
-            Все
+            {{ t('category.all') }}
         </router-link>
         <router-link
             v-for="category in categories"
@@ -55,20 +57,21 @@ const selected = computed({
             exact-active-class="active"
             class="link"
         >
-            {{ category.name }}
+            {{ categoryTranslations[category.slug]?.[langStore.currentLang] ?? category.name}}
         </router-link>
+
     </nav>
 
     <!-- мобильное меню -->
     <div class="categories-mobile">
         <select v-model="selected" class="categories-mobile-selected">
-            <option>Все</option>
+            <option>{{ t('category.all') }}</option>
             <option
                 v-for="category in categories"
                 :key="category.id"
                 :value="category.slug"
             >
-                {{ category.name }}
+                {{ categoryTranslations[category.slug]?.[langStore.currentLang] ?? category.name}}
             </option>
         </select>
     </div>

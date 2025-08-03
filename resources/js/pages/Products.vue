@@ -6,6 +6,7 @@ import {useCategoryStore} from "@/stores/categories.js";
 import {storeToRefs} from "pinia";
 import axios from "axios";
 import {useLangStore} from "@/stores/lang.js";
+import {useI18n} from "vue-i18n";
 
 const route = useRoute();
 
@@ -17,12 +18,18 @@ const selectedSlug = ref("");
 const selectedCategoryName = ref("Все");
 const products = ref([]);
 const loading = ref(false);
-
+const {t} = useI18n()
 // pagination
 const currentPage = ref(Number(route.query.page) || 1);
 const lastPage = ref(1);
 const perPage = 8;
-
+const categoryTranslations = {
+    smartpony: { ru: "Телефоны", en: "Phones"},
+    noytbuki: { ru: "Ноутбуки", en: "Laptops"},
+    plansheti: { ru: "Планшеты", en: "Tablets"},
+    nayshniki: { ru: "Наушники", en: "Headphones"},
+    accesyari: { ru: "Аксессуары", en: "Accessories"},
+}
 async function fetchProducts(categoryId = selectedCategory.value) {
     if (loading.value) return;
     loading.value = true;
@@ -98,15 +105,16 @@ watch(
 <template>
     <g-container>
         <div class="mt-50">
-            <g-title-page>Магазин</g-title-page>
+            <g-title-page>{{ t('products.title') }}</g-title-page>
         </div>
 
-        <g-categories-menu />
+        <g-categories-menu :categoryTranslations="categoryTranslations"/>
 
         <g-breadcrumb
             class="mt-50"
             :selectedSlug="selectedSlug"
             :selectedCategory="selectedCategoryName"
+            :categoryTranslations="categoryTranslations"
         />
 
         <g-loader v-if="loading">Loading...</g-loader>
