@@ -1,8 +1,12 @@
 <script setup>
 import {useLangStore} from "@/stores/lang.js";
+import {computed} from "vue";
+import {useI18n} from "vue-i18n";
 
-const props = defineProps({selectedCategory: String, selectedSlug: String});
+const props = defineProps(['selectedCategory', 'selectedSlug', 'categoryTranslations']);
 const langStore = useLangStore()
+const categoryName = computed(() => props.categoryTranslations[props.selectedSlug]?.[langStore.currentLang])
+const {t} = useI18n()
 </script>
 
 <template>
@@ -12,9 +16,9 @@ const langStore = useLangStore()
                             params: { lang: langStore.currentLang },
                             query: { page: 1 }
                           }"
-                     :class="{active: selectedCategory === 'Все'}" class="breadcrumb-link center">Магазин
+                     :class="{active: selectedCategory === 'Все'}" class="breadcrumb-link center">{{ t('products.title') }}
         </router-link>
-        <span v-if="selectedCategory !== 'Все'">
+        <span v-if="categoryName !== 'Все'">
             / <router-link :class="{active: selectedCategory !== 'Все'}"
                            :to="{
                                 name: 'Products',
@@ -25,7 +29,7 @@ const langStore = useLangStore()
                                 query: { page: 1 }
                                 }"
                            class="breadcrumb-link center">
-            {{ selectedCategory }}
+            {{ categoryName }}
         </router-link>
         </span>
     </nav>

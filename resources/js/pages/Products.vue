@@ -1,5 +1,5 @@
 <script setup>
-import {nextTick, onMounted, ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import router from "@/router/router.js";
 import {useCategoryStore} from "@/stores/categories.js";
@@ -95,6 +95,8 @@ watch(
         currentPage.value = Number(newPage) || 1;
         const category = categories.value.find((cat) => cat.slug === newCategory);
         selectedCategory.value = category ? category.id : 0;
+        selectedSlug.value = category ? category.slug : "";
+        selectedCategoryName.value = category ? category.name : "Все";
 
         await fetchProducts(); // всегда загружаем заново
     },
@@ -117,7 +119,7 @@ watch(
             :categoryTranslations="categoryTranslations"
         />
 
-        <g-loader v-if="loading">Loading...</g-loader>
+        <g-loader v-if="loading">{{ t('new_products.loading') }}</g-loader>
         <g-products-list
             v-else
             class="mt-50"
