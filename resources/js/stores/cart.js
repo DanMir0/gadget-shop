@@ -40,9 +40,13 @@ export const useCartStore = defineStore('cart', {
         },
     },
     actions: {
-        async loadCart() {
+        async loadCart(lang = 'ru') {
             try {
-                const response = await axios.get('/api/get_cart')
+                const response = await axios.get('/api/get_cart', {
+                    params: {
+                        lang: lang
+                    }
+                })
                 this.items = response.data
             } catch (e) {
                 console.error(e)

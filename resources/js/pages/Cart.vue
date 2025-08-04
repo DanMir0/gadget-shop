@@ -5,8 +5,11 @@ import {onMounted, ref, watch} from "vue";
 import IMask from "imask";
 import GButton from "@/components/ui/GButton.vue";
 import router from "@/router/router.js";
+import {useI18n} from "vue-i18n";
+import {useLangStore} from "@/stores/lang.js";
 
 const cart = useCartStore()
+const langStore = useLangStore()
 const showConfirmModal = ref(false)
 const showCreateOrder = ref(false)
 const address = ref({
@@ -20,6 +23,7 @@ const address = ref({
 })
 const errors = ref({})
 const orderId = ref()
+const {t} = useI18n()
 
 function confirmOrder() {
     showConfirmModal.value = true
@@ -50,38 +54,48 @@ async function submitOrder() {
     }
 }
 
+const mask = ref(null)
 
 onMounted(() => {
-    const input = document.getElementById('phone-input');
+    const input = document.getElementById('phone-input')
     if (input) {
-        const mask = IMask(input, {
-            mask: '+{7} (000) 000-00-00'
-        });
+        mask.value = IMask(input, {
+            mask: langStore.currentLang === 'ru' ? '+{7} (000) 000-00-00' : '+{1} (000) 000-00-00',
+        })
 
-        // Синхронизируем IMask с Vue ref
-        mask.on('accept', () => {
-            address.value.phone = mask.value;
-        });
+        // синхронизация с address.phone
+        mask.value.on('accept', () => {
+            address.value.phone = mask.value.value
+        })
 
-        // Если нужно, чтобы при изменении model обновлялся input:
-        watch(() => address.value.phone, (newVal) => {
-            if (mask.value !== newVal) {
-                mask.value = newVal;
+        watch(
+            () => address.value.phone,
+            (newVal) => {
+                if (mask.value && mask.value.value !== newVal) {
+                    mask.value.value = newVal
+                }
             }
-        });
+        )
     }
-});
+})
+
+watch(() => langStore.currentLang, async (newLang) => {
+    await cart.loadCart(newLang)
+})
 </script>
 
 <template>
+    <div>
+
+    </div>
     <g-container>
-        <h1 v-show="cart.items.length !== 0" class="title">Корзина</h1>
+        <h1 v-show="cart.items.length !== 0" class="title">{{ t('cart.title') }}</h1>
 
         <div v-if="cart.items.length === 0" class="empty-cart">
             <img src="../images/shop.svg">
-            <h2>Корзина пуста</h2>
-            <p>Но это никогда не поздно исправить :)</p>
-            <g-button @click="router.push({name: 'Products'})">В каталог товаров</g-button>
+            <h2>{{ t('cart.cart_is_empty') }}</h2>
+            <p>{{ t('cart.cart_desc') }}</p>
+            <g-button @click="router.push({name: 'Products'})">{{ t('cart.catalog') }}</g-button>
         </div>
 
         <div v-else class="cart-wrapper">
@@ -91,13 +105,13 @@ onMounted(() => {
             <hr class="cart-separator"/>
 
             <div class="cart-summary">
-                <p class="total-label">Итого:</p>
+                <p class="total-label">{{ t('cart.total') }}</p>
                 <p class="total-price">{{ cart.totalPrice }}₽</p>
             </div>
             <form class="address-form">
                 <!-- ФИО (на новой строке) -->
                 <div class="form-group full-width">
-                    <input v-model="address.full_name" type="text" placeholder="ФИО" required/>
+                    <input v-model="address.full_name" type="text" :placeholder="langStore.currentLang === 'ru' ? 'ФИО' : 'Full name'" required/>
                     <div class="error" v-if="errors['address.full_name']">{{ errors['address.full_name'][0] }}</div>
                 </div>
 
@@ -106,7 +120,7 @@ onMounted(() => {
                     <input
                         id="phone-input"
                         type="tel"
-                        placeholder="+7 (___) ___-__-__"
+                        :placeholder="langStore.currentLang === 'ru' ? '+7 (___) ___-__-__' : '+1 (___) ___-____'"
                         required
                     />
                     <div class="error" v-if="errors['address.phone']">{{ errors['address.phone'][0] }}</div>
@@ -115,11 +129,11 @@ onMounted(() => {
                 <!-- Город и улица -->
                 <div class="form-row">
                     <div class="form-group half-width">
-                        <input v-model="address.city" type="text" placeholder="Город" required/>
+                        <input v-model="address.city" type="text" :placeholder="langStore.currentLang === 'ru' ? 'Город' : 'City'" required/>
                         <div class="error" v-if="errors['address.city']">{{ errors['address.city'][0] }}</div>
                     </div>
                     <div class="form-group half-width">
-                        <input v-model="address.street" type="text" placeholder="Улица" required/>
+                        <input v-model="address.street" type="text" :placeholder="langStore.currentLang === 'ru' ? 'Улица' : 'Street'" required/>
                         <div class="error" v-if="errors['address.street']">{{ errors['address.street'][0] }}</div>
                     </div>
                 </div>
@@ -127,47 +141,47 @@ onMounted(() => {
                 <!-- Дом и квартира -->
                 <div class="form-row">
                     <div class="form-group half-width">
-                        <input v-model="address.house" type="text" placeholder="Дом" required/>
+                        <input v-model="address.house" type="text" :placeholder="langStore.currentLang === 'ru' ? 'Дом' : 'House'" required/>
                         <div class="error" v-if="errors['address.house']">{{ errors['address.house'][0] }}</div>
                     </div>
                     <div class="form-group half-width">
-                        <input v-model="address.apartment" type="text" placeholder="Квартира"/>
+                        <input v-model="address.apartment" type="text" :placeholder="langStore.currentLang === 'ru' ? 'Квартира' : 'Apartment'"/>
                         <div class="error" v-if="errors['address.apartment']">{{ errors['address.apartment'][0] }}</div>
                     </div>
                 </div>
 
                 <!-- Комментарий (на новой строке) -->
                 <div class="form-group full-width">
-                    <textarea v-model="address.comments" placeholder="Комментарий к доставке"></textarea>
+                    <textarea v-model="address.comments" :placeholder="langStore.currentLang === 'ru' ? 'Комментарий к доставке' : 'Delivery comment'"></textarea>
                     <div class="error" v-if="errors['address.comments']">{{ errors['address.comments'][0] }}</div>
                 </div>
             </form>
 
-            <button class="submit-button" @click="confirmOrder">Оформить заказ</button>
+            <button class="submit-button" @click="confirmOrder">{{ t('cart.order') }}</button>
         </div>
     </g-container>
 
     <div v-if="showConfirmModal" class="modal-overlay">
         <div class="modal">
-            <h2>Подтвердите заказ</h2>
+            <h2>{{ t('cart.confirm_order') }}</h2>
             <div class="modal-items">
                 <div v-for="item in cart.items" :key="item.id" class="modal-item">
-                    <p>{{ item.name }} - {{ item.quantity }} шт. х {{ item.price }}₽</p>
+                    <p>{{ item.name }} - {{ item.quantity }} {{ t('cart.pcs') }} {{ item.price }}₽</p>
                 </div>
             </div>
             <hr>
-            <p class="modal-total"><strong>Итого: {{ cart.totalPrice.toFixed(2) }}₽</strong></p>
+            <p class="modal-total"><strong>{{ t('cart.total') }} {{ cart.totalPrice.toFixed(2) }}₽</strong></p>
 
             <div class="modal-actions">
-                <button class="submit-button" @click="submitOrder">Подтвердить</button>
-                <button class="cancel-button" @click="showConfirmModal = false">Отмена</button>
+                <button class="submit-button" @click="submitOrder">{{ t('cart.confirm') }}</button>
+                <button class="cancel-button" @click="showConfirmModal = false">{{ t('cart.cancel') }}</button>
             </div>
         </div>
     </div>
     <div v-if="showCreateOrder" class="modal-overlay">
         <div class="modal">
-            <p class="modal-order-text">Заказ размещен.</p>
-            <p class="modal-order-text">Номер вашего заказа №{{ orderId }}. </p>
+            <p class="modal-order-text">{{ t('cart.order_placed') }}</p>
+            <p class="modal-order-text">{{ t('cart.order_number') }}{{ orderId }}. </p>
             <button class="submit-button my-20" @click="showConfirmModal = false">Ок</button>
         </div>
     </div>

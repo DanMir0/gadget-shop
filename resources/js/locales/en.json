@@ -78,5 +78,19 @@
     },
     "favorites": {
         "title": "Favorites"
+    },
+    "cart": {
+        "title": "Shopping cart",
+        "cart_is_empty": "Cart is empty",
+        "cart_desc": "But it's never too late to fix it :)",
+        "catalog": "Go to product catalog",
+        "total": "Total:",
+        "order": "Make an order",
+        "confirm_order": "Confirm your order",
+        "pcs": "pcs. x",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "order_placed": "Order placed.",
+        "order_number": "Your order number №"
     }
 }

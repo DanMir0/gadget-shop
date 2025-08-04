@@ -63,39 +63,36 @@ class CartController extends Controller
         return response()->json($cart);
     }
 
-    public function getCart()
+    public function getCart(Request $request)
     {
         $userId = auth()->id();
+        $lang = $request->query('lang', 'ru');
 
-        $cartItems = DB::table('cart as c')
-            ->join('products as p', 'c.product_id', '=', 'p.id')
-            ->where('c.user_id', $userId)
-            ->select(
-                'p.id',
-                'p.name',
-                'p.price',
-                'p.description',
-                'p.stock',
-                'p.image',
-                'c.quantity',
-                'c.user_id',
-                'c.product_id'
-            )
-            ->get()
-            ->map(function ($item) {
-                $cleanImagePath = ltrim(trim($item->image, " \t\n\r\0\x0B\"'"), '/');
+        $cartItems = DB::table('cart')
+            ->where('user_id', $userId)
+            ->get();
 
-                return [
-                    'id' => $item->product_id,
-                    'name' => $item->name,
-                    'description' => $item->description,
-                    'price' => $item->price,
-                    'stock' => $item->stock,
-                    'image' => asset('storage/' . $cleanImagePath),
-                    'quantity' => $item->quantity,
-                ];
-            });
+        $products = \App\Models\Product::whereIn('id', $cartItems->pluck('product_id'))->get()->keyBy('id');
 
-        return response()->json($cartItems);
+        $result = $cartItems->map(function ($item) use ($products, $lang) {
+            $product = $products[$item->product_id] ?? null;
+
+            if (!$product) return null;
+
+            $cleanImagePath = ltrim(trim($product->image, " \t\n\r\0\x0B\"'"), '/');
+
+            return [
+                'id' => $product->id,
+                'name' => $product->name[$lang] ?? $product->name['ru'] ?? '',
+                'description' => $product->description[$lang] ?? $product->description['ru'] ?? '',
+                'price' => $product->price,
+                'stock' => $product->stock,
+                'image' => asset('storage/' . $cleanImagePath),
+                'quantity' => $item->quantity,
+            ];
+        })->filter();
+
+        return response()->json($result);
     }
+
 }
