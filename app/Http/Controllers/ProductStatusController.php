@@ -13,6 +13,7 @@ class ProductStatusController extends Controller
     {
         $status = ProductStatus::where('name', 'new')->first();
         $perPage = $request->query('per_page', 4);
+        $lang = $request->query('lang', 'ru');
 
         $productsQuery = Product::where('status_id', $status->id);
 
@@ -21,14 +22,14 @@ class ProductStatusController extends Controller
         $user = Auth::user();
         $userFavorites = $user ? $user->favorites()->pluck('product_id')->toArray() : [];
 
-        $products->getCollection()->transform(function ($product) use ($userFavorites) {
+        $products->getCollection()->transform(function ($product) use ($userFavorites, $lang) {
 
             $cleanImagePath = ltrim(trim($product->image, " \t\n\r\0\x0B\"'"), '/');
 
             return [
                 'id' => $product->id,
-                'name' => $product->name,
-                'description' => $product->description,
+                'name' => $product->name[$lang] ?? $product->name['ru'] ?? '',
+                'description' => $product->description[$lang] ?? $product->description['ru'] ?? '',
                 'price' => $product->price,
                 'stock' => $product->stock,
                 'image' => asset('storage/' . $cleanImagePath),

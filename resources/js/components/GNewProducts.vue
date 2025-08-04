@@ -3,6 +3,7 @@ import {onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import GPagination from "@/components/GPagination.vue";
 import {useI18n} from "vue-i18n";
+import {useLangStore} from "@/stores/lang.js";
 
 const loading = ref(false)
 const products = ref([]);
@@ -10,11 +11,12 @@ const currentPage = ref(1);
 const lastPage = ref(1);
 const route = useRoute();
 const { t } = useI18n()
+const langStore = useLangStore()
 async function fetchNewProducts(page = 1) {
     loading.value = true
     try {
         const response = await axios.get("/api/new-products", {
-            params: {page}
+            params: {page, lang: langStore.currentLang}
         });
         products.value = response.data
 
@@ -33,7 +35,7 @@ onMounted(async () => {
     await fetchNewProducts(currentPage.value)
 })
 
-watch(() => route.query.page, (newPage) => {
+watch(() => [route.query.page, langStore.currentLang], (newPage) => {
     currentPage.value = Number(newPage) || 1;
     fetchNewProducts(currentPage.value);
 });
