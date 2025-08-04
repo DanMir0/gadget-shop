@@ -5,6 +5,7 @@ import axios from "axios";
 import router from "@/router/router.js";
 import {useCartStore} from "@/stores/cart.js";
 import {useAuthStore} from "@/stores/auth.js";
+import {useI18n} from "vue-i18n";
 
 const props = defineProps({
     product: {
@@ -15,7 +16,7 @@ const props = defineProps({
         type: String,
     }
 });
-
+const {t} = useI18n()
 const auth = useAuthStore()
 const emit = defineEmits(['remove-from-favorites'])
 const cart = useCartStore()
@@ -103,7 +104,7 @@ async function handlerToggle(product) {
                 <p class="product-description">{{ product.description }}</p>
             </div>
             <div class="product-block-stock">
-                <p class="product-stock">Осталось: <strong>{{ product.stock }}</strong></p>
+                <p class="product-stock">{{t('products.stock')}} <strong>{{ product.stock }}</strong></p>
             </div>
             <template v-if="inCart">
                 <div class="group-btn">
@@ -111,12 +112,12 @@ async function handlerToggle(product) {
                     <span class="cart-qty">{{ quantity }}</span>
                     <g-button class="cart-btn" @click="add" :disabled="isOutOfStock">+</g-button>
                 </div>
-                <p v-if="isOutOfStock" class="out-of-stock">Нет в наличии</p>
+                <p v-if="isOutOfStock" class="out-of-stock">{{ t('products.out_of_stock') }}</p>
             </template>
             <template v-else-if="!isOutOfStock">
-                <g-button class="buy-button" @click="add" :disabled="product.stock <= 0">Купить</g-button>
+                <g-button class="buy-button" @click="add" :disabled="product.stock <= 0">{{ t('products.buy') }}</g-button>
             </template>
-            <p v-else class="out-of-stock">Нет в наличии</p>
+            <p v-else class="out-of-stock">{{ t('products.out_of_stock') }}</p>
         </div>
     </article>
 </template>

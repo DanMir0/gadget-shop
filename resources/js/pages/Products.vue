@@ -39,7 +39,8 @@ async function fetchProducts(categoryId = selectedCategory.value) {
             params: {
                 page: currentPage.value,
                 per_page: perPage,
-                category: categoryId
+                category: categoryId,
+                lang: langStore.currentLang
             },
         });
         products.value = response.data.data;

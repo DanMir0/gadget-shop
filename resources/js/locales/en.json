@@ -71,6 +71,9 @@
         "all": "All"
     },
     "products": {
-        "title": "Store"
+        "title": "Store",
+        "stock": "Goods in stock:",
+        "out_of_stock": "Out of stock",
+        "buy": "Buy"
     }
 }

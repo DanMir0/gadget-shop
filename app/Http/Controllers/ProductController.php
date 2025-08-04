@@ -17,6 +17,7 @@ class ProductController extends Controller
     {
         $category = $request->query('category');
         $perPage = $request->query('per_page', 8);
+        $lang = $request->query('lang', 'ru');
 
         $productsQuery = Product::query();
 
@@ -29,13 +30,13 @@ class ProductController extends Controller
         $user = Auth::user();
         $userFavorites = $user ? $user->favorites()->pluck('product_id')->toArray() : [];
 
-        $products->getCollection()->transform(function ($product) use ($userFavorites) {
+        $products->getCollection()->transform(function ($product) use ($userFavorites, $lang) {
             $cleanImagePath = ltrim(trim($product->image, " \t\n\r\0\x0B\"'"), '/');
 
             return [
                 'id' => $product->id,
-                'name' => $product->name,
-                'description' => $product->description,
+                'name' => $product->name[$lang] ?? $product->name['ru'] ?? '',
+                'description' => $product->description[$lang] ?? $product->description['ru'] ?? '',
                 'price' => $product->price,
                 'stock' => $product->stock,
                 'image' => asset('storage/' . $cleanImagePath),
