@@ -1,15 +1,24 @@
 <script setup>
 import {useFavoritesStore} from "@/stores/favorites";
 import {storeToRefs} from "pinia";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
+import {useI18n} from "vue-i18n";
+import {useLangStore} from "@/stores/lang.js";
 
 const route = useRoute();
 const path = ref(route.path);
-
+const categoryTranslations = {
+    smartpony: { ru: "Телефоны", en: "Phones"},
+    noytbuki: { ru: "Ноутбуки", en: "Laptops"},
+    plansheti: { ru: "Планшеты", en: "Tablets"},
+    nayshniki: { ru: "Наушники", en: "Headphones"},
+    accesyari: { ru: "Аксессуары", en: "Accessories"},
+}
 const favoritesStore = useFavoritesStore();
 const {userFavorites} = storeToRefs(favoritesStore);
-
+const {t} = useI18n()
+const langStore = useLangStore()
 function removeFromFavorites(product) {
     favoritesStore.removeFromFavorites(product.id); // Удалить из избранного
 }
@@ -17,13 +26,21 @@ function removeFromFavorites(product) {
 onMounted(async () => {
     await favoritesStore.fetchFavorites(); // Загрузить данные из API
 });
+
+watch(
+    () => langStore.currentLang,
+    async () => {
+        await favoritesStore.fetchFavorites()
+    }
+
+)
 </script>
 
 <template>
     <g-container>
-        <h1>Избранное</h1>
+        <h1>{{ t('favorites.title') }}</h1>
         <div class="block-items" v-for="(item, index) in userFavorites" :key="index">
-            <h3 class="category-title">{{ item.category }}</h3>
+            <h3 class="category-title">{{ categoryTranslations[item.category]?.[langStore.currentLang] }}</h3>
             <g-products-list
                 class="mb-47"
                 :products="item.products"

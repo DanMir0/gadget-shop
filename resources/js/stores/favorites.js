@@ -1,13 +1,19 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
+import {useLangStore} from "@/stores/lang.js";
 
 export const useFavoritesStore = defineStore("favorites", () => {
     const userFavorites = ref([]);
-
+    const langStore = useLangStore()
     async function fetchFavorites() {
-        const response = await axios.get("/api/product-categories");
+        const response = await axios.get("/api/product-categories", {
+            params: {
+                lang: langStore.currentLang
+            }
+        });
         userFavorites.value = response.data;
+        console.log(userFavorites)
     }
 
     function removeFromFavorites(productId) {

@@ -35,25 +35,25 @@ class FavoriteController extends Controller
     public function getProductsWithCategories(Request $request)
     {
         $user = $request->user();
-
+        $lang = $request->query('lang', 'ru');
         // Загружаем избранные товары с категорией
         $favorites = $user->favorites()->with('category')->get();
 
         // Группируем по названию категории
         $grouped = $favorites->groupBy(function ($product) {
-            return $product->category->name ?? 'Без категории';
+            return $product->category->slug ?? '';
         });
 
         // Преобразуем в нужный формат
-        $result = $grouped->map(function ($products, $categoryName) {
+        $result = $grouped->map(function ($products, $categorySlug) use ($lang) {
             return [
-                'category' => $categoryName,
-                'products' => $products->map(function ($product) {
+                'category' => $categorySlug,
+                'products' => $products->map(function ($product) use ($lang) {
                     $cleanImagePath = ltrim(trim($product->image, " \t\n\r\0\x0B\"'"), '/');
                     return [
                         'id' => $product->id,
-                        'name' => $product->name,
-                        'description' => $product->description,
+                        'name' => $product->name[$lang] ?? $product->name['ru'] ?? '',
+                        'description' => $product->description[$lang] ?? $product->description['ru'] ?? '',
                         'price' => $product->price,
                         'stock' => $product->stock,
                         'image' => asset('storage/' . $cleanImagePath),

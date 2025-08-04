@@ -75,5 +75,8 @@
         "stock": "Goods in stock:",
         "out_of_stock": "Out of stock",
         "buy": "Buy"
+    },
+    "favorites": {
+        "title": "Favorites"
     }
 }
