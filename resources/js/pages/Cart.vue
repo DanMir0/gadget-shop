@@ -82,10 +82,6 @@ onMounted(() => {
         )
     }
 })
-
-watch(() => langStore.currentLang, async (newLang) => {
-    await cart.loadCart(newLang)
-})
 </script>
 
 <template v-bind="$attrs">
