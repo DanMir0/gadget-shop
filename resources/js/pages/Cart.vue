@@ -8,6 +8,10 @@ import router from "@/router/router.js";
 import {useI18n} from "vue-i18n";
 import {useLangStore} from "@/stores/lang.js";
 
+defineOptions({
+    inheritAttrs: false
+})
+
 const cart = useCartStore()
 const langStore = useLangStore()
 const showConfirmModal = ref(false)
@@ -84,10 +88,7 @@ watch(() => langStore.currentLang, async (newLang) => {
 })
 </script>
 
-<template>
-    <div>
-
-    </div>
+<template v-bind="$attrs">
     <g-container>
         <h1 v-show="cart.items.length !== 0" class="title">{{ t('cart.title') }}</h1>
 
@@ -111,7 +112,8 @@ watch(() => langStore.currentLang, async (newLang) => {
             <form class="address-form">
                 <!-- ФИО (на новой строке) -->
                 <div class="form-group full-width">
-                    <input v-model="address.full_name" type="text" :placeholder="langStore.currentLang === 'ru' ? 'ФИО' : 'Full name'" required/>
+                    <input v-model="address.full_name" type="text"
+                           :placeholder="langStore.currentLang === 'ru' ? 'ФИО' : 'Full name'" required/>
                     <div class="error" v-if="errors['address.full_name']">{{ errors['address.full_name'][0] }}</div>
                 </div>
 
@@ -129,11 +131,13 @@ watch(() => langStore.currentLang, async (newLang) => {
                 <!-- Город и улица -->
                 <div class="form-row">
                     <div class="form-group half-width">
-                        <input v-model="address.city" type="text" :placeholder="langStore.currentLang === 'ru' ? 'Город' : 'City'" required/>
+                        <input v-model="address.city" type="text"
+                               :placeholder="langStore.currentLang === 'ru' ? 'Город' : 'City'" required/>
                         <div class="error" v-if="errors['address.city']">{{ errors['address.city'][0] }}</div>
                     </div>
                     <div class="form-group half-width">
-                        <input v-model="address.street" type="text" :placeholder="langStore.currentLang === 'ru' ? 'Улица' : 'Street'" required/>
+                        <input v-model="address.street" type="text"
+                               :placeholder="langStore.currentLang === 'ru' ? 'Улица' : 'Street'" required/>
                         <div class="error" v-if="errors['address.street']">{{ errors['address.street'][0] }}</div>
                     </div>
                 </div>
@@ -141,18 +145,21 @@ watch(() => langStore.currentLang, async (newLang) => {
                 <!-- Дом и квартира -->
                 <div class="form-row">
                     <div class="form-group half-width">
-                        <input v-model="address.house" type="text" :placeholder="langStore.currentLang === 'ru' ? 'Дом' : 'House'" required/>
+                        <input v-model="address.house" type="text"
+                               :placeholder="langStore.currentLang === 'ru' ? 'Дом' : 'House'" required/>
                         <div class="error" v-if="errors['address.house']">{{ errors['address.house'][0] }}</div>
                     </div>
                     <div class="form-group half-width">
-                        <input v-model="address.apartment" type="text" :placeholder="langStore.currentLang === 'ru' ? 'Квартира' : 'Apartment'"/>
+                        <input v-model="address.apartment" type="text"
+                               :placeholder="langStore.currentLang === 'ru' ? 'Квартира' : 'Apartment'"/>
                         <div class="error" v-if="errors['address.apartment']">{{ errors['address.apartment'][0] }}</div>
                     </div>
                 </div>
 
                 <!-- Комментарий (на новой строке) -->
                 <div class="form-group full-width">
-                    <textarea v-model="address.comments" :placeholder="langStore.currentLang === 'ru' ? 'Комментарий к доставке' : 'Delivery comment'"></textarea>
+                    <textarea v-model="address.comments"
+                              :placeholder="langStore.currentLang === 'ru' ? 'Комментарий к доставке' : 'Delivery comment'"></textarea>
                     <div class="error" v-if="errors['address.comments']">{{ errors['address.comments'][0] }}</div>
                 </div>
             </form>

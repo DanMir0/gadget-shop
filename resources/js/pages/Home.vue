@@ -4,7 +4,9 @@ import router from "@/router/router.js";
 import {useI18n} from "vue-i18n";
 
 const { t } = useI18n()
-
+defineOptions({
+    inheritAttrs: false
+})
 const slides = ref([
     {image: "/images/slider/slide3.jpg", title: "Скидка на аксессуары при покупки смартфона"},
     {image: "/images/slider/slide3.jpg", title: "Скидка на аксессуары при покупки смартфона"},
@@ -48,7 +50,7 @@ function goToProduct() {
 
 </script>
 
-<template>
+<template v-bind="$attrs">
     <header class="hero">
         <div class="hero-content">
             <h1>{{ t('home.title')}}</h1>
