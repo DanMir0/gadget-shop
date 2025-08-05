@@ -25,6 +25,7 @@ import en from './locales/en.json'
 const app = createApp(App);
 
 const i18n = createI18n({
+    legacy: false,
     locale: 'ru',
     messages: {ru, en}
 });
