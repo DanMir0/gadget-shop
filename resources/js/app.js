@@ -21,8 +21,12 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import {createI18n} from "vue-i18n";
 import ru from './locales/ru.json';
 import en from './locales/en.json'
+import axios from "axios";
 
 const app = createApp(App);
+
+axios.defaults.baseURL = 'http://127.0.0.1:8000'
+axios.defaults.withCredentials = true
 
 const i18n = createI18n({
     legacy: false,

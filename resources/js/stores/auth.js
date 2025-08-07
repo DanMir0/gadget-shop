@@ -6,6 +6,7 @@ export const useAuthStore = defineStore('auth', {
         user: null,
         isAuthResolved: false,
         loading: false,
+        userChecked: false,
     }),
     getters: {
         isAuthenticated: (state) => !!state.user
@@ -18,6 +19,7 @@ export const useAuthStore = defineStore('auth', {
             try {
                 await axios.post('/api/logout'); // Вызываем API выхода
                 this.user = null;                // Сбрасываем пользователя в состоянии
+                this.userChecked = true
                 router.push('/login');           // Редирект на страницу входа
             } catch (error) {
                 console.error('Ошибка выхода:', error);
@@ -26,6 +28,7 @@ export const useAuthStore = defineStore('auth', {
         async fetchUser() {
             this.loading = true
             try {
+                await axios.get('/sanctum/csrf-cookie')
                 const response = await axios.get('/api/user')
                 this.user = response.data
             } catch (error) {
@@ -33,6 +36,7 @@ export const useAuthStore = defineStore('auth', {
                     this.user = null;
                 }
             } finally {
+                this.userChecked = true
                 this.isAuthResolved = true
                 this.loading = false
             }

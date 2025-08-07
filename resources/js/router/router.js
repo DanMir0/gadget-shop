@@ -128,6 +128,10 @@ router.beforeEach(async (to, from, next) => {
 
     const auth = useAuthStore();
 
+    if (!auth.userChecked) {
+        await auth.fetchUser()
+    }
+
     // Если авторизация ещё не проверена, подгружаем пользователя
     if (to.meta.requiresAuth && !auth.isAuthenticated) {
         return next({ name: 'Login', params: { lang } });
