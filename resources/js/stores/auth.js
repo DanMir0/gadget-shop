@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', {
         isAuthResolved: false,
         loading: false,
         userChecked: false,
+        is_admin: null
     }),
     getters: {
         isAuthenticated: (state) => !!state.user
@@ -31,6 +32,7 @@ export const useAuthStore = defineStore('auth', {
                 await axios.get('/sanctum/csrf-cookie')
                 const response = await axios.get('/api/user')
                 this.user = response.data
+                this.is_admin = response.data.is_admin
             } catch (error) {
                 if (error.response && error.response.status === 401) {
                     this.user = null;

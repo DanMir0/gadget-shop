@@ -14,6 +14,7 @@ import Cart from "@/pages/Cart.vue";
 import {useAuthStore} from "@/stores/auth.js";
 import AboutUs from "@/pages/AboutUs.vue";
 import {useLangStore} from "@/stores/lang.js";
+import Dashboard from "@/pages/Dashboard.vue";
 
 const routes = [
     {
@@ -93,7 +94,18 @@ const routes = [
     {
         path: '/',
         redirect: '/ru'
+    },
+    {
+        path: '/:lang/admin/dashboard',
+        name: 'dashboard',
+        component: Dashboard,
+        meta: {
+            requiresAuth: true,
+            requiresAdmin: true,
+            title: 'Админ-панель'
+        }
     }
+
 ];
 
 const router = createRouter({
@@ -135,6 +147,15 @@ router.beforeEach(async (to, from, next) => {
     // Если авторизация ещё не проверена, подгружаем пользователя
     if (to.meta.requiresAuth && !auth.isAuthenticated) {
         return next({ name: 'Login', params: { lang } });
+    }
+
+    if (to.meta.requiresAdmin) {
+        if (!auth.user || auth.user.is_admin !== true) {
+            return next({
+                name: 'Home',
+                params: { lang}
+            })
+        }
     }
 
     const protectedPages = ['/cart', '/favorites',]; // тут укажи свои защищённые страницы
