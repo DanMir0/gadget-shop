@@ -29,7 +29,8 @@
         "about_us": "About us",
         "sign_in": "Sign in",
         "sign_up": "Sign up",
-        "logout": "Logout"
+        "logout": "Logout",
+        "dashboard": "Admin"
     },
     "footer": {
         "favorites": "Favorites",

@@ -29,7 +29,8 @@
         "about_us": "О нас",
         "sign_in": "Войти",
         "sign_up": "Зарегистрироваться",
-        "logout": "Выйти"
+        "logout": "Выйти",
+        "dashboard": "Админка"
     },
     "footer": {
         "favorites": "Избранное",

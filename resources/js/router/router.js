@@ -14,7 +14,8 @@ import Cart from "@/pages/Cart.vue";
 import {useAuthStore} from "@/stores/auth.js";
 import AboutUs from "@/pages/AboutUs.vue";
 import {useLangStore} from "@/stores/lang.js";
-import Dashboard from "@/pages/Dashboard.vue";
+import AdminProducts from "@/pages/admin/AdminProducts.vue";
+import DashboardLayout from "@/layouts/DashboardLayout.vue";
 
 const routes = [
     {
@@ -58,6 +59,19 @@ const routes = [
                 component: AboutUs,
                 meta: {title: "О нас"},
             },
+            {
+                path: 'admin',
+                component: DashboardLayout,
+                meta: { requiresAuth: true, requiresAdmin: true, title: 'Админ-панель'},
+                children: [
+                    {
+                        path: 'products',
+                        name: 'AdminProducts',
+                        component: AdminProducts,
+                        meta: { title: 'Админ-товары' }
+                    }
+                ]
+            },
         ]
     },
     {
@@ -95,17 +109,6 @@ const routes = [
         path: '/',
         redirect: '/ru'
     },
-    {
-        path: '/:lang/admin/dashboard',
-        name: 'dashboard',
-        component: Dashboard,
-        meta: {
-            requiresAuth: true,
-            requiresAdmin: true,
-            title: 'Админ-панель'
-        }
-    }
-
 ];
 
 const router = createRouter({

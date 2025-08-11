@@ -72,6 +72,10 @@ onUnmounted(() => {
                              :class="{'active': route.name === 'AboutUs'}"
                              class="menu-link">{{ t('header.about_us') }}
                 </router-link>
+                <router-link v-show="auth.user && auth.user.is_admin" :to="{name: 'AdminProducts', params: {lang: langStore.currentLang}}"
+                             :class="{'active': route.name === 'AdminProducts'}"
+                             class="menu-link">{{ t('header.dashboard') }}
+                </router-link>
             </nav>
 
             <!-- Кнопки на десктопе -->

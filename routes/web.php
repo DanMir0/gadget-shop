@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 
+Route::get('/api/admin/products', [ProductController::class, 'getProductsAdmin'])->name('getProductsAdmin');
+
 Route::post('/api/register', [AuthController::class, 'register']);
 Route::post('/api/login', [AuthController::class, 'login']);
 Route::post('/api/logout', [AuthController::class, 'logout']);
@@ -18,7 +20,6 @@ Route::middleware('auth:sanctum')->get('/api/user', function (Request $request) 
 });
 Route::middleware('auth:sanctum')->get('/api/product-categories', [FavoriteController::class, 'getProductsWithCategories']);
 Route::middleware('auth:sanctum')->post('/api/favorites/{product}', [FavoriteController::class, 'toggle']);
-
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/api/products', [ProductController::class, 'getProducts']);

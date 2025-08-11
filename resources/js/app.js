@@ -22,6 +22,7 @@ import {createI18n} from "vue-i18n";
 import ru from './locales/ru.json';
 import en from './locales/en.json'
 import axios from "axios";
+import GAdminProductsList from "@/components/GAdminProductsList.vue";
 
 const app = createApp(App);
 
@@ -51,6 +52,7 @@ app
     .component('g-new-products', GNewProducts)
     .component('g-header', GHeader)
     .component('g-categories-menu', GCategoriesMenu)
+    .component('g-admin-products-list', GAdminProductsList)
     .use(pinia)
     .use(router)
     .use(i18n)

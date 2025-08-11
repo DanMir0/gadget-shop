@@ -13,6 +13,37 @@ class ProductController extends Controller
         return view('welcome');
     }
 
+    public function getProductsAdmin(Request $request)
+    {
+        $lang = $request->get('lang', 'ru');
+        $user = Auth::user();
+
+        // Здесь получаем товары (с пагинацией)
+        $products = Product::paginate($request->get('per_page', 8));
+
+        // Массив ID избранных товаров
+        $userFavorites = $user
+            ? $user->favorites()->pluck('product_id')->toArray()
+            : [];
+
+        // Преобразуем данные
+        $products->getCollection()->transform(function ($product) use ($userFavorites, $lang) {
+            $cleanImagePath = ltrim(trim($product->image, " \t\n\r\0\x0B\"'"), '/');
+
+            return [
+                'id' => $product->id,
+                'name' => $product->name[$lang] ?? $product->name['ru'] ?? '',
+                'description' => $product->description[$lang] ?? $product->description['ru'] ?? '',
+                'price' => $product->price,
+                'stock' => $product->stock,
+                'image' => asset('storage/' . $cleanImagePath),
+                'is_favorite' => in_array($product->id, $userFavorites),
+            ];
+        });
+
+        return response()->json($products);
+    }
+
     public function getProducts(Request $request)
     {
         $category = $request->query('category');
