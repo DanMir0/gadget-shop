@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use \App\Http\Controllers\AdminController;
 
 Route::get('/api/admin/products', [ProductController::class, 'getProductsAdmin'])->name('getProductsAdmin');
 
@@ -35,6 +36,11 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/api/cart', [CartController::class, 'postCart']);
 Route::delete('/cart', [CartController::class, 'decreaseCart']);
 Route::get('/api/get_cart', [CartController::class, 'getCart']);
+
+Route::resource('/admin/products', AdminController::class);
+Route::get('/api/get-product/{id}', [AdminController::class, 'getProduct'])->name('getProduct');
+Route::get('/api/get-categories/', [AdminController::class, 'getCategories'])->name('getCategories');
+Route::get('/api/get-statuses/', [AdminController::class, 'getStatuses'])->name('getStatuses');
 
 Route::get('{any}', function () {
     return view('welcome');

@@ -16,6 +16,7 @@ import AboutUs from "@/pages/AboutUs.vue";
 import {useLangStore} from "@/stores/lang.js";
 import AdminProducts from "@/pages/admin/AdminProducts.vue";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
+import EditProduct from "@/pages/admin/EditProduct.vue";
 
 const routes = [
     {
@@ -69,6 +70,13 @@ const routes = [
                         name: 'AdminProducts',
                         component: AdminProducts,
                         meta: { title: 'Админ-товары' }
+                    },
+                    {
+                        path: 'products/:id/edit',
+                        name: 'EditProduct',
+                        component: EditProduct,
+                        meta: { title: 'Редактирование товара'},
+                        props: true
                     }
                 ]
             },

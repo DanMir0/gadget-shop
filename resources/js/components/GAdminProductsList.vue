@@ -1,10 +1,16 @@
 <script setup>
-
 import {useI18n} from "vue-i18n";
+import {useLangStore} from "@/stores/lang.js";
+import router from "@/router/router.js";
+import GButton from "@/components/ui/GButton.vue";
 
 defineProps(['products'])
-
+const lang = useLangStore()
 const {t} = useI18n()
+
+function goToEdit(productId) {
+    router.push({name: 'EditProduct', params: {id: productId}, lang: lang.currentLang})
+}
 </script>
 
 <template>
@@ -25,7 +31,7 @@ const {t} = useI18n()
                     <p class="product-stock">{{ t('products.stock') }} <strong>{{ item.stock }}</strong></p>
                 </div>
                 <div class="product-group-btn">
-                    <g-button class="btn-edit">Изменить</g-button>
+                    <g-button @click="goToEdit(item.id)" class="btn-edit">Изменить</g-button>
                     <g-button class="btn-del">Удалить</g-button>
                 </div>
             </div>
