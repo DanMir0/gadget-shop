@@ -34,7 +34,7 @@ async function fetchProduct() {
       product.value = response.data;
 
       if (product.value.image) {
-          imagePreview.value = `/storage${product.value.image.trim()}`
+          imagePreview.value = `/storage/${product.value.image.trim()}`
       }
     } catch (e) {
 
