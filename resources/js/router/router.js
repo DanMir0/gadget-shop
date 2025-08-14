@@ -17,6 +17,7 @@ import {useLangStore} from "@/stores/lang.js";
 import AdminProducts from "@/pages/admin/AdminProducts.vue";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import EditProduct from "@/pages/admin/EditProduct.vue";
+import AddProduct from "@/pages/admin/AddProduct.vue";
 
 const routes = [
     {
@@ -77,6 +78,12 @@ const routes = [
                         component: EditProduct,
                         meta: { title: 'Редактирование товара'},
                         props: true
+                    },
+                    {
+                        path: 'products/create',
+                        name: 'AddProduct',
+                        component: AddProduct,
+                        meta: { title: 'Редактирование товара'},
                     }
                 ]
             },

@@ -85,4 +85,49 @@ class AdminController extends Controller
         $statuses = ProductStatus::all();
         return response()->json($statuses);
     }
+
+    public function create()
+    {
+        return view('welcome');
+    }
+
+    public function store(Request $request)
+    {
+
+        $validated = $request->validate([
+            'name.ru' => 'required|string|max:255',
+            'name.en' => 'required|string|max:255',
+            'description.ru' => 'nullable|string',
+            'description.en' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'category_id' => 'required|exists:categories,id',
+            'status_id' => 'required|exists:product_status,id',
+        ]);
+
+        $imagePath = null;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+        }
+
+        $product = Product::create([
+            'name' => [
+                'ru' => $validated['name']['ru'],
+                'en' => $validated['name']['en'],
+            ],
+            'description' => [
+                'ru' => $validated['description']['ru'],
+                'en' => $validated['description']['en'],
+            ],
+            'price' => $validated['price'],
+            'stock' => $validated['stock'],
+            'image' => $imagePath,
+            'category_id' => $validated['category_id'],
+            'status_id' =>  $validated['status_id'],
+        ]);
+
+        return response()->json($product);
+    }
 }

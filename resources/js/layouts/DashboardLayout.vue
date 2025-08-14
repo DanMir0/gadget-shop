@@ -12,7 +12,7 @@
             <div class="menu-group">
                 <hr>
                 <div class="link-wrapper">
-                    <router-link to="" class="btn-add">Добавить товар</router-link>
+                    <router-link :to="{name: 'AddProduct'}" class="btn-add">Добавить товар</router-link>
                 </div>
             </div>
         </nav>
