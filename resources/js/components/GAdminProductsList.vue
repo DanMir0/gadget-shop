@@ -33,7 +33,7 @@ async function confirmDelete(productId) {
 </script>
 
 <template>
-    <div class="lists">
+    <div class="lists mt-30">
         <article class="product" v-for="(item, index) in products" :key="index">
             <div class="image-wrapper">
                 <img class="product-image" :src="item.image" :alt="item.name">
@@ -103,7 +103,9 @@ async function confirmDelete(productId) {
     color: #fff;
 }
 
-
+.mt-30 {
+    margin-top: 30px;
+}
 
 .lists {
     display: grid;
