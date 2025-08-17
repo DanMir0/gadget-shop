@@ -31,13 +31,17 @@ async function fetchProductsAdmin() {
     loading.value = false;
 }
 
+function removeProduct(id) {
+    products.value = products.value.filter(p => p.id != id)
+}
+
 onMounted(async () => {
     await fetchProductsAdmin();
 });
 </script>
 
 <template>
-        <g-admin-products-list class="mt-30" :products="products"></g-admin-products-list>
+        <g-admin-products-list class="mt-30" :products="products" @productDelete="removeProduct"></g-admin-products-list>
 </template>
 
 <style scoped>

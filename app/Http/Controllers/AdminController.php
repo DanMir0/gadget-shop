@@ -130,4 +130,13 @@ class AdminController extends Controller
 
         return response()->json($product);
     }
+
+    public function destroy($id)
+    {
+        $product = Product::find($id);
+
+        if ($product) {
+            $product->delete();
+        }
+    }
 }

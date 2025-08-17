@@ -3,14 +3,33 @@ import {useI18n} from "vue-i18n";
 import {useLangStore} from "@/stores/lang.js";
 import router from "@/router/router.js";
 import GButton from "@/components/ui/GButton.vue";
+import {ref} from "vue";
+import axios from "axios";
 
 defineProps(['products'])
+const emit = defineEmits(['product-delete'])
 const lang = useLangStore()
 const {t} = useI18n()
+const selectedProduct = ref(null)
+const showModal = ref(false)
+
 
 function goToEdit(productId) {
     router.push({name: 'EditProduct', params: {id: productId}, lang: lang.currentLang})
 }
+
+function openModal(product) {
+    showModal.value = true;
+    selectedProduct.value = product
+}
+
+async function confirmDelete(productId) {
+    await axios.delete(`/admin/products/${productId}`)
+    showModal.value = false;
+    selectedProduct.value = null
+    emit('product-delete', productId)
+}
+
 </script>
 
 <template>
@@ -32,14 +51,60 @@ function goToEdit(productId) {
                 </div>
                 <div class="product-group-btn">
                     <g-button @click="goToEdit(item.id)" class="btn-edit">Изменить</g-button>
-                    <g-button class="btn-del">Удалить</g-button>
+                    <g-button @click="openModal(item)" class="btn-del">Удалить</g-button>
                 </div>
             </div>
         </article>
     </div>
+
+    <div v-if="showModal" class="modal-overlay">
+        <div class="modal">
+            <h3>Подтверждение</h3>
+            <p>Вы уверены, что хотите удалить товар
+                <strong>{{ selectedProduct?.name }}</strong>?</p>
+            <div class="modal-actions">
+                <g-button @click="confirmDelete(selectedProduct.id)" class="btn-del">Удалить</g-button>
+                <g-button @click="showModal = false" class="btn-cancel">Отмена</g-button>
+            </div>
+        </div>
+    </div>
 </template>
 
 <style scoped>
+/* модалка */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background-color: #777;
+    color: #fff;
+}
+
+
+
 .lists {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
