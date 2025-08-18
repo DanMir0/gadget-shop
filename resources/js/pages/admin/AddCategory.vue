@@ -16,6 +16,7 @@ async function saveCategory() {
         const response = await axios.post(`/admin/category`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
+        alert('Категория добавлена!')
         router.push({name: 'AdminCategory'})
     } catch (e) {
 

@@ -1,6 +1,7 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import axios from "axios";
+import router from "@/router/router.js";
 
 const product = ref({
     name: { ru: '', en: '' },
@@ -59,7 +60,7 @@ async function saveProduct() {
         await axios.post(`/admin/products`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
-        alert('Товар успешно добавлен.')
+        router.push({name: 'AdminProduct'})
     } catch (error) {
         console.error(error.response?.data || error.message)
     }
@@ -74,7 +75,7 @@ onMounted( async () => {
 
 <template>
     <div class="form-container" @submit.prevent="saveProduct()">
-        <h2>Редактирование товара</h2>
+        <h2>Добавление товара</h2>
         <form id="edit-product-form" >
 
             <label for="name_ru">Название (RU)</label>
