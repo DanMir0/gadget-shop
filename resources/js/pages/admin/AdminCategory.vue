@@ -7,6 +7,8 @@ import {useLangStore} from "@/stores/lang.js";
 
 const categories = ref([])
 const lang = useLangStore()
+const showModal = ref(false)
+const selectedCategory = ref(null)
 async function fetchCategories() {
     try {
         const response = await axios.get(`/api/get-categories/`);
@@ -18,6 +20,18 @@ async function fetchCategories() {
 
 function goToEdit(id) {
     router.push({name: 'EditCategory', params: {id: id, lang: lang.currentLang}})
+}
+
+function openModal(category) {
+    showModal.value = true
+    selectedCategory.value = category
+}
+
+async function confirmDelete(categoryId) {
+    await axios.delete(`/admin/category/${categoryId}`)
+    showModal.value = false
+    selectedCategory.value = null
+    categories.value = categories.value.filter(c => c.id != categoryId)
 }
 
 onMounted(async () => {
@@ -33,10 +47,22 @@ onMounted(async () => {
                 <h3>{{ item.name }}</h3>
                 <div class="group-btn">
                     <g-button @click="goToEdit(item.id)" class="btn-edit" size="sm">Изменить</g-button>
-                    <g-button class="btn-del" size="sm">Удалить</g-button>
+                    <g-button @click="openModal(item)" class="btn-del" size="sm">Удалить</g-button>
                 </div>
             </li>
         </ul>
+    </div>
+
+    <div v-if="showModal" class="modal-overlay">
+        <div class="modal">
+            <h3>Подтверждение</h3>
+            <p>Вы уверены, что хотите удалить категорию
+                <strong>{{ selectedCategory?.name }}</strong>?</p>
+            <div class="modal-actions">
+                <g-button @click="confirmDelete(selectedCategory.id)" class="btn-del">Удалить</g-button>
+                <g-button @click="showModal = false" class="btn-cancel">Отмена</g-button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -89,6 +115,37 @@ h3 {
 
 .btn-edit {
     background-color: #007bff;
+    color: #fff;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background-color: #777;
     color: #fff;
 }
 </style>

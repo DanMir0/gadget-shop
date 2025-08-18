@@ -31,6 +31,10 @@ class AdminCategoryController extends Controller
         return view('welcome');
     }
 
+    public function create() {
+        return view('welcome');
+    }
+
     public function getCategory($id)
     {
         $category = Categorie::find($id);
@@ -63,4 +67,14 @@ class AdminCategoryController extends Controller
             'product' => $category
         ]);
     }
+
+    public function destroy($id)
+    {
+        $category = Categorie::find($id);
+
+        if ($category) {
+            $category->delete();
+        }
+    }
+
 }
