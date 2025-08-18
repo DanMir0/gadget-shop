@@ -19,6 +19,7 @@ import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import EditProduct from "@/pages/admin/EditProduct.vue";
 import AddProduct from "@/pages/admin/AddProduct.vue";
 import AdminCategory from "@/pages/admin/AdminCategory.vue";
+import AddCategory from "@/pages/admin/AddCategory.vue";
 
 const routes = [
     {
@@ -91,6 +92,12 @@ const routes = [
                         name: 'AdminCategory',
                         component: AdminCategory,
                         meta: { title: 'Админ-категорий'},
+                    },
+                    {
+                        path: 'category/create',
+                        name: 'AddCategory',
+                        component: AddCategory,
+                        meta: { title: 'Добавление категории'},
                     },
                 ]
             },

@@ -20,7 +20,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <g-admin-menu :to="{}">категорию</g-admin-menu>
+    <g-admin-menu :to="{name: 'AddCategory'}">категорию</g-admin-menu>
     <div class="category">
         <ul class="category-lists">
             <li class="category-item" v-for="item in categories" :key="item.id">
