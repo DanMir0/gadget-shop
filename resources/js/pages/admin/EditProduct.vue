@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import axios from "axios";
 import {useRoute} from "vue-router";
 import GButton from "@/components/ui/GButton.vue";
+import router from "@/router/router.js";
 
 const route = useRoute()
 const categories = ref([])
@@ -78,6 +79,7 @@ async function saveProduct(id) {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
         alert('Товар успешно обновлен')
+        router.push({name: 'AdminProduct'})
     } catch (error) {
         console.error(error.response?.data || error.message)
     }

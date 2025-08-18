@@ -44,6 +44,7 @@ Route::get('/api/get-categories/', [AdminController::class, 'getCategories'])->n
 Route::get('/api/get-statuses/', [AdminController::class, 'getStatuses'])->name('getStatuses');
 
 Route::resource('/admin/category', AdminCategoryController::class);
+Route::get('/api/get-category/{id}', [AdminCategoryController::class, 'getCategory'])->name('getCategory');
 
 Route::get('{any}', function () {
     return view('welcome');

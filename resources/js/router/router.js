@@ -20,6 +20,7 @@ import EditProduct from "@/pages/admin/EditProduct.vue";
 import AddProduct from "@/pages/admin/AddProduct.vue";
 import AdminCategory from "@/pages/admin/AdminCategory.vue";
 import AddCategory from "@/pages/admin/AddCategory.vue";
+import EditCategory from "@/pages/admin/EditCategory.vue";
 
 const routes = [
     {
@@ -98,6 +99,13 @@ const routes = [
                         name: 'AddCategory',
                         component: AddCategory,
                         meta: { title: 'Добавление категории'},
+                    },
+                    {
+                        path: 'category/:id/edit',
+                        name: 'EditCategory',
+                        component: EditCategory,
+                        meta: { title: 'Редактирование категории'},
+                        props: true
                     },
                 ]
             },

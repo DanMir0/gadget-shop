@@ -2,9 +2,11 @@
 import {onMounted, ref} from "vue";
 import axios from "axios";
 import GButton from "@/components/ui/GButton.vue";
+import router from "@/router/router.js";
+import {useLangStore} from "@/stores/lang.js";
 
 const categories = ref([])
-
+const lang = useLangStore()
 async function fetchCategories() {
     try {
         const response = await axios.get(`/api/get-categories/`);
@@ -12,6 +14,10 @@ async function fetchCategories() {
     } catch (e) {
 
     }
+}
+
+function goToEdit(id) {
+    router.push({name: 'EditCategory', params: {id: id, lang: lang.currentLang}})
 }
 
 onMounted(async () => {
@@ -26,7 +32,7 @@ onMounted(async () => {
             <li class="category-item" v-for="item in categories" :key="item.id">
                 <h3>{{ item.name }}</h3>
                 <div class="group-btn">
-                    <g-button class="btn-edit" size="sm">Изменить</g-button>
+                    <g-button @click="goToEdit(item.id)" class="btn-edit" size="sm">Изменить</g-button>
                     <g-button class="btn-del" size="sm">Удалить</g-button>
                 </div>
             </li>
