@@ -59,6 +59,7 @@ onMounted(async () => {
 </script>
 
 <template>
+    <g-admin-menu :to="{name: 'AddProduct'}">товар</g-admin-menu>
     <g-admin-products-list class="mt-30" :products="products" @productDelete="removeProduct"></g-admin-products-list>
     <div class="pagination" v-if="lastPage > 1">
         <button
@@ -180,7 +181,7 @@ onMounted(async () => {
     }
 }
 
-/* 💻 Планшеты */
+
 @media (max-width: 768px) {
     .pagination-button {
         padding: 7px 12px;

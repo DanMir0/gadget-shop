@@ -23,6 +23,7 @@ import ru from './locales/ru.json';
 import en from './locales/en.json'
 import axios from "axios";
 import GAdminProductsList from "@/components/GAdminProductsList.vue";
+import GAdminMenu from "@/components/GAdminMenu.vue";
 
 const app = createApp(App);
 
@@ -53,6 +54,7 @@ app
     .component('g-header', GHeader)
     .component('g-categories-menu', GCategoriesMenu)
     .component('g-admin-products-list', GAdminProductsList)
+    .component('g-admin-menu', GAdminMenu)
     .use(pinia)
     .use(router)
     .use(i18n)
