@@ -18,6 +18,7 @@ import AdminProducts from "@/pages/admin/AdminProducts.vue";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import EditProduct from "@/pages/admin/EditProduct.vue";
 import AddProduct from "@/pages/admin/AddProduct.vue";
+import AdminCategory from "@/pages/admin/AdminCategory.vue";
 
 const routes = [
     {
@@ -83,8 +84,14 @@ const routes = [
                         path: 'products/create',
                         name: 'AddProduct',
                         component: AddProduct,
-                        meta: { title: 'Редактирование товара'},
-                    }
+                        meta: { title: 'Добавление товара'},
+                    },
+                    {
+                        path: 'category',
+                        name: 'AdminCategory',
+                        component: AdminCategory,
+                        meta: { title: 'Админ-категорий'},
+                    },
                 ]
             },
         ]

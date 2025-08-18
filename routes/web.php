@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use \App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminCategoryController;
 
 Route::get('/api/admin/products', [ProductController::class, 'getProductsAdmin'])->name('getProductsAdmin');
 
@@ -41,6 +42,8 @@ Route::resource('/admin/products', AdminController::class);
 Route::get('/api/get-product/{id}', [AdminController::class, 'getProduct'])->name('getProduct');
 Route::get('/api/get-categories/', [AdminController::class, 'getCategories'])->name('getCategories');
 Route::get('/api/get-statuses/', [AdminController::class, 'getStatuses'])->name('getStatuses');
+
+Route::resource('/admin/category', AdminCategoryController::class);
 
 Route::get('{any}', function () {
     return view('welcome');
