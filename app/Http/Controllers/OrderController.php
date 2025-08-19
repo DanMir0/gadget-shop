@@ -56,7 +56,7 @@ class OrderController extends Controller
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'total_price' => round($total, 2),
-                'status' => 'pending',
+                'status' => 'Новый',
             ]);
 
             foreach ($productsToUpdate as $item) {

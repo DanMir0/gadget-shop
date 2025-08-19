@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use \App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminCategoryController;
+use App\Http\Controllers\AdminOrderController;
 
 Route::get('/api/admin/products', [ProductController::class, 'getProductsAdmin'])->name('getProductsAdmin');
 
@@ -45,6 +46,9 @@ Route::get('/api/get-statuses/', [AdminController::class, 'getStatuses'])->name(
 
 Route::resource('/admin/category', AdminCategoryController::class);
 Route::get('/api/get-category/{id}', [AdminCategoryController::class, 'getCategory'])->name('getCategory');
+
+Route::resource('/admin/orders', AdminOrderController::class);
+Route::get('/api/get-orders', [AdminOrderController::class, 'getOrders'])->name('getOrders');
 
 Route::get('{any}', function () {
     return view('welcome');

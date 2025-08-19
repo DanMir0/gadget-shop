@@ -185,7 +185,7 @@ onMounted(() => {
         <div class="modal">
             <p class="modal-order-text">{{ t('cart.order_placed') }}</p>
             <p class="modal-order-text">{{ t('cart.order_number') }}{{ orderId }}. </p>
-            <button class="submit-button my-20" @click="showConfirmModal = false">Ок</button>
+            <button class="submit-button my-20" @click="showCreateOrder = false">Ок</button>
         </div>
     </div>
 </template>

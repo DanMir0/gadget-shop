@@ -3,9 +3,7 @@
 </script>
 
 <template>
-    <g-container>
-        <router-view></router-view>
-    </g-container>
+    <router-view></router-view>
 </template>
 
 <style scoped>

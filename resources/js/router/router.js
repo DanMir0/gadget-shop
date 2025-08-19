@@ -21,6 +21,7 @@ import AddProduct from "@/pages/admin/AddProduct.vue";
 import AdminCategory from "@/pages/admin/AdminCategory.vue";
 import AddCategory from "@/pages/admin/AddCategory.vue";
 import EditCategory from "@/pages/admin/EditCategory.vue";
+import AdminOrders from "@/pages/admin/AdminOrders.vue";
 
 const routes = [
     {
@@ -106,6 +107,12 @@ const routes = [
                         component: EditCategory,
                         meta: { title: 'Редактирование категории'},
                         props: true
+                    },
+                    {
+                        path: 'category/',
+                        name: 'AdminOrders',
+                        component: AdminOrders,
+                        meta: { title: 'Админ-заказы'},
                     },
                 ]
             },

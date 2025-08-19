@@ -3,24 +3,33 @@ const props = defineProps({
     to: {
         type: [String, Object],
         required: true
+    },
+    showBtn: {
+        type: [Boolean],
+        default: true
     }
 })
 </script>
 
 <template>
-    <nav class="menu">
-        <ul class="menu-wrapper">
-            <router-link :to="{name: 'AdminProducts'}" class="link" exact-active-class="active">Товары</router-link>
-            <router-link :to="{name: 'AdminCategory'}" class="link" exact-active-class="active">Категории</router-link>
-            <router-link class="link">Заказы</router-link>
-        </ul>
-        <div class="menu-group">
-            <hr>
-            <div class="link-wrapper">
-                <router-link :to="props.to" class="btn-add">Добавить <slot></slot></router-link>
+    <g-container>
+        <nav class="menu">
+            <ul class="menu-wrapper">
+                <router-link :to="{name: 'AdminProducts'}" class="link" exact-active-class="active">Товары</router-link>
+                <router-link :to="{name: 'AdminCategory'}" class="link" exact-active-class="active">Категории
+                </router-link>
+                <router-link :to="{name: 'AdminOrders'}" class="link" exact-active-class="active">Заказы</router-link>
+            </ul>
+            <div class="menu-group" v-show="showBtn">
+                <hr>
+                <div class="link-wrapper">
+                    <router-link :to="props.to" class="btn-add">Добавить
+                        <slot></slot>
+                    </router-link>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </g-container>
 </template>
 
 <style scoped>
