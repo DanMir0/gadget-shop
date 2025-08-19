@@ -3,6 +3,7 @@ import {computed, onMounted, ref} from "vue";
 import {useLangStore} from "@/stores/lang.js";
 import axios from "axios";
 import {useRoute} from 'vue-router';
+import GContainer from "@/components/GContainer.vue";
 
 const route = useRoute();
 const products = ref([]);
@@ -60,63 +61,65 @@ onMounted(async () => {
 
 <template>
     <g-admin-menu :to="{name: 'AddProduct'}">товар</g-admin-menu>
-    <g-admin-products-list class="mt-30" :products="products" @productDelete="removeProduct"></g-admin-products-list>
-    <div class="pagination" v-if="lastPage > 1">
-        <button
-            @click="changePage(currentPage - 1)"
-            :disabled="currentPage === 1"
-            class="pagination-button"
-            aria-label="Назад"
-        >
-            ◀
-        </button>
+    <g-container>
+        <g-admin-products-list class="mt-30" :products="products"
+                               @productDelete="removeProduct"></g-admin-products-list>
+        <div class="pagination" v-if="lastPage > 1">
+            <button
+                @click="changePage(currentPage - 1)"
+                :disabled="currentPage === 1"
+                class="pagination-button"
+                aria-label="Назад"
+            >
+                ◀
+            </button>
 
-        <!-- Always show page 1 -->
-        <button
-            @click="changePage(1)"
-            class="pagination-button"
-            :class="{ active: currentPage === 1 }"
-        >
-            1
-        </button>
+            <!-- Always show page 1 -->
+            <button
+                @click="changePage(1)"
+                class="pagination-button"
+                :class="{ active: currentPage === 1 }"
+            >
+                1
+            </button>
 
-        <!-- Left ellipsis -->
-        <span v-if="currentPage > 3" class="pagination-ellipsis">...</span>
+            <!-- Left ellipsis -->
+            <span v-if="currentPage > 3" class="pagination-ellipsis">...</span>
 
-        <!-- Pages around current -->
-        <button
-            v-for="page in visiblePages"
-            :key="page"
-            @click="changePage(page)"
-            class="pagination-button"
-            :class="{ active: currentPage === page }"
-        >
-            {{ page }}
-        </button>
+            <!-- Pages around current -->
+            <button
+                v-for="page in visiblePages"
+                :key="page"
+                @click="changePage(page)"
+                class="pagination-button"
+                :class="{ active: currentPage === page }"
+            >
+                {{ page }}
+            </button>
 
-        <!-- Right ellipsis -->
-        <span v-if="currentPage < lastPage - 2" class="pagination-ellipsis">...</span>
+            <!-- Right ellipsis -->
+            <span v-if="currentPage < lastPage - 2" class="pagination-ellipsis">...</span>
 
-        <!-- Always show last page if it's not 1 -->
-        <button
-            v-if="lastPage > 1"
-            @click="changePage(lastPage)"
-            class="pagination-button"
-            :class="{ active: currentPage === lastPage }"
-        >
-            {{ lastPage }}
-        </button>
+            <!-- Always show last page if it's not 1 -->
+            <button
+                v-if="lastPage > 1"
+                @click="changePage(lastPage)"
+                class="pagination-button"
+                :class="{ active: currentPage === lastPage }"
+            >
+                {{ lastPage }}
+            </button>
 
-        <button
-            @click="changePage(currentPage + 1)"
-            :disabled="currentPage === lastPage"
-            class="pagination-button"
-            aria-label="Вперед"
-        >
-            ▶
-        </button>
-    </div>
-
+            <button
+                @click="changePage(currentPage + 1)"
+                :disabled="currentPage === lastPage"
+                class="pagination-button"
+                aria-label="Вперед"
+            >
+                ▶
+            </button>
+        </div>
+    </g-container>
 </template>
 
 <style scoped>

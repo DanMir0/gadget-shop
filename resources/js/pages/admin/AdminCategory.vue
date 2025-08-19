@@ -4,11 +4,13 @@ import axios from "axios";
 import GButton from "@/components/ui/GButton.vue";
 import router from "@/router/router.js";
 import {useLangStore} from "@/stores/lang.js";
+import GContainer from "@/components/GContainer.vue";
 
 const categories = ref([])
 const lang = useLangStore()
 const showModal = ref(false)
 const selectedCategory = ref(null)
+
 async function fetchCategories() {
     try {
         const response = await axios.get(`/api/get-categories/`);
@@ -41,17 +43,20 @@ onMounted(async () => {
 
 <template>
     <g-admin-menu :to="{name: 'AddCategory'}">категорию</g-admin-menu>
-    <div class="category">
-        <ul class="category-lists">
-            <li class="category-item" v-for="item in categories" :key="item.id">
-                <h3>{{ item.name }}</h3>
-                <div class="group-btn">
-                    <g-button @click="goToEdit(item.id)" class="btn-edit" size="sm">Изменить</g-button>
-                    <g-button @click="openModal(item)" class="btn-del" size="sm">Удалить</g-button>
-                </div>
-            </li>
-        </ul>
-    </div>
+    <g-container>
+        <div class="category">
+            <ul class="category-lists">
+                <li class="category-item" v-for="item in categories" :key="item.id">
+                    <h3>{{ item.name }}</h3>
+                    <div class="group-btn">
+                        <g-button @click="goToEdit(item.id)" class="btn-edit" size="sm">Изменить</g-button>
+                        <g-button @click="openModal(item)" class="btn-del" size="sm">Удалить</g-button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </g-container>
+
 
     <div v-if="showModal" class="modal-overlay">
         <div class="modal">
@@ -120,8 +125,11 @@ h3 {
 
 .modal-overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.6);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -135,7 +143,7 @@ h3 {
     max-width: 400px;
     width: 90%;
     text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 }
 
 .modal-actions {
